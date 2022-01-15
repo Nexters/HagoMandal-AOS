@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 def _versionCode = 1
@@ -89,10 +90,14 @@ dependencies {
     testImplementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
 
     implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
     implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+
+    implementation platform("com.google.firebase:firebase-bom:$firebaseVersion")
+    implementation 'com.google.firebase:firebase-analytics'
 }
