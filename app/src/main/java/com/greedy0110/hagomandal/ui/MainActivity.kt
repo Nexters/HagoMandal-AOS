@@ -1,4 +1,4 @@
-package com.greedy0110.hagomandal
+package com.greedy0110.hagomandal.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
