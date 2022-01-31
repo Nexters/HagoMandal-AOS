@@ -86,7 +86,6 @@ object DatabaseModule {
     fun provideDatabase(@ApplicationContext applicationContext: Context): AppDatabase {
         val builder = if (BuildConfig.DEBUG) {
             Room.inMemoryDatabaseBuilder(applicationContext, AppDatabase::class.java)
-
         } else {
             Room.databaseBuilder(applicationContext, AppDatabase::class.java, "HagoMandal-database")
         }

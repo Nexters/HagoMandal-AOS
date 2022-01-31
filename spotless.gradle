@@ -1,0 +1,22 @@
+apply plugin: "com.diffplug.spotless"
+
+spotless {
+    kotlin {
+        target "**/*.kt"
+        ktlint("0.42.1").userData(['indent_size': '4', 'continuation_indent_size': '4'])
+        //licenseHeaderFile "$rootDir/spotless.license.kt"
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+
+        // define the steps to apply to those files
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
