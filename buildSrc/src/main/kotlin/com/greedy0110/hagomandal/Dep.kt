@@ -120,8 +120,8 @@ object Dep {
     }
 
     object Firebase {
-        private const val version = "29.0.3"
-        const val analytics = "com.google.firebase:firebase-analytics$version"
+        const val bom = "com.google.firebase:firebase-bom:29.0.4"
+        const val analytics = "com.google.firebase:firebase-analytics-ktx"
     }
 
     const val timber = "com.jakewharton.timber:timber:5.0.1"
