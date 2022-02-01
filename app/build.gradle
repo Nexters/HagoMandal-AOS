@@ -53,6 +53,9 @@ android {
             excludes += "DebugProbesKt.bin"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -101,3 +104,12 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 }
+
+// 린트 적용하는 GitHook을 강제한다.
+task installGitHook(type: Copy) {
+    from new File(rootProject.rootDir, 'pre-commit')
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0777
+}
+
+tasks.getByPath(':app:preBuild').dependsOn installGitHook

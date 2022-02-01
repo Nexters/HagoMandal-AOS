@@ -1,0 +1,10 @@
+#!/bin/sh
+# https://github.com/shyiko/ktlint pre-commit hook
+echo "*********************************************************"
+echo "Running git pre-commit hook. Running Static analysis... "
+echo "*********************************************************"
+
+./gradlew spotlessApply
+
+#git diff --name-only --cached --relative | grep '\.kt[s"]\?$' | xargs ktlint --relative .
+if [ $? -ne 0 ]; then exit 1; fi
