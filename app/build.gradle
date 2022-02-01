@@ -86,7 +86,7 @@ dependencies {
     testImplementation(Dep.Test.junit)
 
     implementation(Dep.Dagger.hiltAndroid)
-    implementation(Dep.Dagger.hiltCompiler)
+    kapt(Dep.Dagger.hiltCompiler)
 
     implementation(Dep.Lifecycle.runtime)
     implementation(Dep.Lifecycle.viewModel)
@@ -106,6 +106,7 @@ dependencies {
     implementation(Dep.Moshi.core)
     implementation(Dep.Moshi.kotlin)
 
+    implementation platform(Dep.Firebase.bom)
     implementation(Dep.Firebase.analytics)
 
     implementation(Dep.timber)
