@@ -1,38 +1,21 @@
+import com.greedy0110.hagomandal.Dep
+
 apply from: "$project.rootDir/spotless.gradle"
 
 buildscript {
-    ext.kotlinVersion = '1.5.31'
-    ext.hiltVersion = '2.40'
-
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.2.0'
+        classpath(Dep.Plugins.androidGradlePlugin)
+        classpath(Dep.Plugins.kotlin)
+        classpath(Dep.Plugins.hilt)
+        classpath(Dep.Plugins.googleService)
+        classpath(Dep.Plugins.spotless)
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-ext {
-    _compileSdkVersion = 31
-    _minSdkVersion = 21
-    _targetSdkVersion = 31
-
-    composeVersion = '1.0.5'
-    junitVersion = '4.13.2'
-    coroutineVersion = '1.6.0'
-    roomVersion = '2.4.1'
-    retrofitVersion = '2.9.0'
-    moshiVersion = '1.12.0'
-    okhttpVersion = '4.9.2'
-    navVersion = "2.3.5"
-    firebaseVersion = '29.0.3'
 }
