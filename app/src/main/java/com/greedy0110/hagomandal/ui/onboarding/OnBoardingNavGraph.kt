@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.greedy0110.hagomandal.R
 
 object OnBoardingDestinations {
+    const val INTRO = "intro"
     const val DISPLAY = "display"
     const val NICKNAME = "nickname"
     const val DEADLINE = "deadline"
@@ -22,7 +23,7 @@ const val DISPLAY_RES_ID = "res_id"
 @Composable
 fun OnBoardingNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = "${OnBoardingDestinations.DISPLAY}/{$DISPLAY_RES_ID}"
+    startDestination: String = OnBoardingDestinations.INTRO
 ) {
 
     // TODO: 테스트용
