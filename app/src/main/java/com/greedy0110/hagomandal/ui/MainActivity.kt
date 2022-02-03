@@ -3,9 +3,7 @@ package com.greedy0110.hagomandal.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -56,12 +54,15 @@ fun GoalScreen() {
     TabRow(
         // Our selected tab is our current page
         selectedTabIndex = pagerState.currentPage,
-        backgroundColor= backgroundColor,
+        backgroundColor = backgroundColor,
         // TODO: indicator 만들기
         indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
+            GoalIndicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
             )
+//            TabRowDefaults.Indicator(
+//                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+//            )
         }
     ) {
         // Add tabs for all of our pages

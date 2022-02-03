@@ -3,10 +3,12 @@ package com.greedy0110.hagomandal.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,18 +77,35 @@ fun GoalTab(
         selected -> Color(0xffffffff)
         else -> Color(0xff40485c)
     }
+    val indicatorHeight = 2.dp
+    // TODO: 컬러 알아내면 다시 작업
+    val defaultIndicatorColor = Color.Red
+//    val defaultIndicatorColor = Color(0xff202532)
 
-    Row(
+    Column(
         modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 14.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(top = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = title, color = textColor)
-        Spacer(Modifier.size(4.dp))
-        GoalTabBadge(completed = completed, selected = selected, text = badge)
+        Row(
+            modifier = Modifier
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = title, color = textColor)
+            Spacer(Modifier.size(4.dp))
+            GoalTabBadge(completed = completed, selected = selected, text = badge)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(indicatorHeight)
+                .background(defaultIndicatorColor)
+        )
     }
 }
 
@@ -99,4 +118,24 @@ fun PreviewGoalTab() {
         GoalTab(completed = false, selected = false, title = "핵심목표", badge = "2/4")
         GoalTab(completed = false, selected = true, title = "핵심목표", badge = "2/4")
     }
+}
+
+@Composable
+fun GoalIndicator(modifier: Modifier = Modifier) {
+    val indicatorHeight = 2.dp
+    val indicatorColor = Color(0xff3288ff)
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(indicatorHeight)
+            .padding(horizontal = 2.dp)
+            .background(indicatorColor, RoundedCornerShape(4.dp))
+    )
+}
+
+@Preview
+@Composable
+fun PreviewGoalIndicator() {
+    GoalIndicator()
 }
