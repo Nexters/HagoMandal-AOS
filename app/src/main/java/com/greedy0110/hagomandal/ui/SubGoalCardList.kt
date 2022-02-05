@@ -2,9 +2,7 @@ package com.greedy0110.hagomandal.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 
@@ -38,18 +37,13 @@ fun SubGoalCardList() {
     }
 
     Column {
-        SubGoalLayout(modifier = Modifier) {
-            cardColors.subList(0, selectedIndex + 1)
+        SubGoalLayout(
+            modifier = Modifier,
+            selectedIndex = selectedIndex,
+            partitionGap = 10.dp
+        ) {
+            cardColors
                 .forEachIndexed { index, color -> getCard(color, index) }
-        }
-        if (selectedIndex != cardColors.lastIndex) {
-            Spacer(modifier = Modifier.size(10.dp))
-            SubGoalLayout(modifier = Modifier) {
-                cardColors.subList(selectedIndex + 1, cardColors.size)
-                    .forEachIndexed { index, color ->
-                        getCard(color, index + selectedIndex + 1)
-                    }
-            }
         }
     }
 }
@@ -65,6 +59,8 @@ fun PreviewSubGoalCardList() {
 @Composable
 private fun SubGoalLayout(
     modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    partitionGap: Dp,
     content: @Composable () -> Unit
 ) {
     val gap = 40.dp
@@ -77,15 +73,24 @@ private fun SubGoalLayout(
             measurable.measure(constraints)
         }
 
-        val layoutHeight = ((placeables.size - 1) * gap.roundToPx() + placeables.last().height)
-            .coerceAtMost(constraints.maxHeight)
+        val layoutHeight = if (selectedIndex == placeables.lastIndex) {
+            (placeables.size - 1) * gap.roundToPx() + placeables.last().height
+        } else {
+            selectedIndex * gap.roundToPx() +
+                placeables[selectedIndex].height +
+                partitionGap.roundToPx() +
+                (placeables.lastIndex - selectedIndex - 1) * gap.roundToPx() +
+                placeables.last().height
+        }.coerceAtMost(constraints.maxHeight)
 
         layout(constraints.maxWidth, layoutHeight) {
             var yPosition = 0
 
-            placeables.forEach { placeable ->
+            placeables.forEachIndexed { index, placeable ->
                 placeable.placeRelative(x = 0, y = yPosition)
-                yPosition += gap.roundToPx()
+                yPosition +=
+                    if (index != selectedIndex) gap.roundToPx()
+                    else placeable.height + partitionGap.roundToPx()
             }
         }
     }
