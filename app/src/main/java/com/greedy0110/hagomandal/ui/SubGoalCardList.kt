@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,6 +63,38 @@ fun PreviewSubGoalCardList() {
 }
 
 @Composable
+fun <T> rememberRef(): MutableState<T?> {
+    // for some reason it always recreated the value with vararg keys,
+    // leaving out the keys as a parameter for remember for now
+    return remember() {
+        object : MutableState<T?> {
+            override var value: T? = null
+
+            override fun component1(): T? = value
+
+            override fun component2(): (T?) -> Unit = { value = it }
+        }
+    }
+}
+
+@Composable
+fun <T> rememberPrevious(
+    current: T,
+    shouldUpdate: (prev: T?, curr: T) -> Boolean = { a: T?, b: T -> a != b },
+): T? {
+    val ref = rememberRef<T>()
+
+    // launched after render, so the current render will have the old value anyway
+    SideEffect {
+        if (shouldUpdate(ref.value, current)) {
+            ref.value = current
+        }
+    }
+
+    return ref.value
+}
+
+@Composable
 private fun SubGoalLayout(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
@@ -71,8 +106,8 @@ private fun SubGoalLayout(
     // selectedIndex 별로 애니메이션이 실행되고 싶어.
     val yDeltaAnimation = remember(selectedIndex) { Animatable(0f) }
 
-
-    //TODO: 전 selected 를 알아야해.
+    // TODO: rememberPrevious 동작 이해하기
+    val previousSelectedIndex = rememberPrevious(current = selectedIndex)
 
     LaunchedEffect(yDeltaAnimation) {
         yDeltaAnimation.animateTo(
@@ -89,6 +124,7 @@ private fun SubGoalLayout(
             measurable.measure(constraints)
         }
 
+        // TODO: layoutHeight 변화하기.
 //        val layoutHeight = if (selectedIndex == placeables.lastIndex) {
 //            (placeables.size - 1) * gap.roundToPx() + placeables.last().height
 //        } else {
@@ -100,16 +136,28 @@ private fun SubGoalLayout(
 //        }.coerceAtMost(constraints.maxHeight)
         val layoutHeight = constraints.maxHeight
 
-        layout(constraints.maxWidth, layoutHeight) {
-            var yPosition = 0
+        fun getYPosition(index: Int, selectedIndex: Int, placeables: List<Placeable>): Int {
+            return when {
+                index == 0 -> 0.dp
+                index > selectedIndex -> gap * (index - 1) + (placeables[index - 1].height.toDp() + partitionGap)
+                else -> gap * index
+            }.roundToPx()
+        }
 
+        layout(constraints.maxWidth, layoutHeight) {
             placeables.forEachIndexed { index, placeable ->
-                placeable.placeRelative(x = 0, y = yPosition)
-//                yPosition +=
-//                    if (index != selectedIndex) gap.roundToPx()
-//                    else placeable.height + partitionGap.roundToPx() + anana.value.roundToPx()
-                yPosition += gap.roundToPx() +
-                    if (index == selectedIndex) ((placeable.height + partitionGap.roundToPx() - gap.roundToPx()) * yDeltaAnimation.value).toInt() else 0
+                if (previousSelectedIndex == null) placeable.placeRelative(
+                    x = 0,
+                    y = getYPosition(index, selectedIndex, placeables)
+                )
+                else {
+                    val fromY = getYPosition(index, previousSelectedIndex, placeables)
+                    val toY = getYPosition(index, selectedIndex, placeables)
+                    placeable.placeRelative(
+                        x = 0,
+                        y = (fromY + ((toY - fromY) * yDeltaAnimation.value)).toInt()
+                    )
+                }
             }
         }
     }
