@@ -19,13 +19,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+private val defaultFontFamily: FontFamily = FontFamily.SansSerif
+private val t20 = TextStyle(
+    fontWeight = FontWeight.W700,
+    color = Color.White,
+    fontStyle = FontStyle.Normal,
+    fontSize = 20.sp,
+    fontFamily = defaultFontFamily
+)
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
@@ -45,23 +55,23 @@ fun SubGoalCard(
         horizontalAlignment = Alignment.Start
     ) {
         // TODO: hint 설정은 어떻게?
+        // TODO: 기본 TextField 설정이 이렇게 어려울 수 가 있나?...
         BasicTextField(
             value = title,
-            onValueChange = setTitle,
-            // TODO: 마지막 요소는 imeAction이 다를 것.
+            onValueChange = { if (it.length <= maxTitleLength) setTitle(it) },
+            // // TODO: 마지막 요소는 imeAction이 다를 것.
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(
                 onNext = { },
                 onDone = { },
             ),
-            // TODO: textStyle 지정은 전체적으로 고려하기
-            textStyle = TextStyle(
-                color = Color.White,
-                fontWeight = FontWeight.W500,
-                fontSize = TextUnit(20f, TextUnitType.Sp)
-            ),
+            // // TODO: textStyle 지정은 전체적으로 고려하기
+            textStyle = t20.copy(color = Color.White),
             cursorBrush = SolidColor(Color.White),
-
+            decorationBox = {
+                if (title.isEmpty()) Text("세부목표", style = t20.copy(color = Color.White))
+                else Text(title, style = t20.copy(color = Color.White))
+            }
         )
         Spacer(modifier = Modifier.size(66.dp))
         Text(
