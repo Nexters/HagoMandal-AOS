@@ -2,6 +2,7 @@ package com.greedy0110.hagomandal.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -116,25 +117,35 @@ private fun SubGoalLayout(
         )
     }
 
+    // TODO: 코드 구조 리팩토링하기
     Layout(
-        modifier = modifier,
+        modifier = modifier.background(Color.DarkGray),
         content = content
     ) { measurables, constraints ->
         val placeables = measurables.map { measurable ->
             measurable.measure(constraints)
         }
 
-        // TODO: layoutHeight 변화하기.
-//        val layoutHeight = if (selectedIndex == placeables.lastIndex) {
-//            (placeables.size - 1) * gap.roundToPx() + placeables.last().height
-//        } else {
-//            selectedIndex * gap.roundToPx() +
-//                placeables[selectedIndex].height +
-//                partitionGap.roundToPx() +
-//                (placeables.lastIndex - selectedIndex - 1) * gap.roundToPx() +
-//                placeables.last().height
-//        }.coerceAtMost(constraints.maxHeight)
-        val layoutHeight = constraints.maxHeight
+        fun getLayoutHeight(selectedIndex: Int): Int {
+            return if (selectedIndex == placeables.lastIndex) {
+                (placeables.size - 1) * gap.roundToPx() + placeables.last().height
+            } else {
+                selectedIndex * gap.roundToPx() +
+                    placeables[selectedIndex].height +
+                    partitionGap.roundToPx() +
+                    (placeables.lastIndex - selectedIndex - 1) * gap.roundToPx() +
+                    placeables.last().height
+            }.coerceAtMost(constraints.maxHeight)
+        }
+
+        val layoutHeight =
+            if (previousSelectedIndex == null) getLayoutHeight(selectedIndex)
+            else {
+                val fromLayoutHeight = getLayoutHeight(previousSelectedIndex)
+                val toLayoutHeight = getLayoutHeight(selectedIndex)
+
+                (fromLayoutHeight + ((toLayoutHeight - fromLayoutHeight) * yDeltaAnimation.value)).toInt()
+            }
 
         fun getYPosition(index: Int, selectedIndex: Int, placeables: List<Placeable>): Int {
             return when {
