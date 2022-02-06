@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -143,8 +144,7 @@ private fun SubGoalLayout(
             else {
                 val fromLayoutHeight = getLayoutHeight(previousSelectedIndex)
                 val toLayoutHeight = getLayoutHeight(selectedIndex)
-
-                (fromLayoutHeight + ((toLayoutHeight - fromLayoutHeight) * yDeltaAnimation.value)).toInt()
+                interpolateValue(fromLayoutHeight, toLayoutHeight, yDeltaAnimation.value)
             }
 
         fun getYPosition(index: Int, selectedIndex: Int, placeables: List<Placeable>): Int {
@@ -166,10 +166,14 @@ private fun SubGoalLayout(
                     val toY = getYPosition(index, selectedIndex, placeables)
                     placeable.placeRelative(
                         x = 0,
-                        y = (fromY + ((toY - fromY) * yDeltaAnimation.value)).toInt()
+                        y = interpolateValue(fromY, toY, yDeltaAnimation.value)
                     )
                 }
             }
         }
     }
+}
+
+fun interpolateValue(from: Int, to: Int, @FloatRange(from = 0.0, to = 1.0) factor: Float): Int {
+    return (from + ((to - from) * factor)).toInt()
 }
