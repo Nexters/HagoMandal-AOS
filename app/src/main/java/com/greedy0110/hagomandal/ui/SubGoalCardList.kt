@@ -3,14 +3,11 @@ package com.greedy0110.hagomandal.ui
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,11 +15,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
+import com.greedy0110.hagomandal.util.rememberPrevious
 
 @Composable
 fun SubGoalCardList() {
@@ -65,38 +62,6 @@ fun PreviewSubGoalCardList() {
 }
 
 @Composable
-fun <T> rememberRef(): MutableState<T?> {
-    // for some reason it always recreated the value with vararg keys,
-    // leaving out the keys as a parameter for remember for now
-    return remember() {
-        object : MutableState<T?> {
-            override var value: T? = null
-
-            override fun component1(): T? = value
-
-            override fun component2(): (T?) -> Unit = { value = it }
-        }
-    }
-}
-
-@Composable
-fun <T> rememberPrevious(
-    current: T,
-    shouldUpdate: (prev: T?, curr: T) -> Boolean = { a: T?, b: T -> a != b },
-): T? {
-    val ref = rememberRef<T>()
-
-    // launched after render, so the current render will have the old value anyway
-    SideEffect {
-        if (shouldUpdate(ref.value, current)) {
-            ref.value = current
-        }
-    }
-
-    return ref.value
-}
-
-@Composable
 private fun SubGoalLayout(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
@@ -118,9 +83,8 @@ private fun SubGoalLayout(
         )
     }
 
-    // TODO: 코드 구조 리팩토링하기
     Layout(
-        modifier = modifier.background(Color.DarkGray),
+        modifier = modifier,
         content = content
     ) { measurables, constraints ->
         val placeables = measurables.map { measurable ->
@@ -139,6 +103,14 @@ private fun SubGoalLayout(
             }.coerceAtMost(constraints.maxHeight)
         }
 
+        fun getYPosition(index: Int, selectedIndex: Int): Int {
+            return when {
+                index == 0 -> 0.dp
+                index > selectedIndex -> gap * (index - 1) + (placeables[index - 1].height.toDp() + partitionGap)
+                else -> gap * index
+            }.roundToPx()
+        }
+
         val layoutHeight =
             if (previousSelectedIndex == null) getLayoutHeight(selectedIndex)
             else {
@@ -147,23 +119,15 @@ private fun SubGoalLayout(
                 interpolateValue(fromLayoutHeight, toLayoutHeight, yDeltaAnimation.value)
             }
 
-        fun getYPosition(index: Int, selectedIndex: Int, placeables: List<Placeable>): Int {
-            return when {
-                index == 0 -> 0.dp
-                index > selectedIndex -> gap * (index - 1) + (placeables[index - 1].height.toDp() + partitionGap)
-                else -> gap * index
-            }.roundToPx()
-        }
-
         layout(constraints.maxWidth, layoutHeight) {
             placeables.forEachIndexed { index, placeable ->
                 if (previousSelectedIndex == null) placeable.placeRelative(
                     x = 0,
-                    y = getYPosition(index, selectedIndex, placeables)
+                    y = getYPosition(index, selectedIndex)
                 )
                 else {
-                    val fromY = getYPosition(index, previousSelectedIndex, placeables)
-                    val toY = getYPosition(index, selectedIndex, placeables)
+                    val fromY = getYPosition(index, previousSelectedIndex)
+                    val toY = getYPosition(index, selectedIndex)
                     placeable.placeRelative(
                         x = 0,
                         y = interpolateValue(fromY, toY, yDeltaAnimation.value)
