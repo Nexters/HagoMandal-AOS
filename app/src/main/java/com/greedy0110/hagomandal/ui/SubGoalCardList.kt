@@ -1,9 +1,12 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,6 +68,19 @@ private fun SubGoalLayout(
 ) {
     val gap = 40.dp
 
+    // selectedIndex 별로 애니메이션이 실행되고 싶어.
+    val yDeltaAnimation = remember(selectedIndex) { Animatable(0f) }
+
+
+    //TODO: 전 selected 를 알아야해.
+
+    LaunchedEffect(yDeltaAnimation) {
+        yDeltaAnimation.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(1000)
+        )
+    }
+
     Layout(
         modifier = modifier,
         content = content
@@ -73,24 +89,27 @@ private fun SubGoalLayout(
             measurable.measure(constraints)
         }
 
-        val layoutHeight = if (selectedIndex == placeables.lastIndex) {
-            (placeables.size - 1) * gap.roundToPx() + placeables.last().height
-        } else {
-            selectedIndex * gap.roundToPx() +
-                placeables[selectedIndex].height +
-                partitionGap.roundToPx() +
-                (placeables.lastIndex - selectedIndex - 1) * gap.roundToPx() +
-                placeables.last().height
-        }.coerceAtMost(constraints.maxHeight)
+//        val layoutHeight = if (selectedIndex == placeables.lastIndex) {
+//            (placeables.size - 1) * gap.roundToPx() + placeables.last().height
+//        } else {
+//            selectedIndex * gap.roundToPx() +
+//                placeables[selectedIndex].height +
+//                partitionGap.roundToPx() +
+//                (placeables.lastIndex - selectedIndex - 1) * gap.roundToPx() +
+//                placeables.last().height
+//        }.coerceAtMost(constraints.maxHeight)
+        val layoutHeight = constraints.maxHeight
 
         layout(constraints.maxWidth, layoutHeight) {
             var yPosition = 0
 
             placeables.forEachIndexed { index, placeable ->
                 placeable.placeRelative(x = 0, y = yPosition)
-                yPosition +=
-                    if (index != selectedIndex) gap.roundToPx()
-                    else placeable.height + partitionGap.roundToPx()
+//                yPosition +=
+//                    if (index != selectedIndex) gap.roundToPx()
+//                    else placeable.height + partitionGap.roundToPx() + anana.value.roundToPx()
+                yPosition += gap.roundToPx() +
+                    if (index == selectedIndex) ((placeable.height + partitionGap.roundToPx() - gap.roundToPx()) * yDeltaAnimation.value).toInt() else 0
             }
         }
     }
