@@ -1,7 +1,10 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
@@ -51,23 +54,37 @@ fun SubGaolScreen(
         backgroundColor = backgroundColor
     ) {
         Column(
-            modifier = Modifier
+            Modifier
                 .padding(it)
-                .padding(top = 32.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 32.dp)
         ) {
-            Text(
-                text = "${nickname}님의 핵심목표",
-                style = t14,
-                color = Color.White.copy(alpha = 0.5f)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 20.dp, end = 20.dp)
+            ) {
+                Text(
+                    text = "${nickname}님의 핵심목표",
+                    style = t14,
+                    color = Color.White.copy(alpha = 0.5f)
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    text = mainGoal,
+                    style = t24,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.size(22.dp))
+                SubGoalCardList()
+            }
+            // TODO: 키보드 위에 붙어있어야함.
+            ColorChooser(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(backgroundColor),
+                selectedIndex = null,
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
             )
-            Spacer(modifier = Modifier.size(4.dp))
-            Text(
-                text = mainGoal,
-                style = t24,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.size(22.dp))
-            SubGoalCardList()
         }
     }
 }

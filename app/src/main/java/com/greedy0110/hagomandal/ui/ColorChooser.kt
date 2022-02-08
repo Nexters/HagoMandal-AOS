@@ -2,6 +2,7 @@ package com.greedy0110.hagomandal.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -72,15 +73,17 @@ fun PreviewColorChooserUnit() {
 @Composable
 fun ColorChooser(
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     selectedIndex: Int?
 ) {
     LazyRow(
-        modifier = modifier.padding(vertical = 6.dp, horizontal = 10.dp),
+        modifier = modifier,
+        contentPadding = contentPadding,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items(cardColorBrushes.size) { index ->
             ColorChooserUnit(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 4.dp),
                 index = index,
                 selected = selectedIndex == index
             )
@@ -92,6 +95,6 @@ fun ColorChooser(
 @Composable
 fun PreviewColorChooser() {
     HagoMandalTheme {
-        ColorChooser(Modifier, 5)
+        ColorChooser(Modifier, selectedIndex = 5)
     }
 }

@@ -72,7 +72,7 @@ fun GoalScreen() {
                 badge = "${item.doneCount}/${item.totalCount}",
                 onClick = {
                     coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
+                        pagerState.scrollToPage(index)
                     }
                 }
             )
@@ -83,7 +83,8 @@ fun GoalScreen() {
     HorizontalPager(
         count = pages.size,
         state = pagerState,
-        contentPadding = PaddingValues(top = tabHeight)
+        contentPadding = PaddingValues(top = tabHeight),
+        userScrollEnabled = false
     ) { page ->
         // TODO: 패딩은?
         when (page) {
