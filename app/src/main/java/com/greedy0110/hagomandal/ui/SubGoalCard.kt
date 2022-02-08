@@ -1,5 +1,7 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -48,15 +51,20 @@ fun SubGoalCard(
     val (title, setTitle) = rememberSaveable { mutableStateOf("") }
     val maxTitleLength = 12
 
-    // TODO: 애니메이션으로 개선.
-    val fontSize = if (selected) 20.sp else 15.sp
-    val textAlpha = if (selected) 1f else 0.3f
+    // TODO: 애니메이션 처리 고도화.
+    val animationDuration = 1000
+    val fontSizeSp by animateIntAsState(
+        targetValue = if (selected) 20 else 15,
+    )
+    val textAlpha by animateFloatAsState(
+        targetValue = if (selected) 1f else 0.3f,
+    )
 
     val textStyle = TextStyle(
         fontWeight = FontWeight.W500,
         color = Color.White.copy(textAlpha),
         fontStyle = FontStyle.Normal,
-        fontSize = fontSize,
+        fontSize = fontSizeSp.sp,
         fontFamily = defaultFontFamily
     )
 
