@@ -106,7 +106,7 @@ fun GoalTab(
 
     val indicatorColor = when {
         completed -> Color(0xff3174d6)
-        else -> Color(0xff619FFF).copy(alpha = 0.2f)
+        else -> Color(0xFF619FFF).copy(alpha = 0.2f)
     }
 
     Column(

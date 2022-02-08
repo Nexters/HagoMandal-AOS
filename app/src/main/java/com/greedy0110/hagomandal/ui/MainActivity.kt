@@ -63,7 +63,7 @@ fun GoalScreen() {
             )
         }
     ) {
-        // Add tabs for all of our pages
+        //TODO: 도대체 클릭이 왜 안돼냐;
         pages.forEachIndexed { index, item ->
             GoalTab(
                 completed = item.completed,
@@ -84,7 +84,7 @@ fun GoalScreen() {
         count = pages.size,
         state = pagerState,
         contentPadding = PaddingValues(top = tabHeight),
-        userScrollEnabled = false
+        // userScrollEnabled = false // 이렇게 세팅할 수 있어야함...
     ) { page ->
         // TODO: 패딩은?
         when (page) {
