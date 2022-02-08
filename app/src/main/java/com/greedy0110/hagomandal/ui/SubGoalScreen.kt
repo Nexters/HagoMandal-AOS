@@ -53,7 +53,7 @@ fun SubGaolScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 20.dp)
+                .padding(top = 32.dp, start = 20.dp, end = 20.dp)
         ) {
             Text(
                 text = "${nickname}님의 핵심목표",
