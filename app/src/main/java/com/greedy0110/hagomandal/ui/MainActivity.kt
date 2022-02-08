@@ -3,12 +3,14 @@ package com.greedy0110.hagomandal.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -55,14 +57,10 @@ fun GoalScreen() {
         // Our selected tab is our current page
         selectedTabIndex = pagerState.currentPage,
         backgroundColor = backgroundColor,
-        // TODO: indicator 만들기
         indicator = { tabPositions ->
             GoalIndicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
             )
-//            TabRowDefaults.Indicator(
-//                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-//            )
         }
     ) {
         // Add tabs for all of our pages
@@ -74,16 +72,18 @@ fun GoalScreen() {
                 badge = "${item.doneCount}/${item.totalCount}",
                 onClick = {
                     coroutineScope.launch {
-                        pagerState.scrollToPage(index)
+                        pagerState.animateScrollToPage(index)
                     }
                 }
             )
         }
     }
 
+    val tabHeight = 56.dp
     HorizontalPager(
         count = pages.size,
         state = pagerState,
+        contentPadding = PaddingValues(top = tabHeight)
     ) { page ->
         // TODO: 패딩은?
         when (page) {

@@ -38,13 +38,16 @@ private val t14 = TextStyle(
 )
 
 @Composable
-fun SubGaolScreen() {
+fun SubGaolScreen(
+    modifier: Modifier = Modifier
+) {
     val nickname = "박만달"
     val mainGoal = "8구단 드래프트 1순위"
 
     val backgroundColor = Color(0xff19202e)
 
     Scaffold(
+        modifier = modifier,
         backgroundColor = backgroundColor
     ) {
         Column(

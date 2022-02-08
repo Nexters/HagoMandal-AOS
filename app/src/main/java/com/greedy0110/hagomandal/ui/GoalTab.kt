@@ -78,14 +78,14 @@ fun GoalTab(
         else -> Color(0xff40485c)
     }
     val indicatorHeight = 2.dp
-    // TODO: 컬러 알아내면 다시 작업
-    val defaultIndicatorColor = Color.Red
-//    val defaultIndicatorColor = Color(0xff202532)
+    val defaultIndicatorColor = Color(0xff619FFF).copy(alpha = 0.2f)
+    val tabHeight = 56.dp
 
     Column(
         modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
+            .height(tabHeight)
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
