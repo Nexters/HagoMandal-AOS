@@ -63,7 +63,7 @@ fun GoalScreen() {
             )
         }
     ) {
-        //TODO: 도대체 클릭이 왜 안돼냐;
+        // TODO: 도대체 클릭이 왜 안돼냐;
         pages.forEachIndexed { index, item ->
             GoalTab(
                 completed = item.completed,

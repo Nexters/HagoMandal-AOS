@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.greedy0110.hagomandal.util.coloredShadow
 
 private val defaultFontFamily: FontFamily = FontFamily.SansSerif
 private val t20 = TextStyle(
@@ -71,6 +72,14 @@ fun SubGoalCard(
     Column(
         // TODO: shadow 설정은 어떻게?
         modifier = modifier
+            .coloredShadow(
+                color = Color.Black,
+                alpha = 0.2f,
+                borderRadius = 16.dp,
+                shadowRadius = 20.dp,
+                offsetY = (-16).dp,
+                offsetX = 2.dp
+            )
             .background(backgroundColor, shape = RoundedCornerShape(16.dp))
             .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.Start
@@ -103,7 +112,7 @@ fun SubGoalCard(
     }
 }
 
-@Preview(widthDp = 320, heightDp = 640)
+@Preview(widthDp = 320, heightDp = 640, showBackground = true)
 @Composable
 fun PreviewSubGoalCard() {
     Column(modifier = Modifier.padding(20.dp)) {
