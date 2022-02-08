@@ -17,9 +17,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
+
+private val defaultFontFamily: FontFamily = FontFamily.SansSerif
+private val t12 = TextStyle(
+    fontWeight = FontWeight.W400,
+    color = Color.White,
+    fontStyle = FontStyle.Normal,
+    fontSize = 14.sp,
+    fontFamily = defaultFontFamily,
+    lineHeight = 1.2.sp,
+    letterSpacing = (-0.3).sp
+)
+
+private val t10 = TextStyle(
+    fontWeight = FontWeight.W500,
+    color = Color.White,
+    fontSize = 10.sp,
+    fontFamily = defaultFontFamily,
+    letterSpacing = (-0.3).sp
+)
 
 @Composable
 fun GoalTabBadge(
@@ -42,7 +66,7 @@ fun GoalTabBadge(
             )
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = text,
-        color = badgeTextColor
+        style = t10.copy(badgeTextColor)
     )
 }
 
@@ -78,8 +102,12 @@ fun GoalTab(
         else -> Color(0xff40485c)
     }
     val indicatorHeight = 2.dp
-    val defaultIndicatorColor = Color(0xff619FFF).copy(alpha = 0.2f)
     val tabHeight = 56.dp
+
+    val indicatorColor = when {
+        completed -> Color(0xff3174d6)
+        else -> Color(0xff619FFF).copy(alpha = 0.2f)
+    }
 
     Column(
         modifier = modifier
@@ -92,11 +120,12 @@ fun GoalTab(
     ) {
         Row(
             modifier = Modifier
-                .padding(bottom = 12.dp),
+                .padding(bottom = 12.dp)
+                .weight(1f),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = title, color = textColor)
+            Text(text = title, style = t12.copy(color = textColor))
             Spacer(Modifier.size(4.dp))
             GoalTabBadge(completed = completed, selected = selected, text = badge)
         }
@@ -104,7 +133,7 @@ fun GoalTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(indicatorHeight)
-                .background(defaultIndicatorColor)
+                .background(indicatorColor)
         )
     }
 }
@@ -123,13 +152,12 @@ fun PreviewGoalTab() {
 @Composable
 fun GoalIndicator(modifier: Modifier = Modifier) {
     val indicatorHeight = 2.dp
-    val indicatorColor = Color(0xff3288ff)
+    val indicatorColor = Color.White.copy(alpha = 0.8f)
 
     Box(
         modifier
             .fillMaxWidth()
             .height(indicatorHeight)
-            .padding(horizontal = 2.dp)
             .background(indicatorColor, RoundedCornerShape(4.dp))
     )
 }
