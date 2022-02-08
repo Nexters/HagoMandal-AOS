@@ -41,11 +41,24 @@ private val t20 = TextStyle(
 @Composable
 fun SubGoalCard(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color(0xfff3c403)
+    backgroundColor: Color = Color(0xfff3c403),
+    selected: Boolean = false,
 ) {
     // TODO: text size가 선택적으로 변경되어야한다.
     val (title, setTitle) = rememberSaveable { mutableStateOf("") }
     val maxTitleLength = 12
+
+    // TODO: 애니메이션으로 개선.
+    val fontSize = if (selected) 20.sp else 15.sp
+    val textAlpha = if (selected) 1f else 0.3f
+
+    val textStyle = TextStyle(
+        fontWeight = FontWeight.W500,
+        color = Color.White.copy(textAlpha),
+        fontStyle = FontStyle.Normal,
+        fontSize = fontSize,
+        fontFamily = defaultFontFamily
+    )
 
     Column(
         // TODO: shadow 설정은 어떻게?
@@ -66,11 +79,11 @@ fun SubGoalCard(
                 onDone = { },
             ),
             // // TODO: textStyle 지정은 전체적으로 고려하기
-            textStyle = t20.copy(color = Color.White),
+            textStyle = textStyle,
             cursorBrush = SolidColor(Color.White),
             decorationBox = {
-                if (title.isEmpty()) Text("세부목표", style = t20.copy(color = Color.White))
-                else Text(title, style = t20.copy(color = Color.White))
+                if (title.isEmpty()) Text("세부목표", style = textStyle)
+                else Text(title, style = textStyle)
             }
         )
         Spacer(modifier = Modifier.size(66.dp))
@@ -86,9 +99,17 @@ fun SubGoalCard(
 @Composable
 fun PreviewSubGoalCard() {
     Column(modifier = Modifier.padding(20.dp)) {
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff5533c0))
+        SubGoalCard(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = Color(0xff5533c0),
+            selected = true
+        )
         SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff35ace4))
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff09c6a6))
+        SubGoalCard(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = Color(0xff09c6a6),
+            selected = true
+        )
         SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xfff3c403))
     }
 }

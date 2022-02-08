@@ -37,7 +37,8 @@ fun SubGoalCardList() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { selectedIndex = index },
-            backgroundColor = color
+            backgroundColor = color,
+            selected = selectedIndex == index
         )
     }
 
