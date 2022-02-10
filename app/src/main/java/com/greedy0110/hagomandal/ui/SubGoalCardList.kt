@@ -37,7 +37,8 @@ fun SubGoalCardList() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { selectedIndex = index },
-            backgroundColor = color,
+            // backgroundColor = color,
+            brushColorIndex = index, // TODO: index 에 따라 선택된 brushColorIndex 제공하기.
             selected = selectedIndex == index
         )
     }

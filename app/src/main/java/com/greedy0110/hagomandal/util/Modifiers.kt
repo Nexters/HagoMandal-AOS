@@ -20,7 +20,7 @@ fun Modifier.`if`(
         this
     }
 
-//https://gist.github.com/arthurgonzaga/598267f570e38425fc52f97b30e0619d
+// https://gist.github.com/arthurgonzaga/598267f570e38425fc52f97b30e0619d
 fun Modifier.coloredShadow(
     color: Color,
     alpha: Float = 0.2f,
