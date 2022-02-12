@@ -30,10 +30,17 @@ fun OnBoardingNavGraph(
         composable(OnBoardingDestinations.INTRO) {
             IntroScreen(
                 onWhatIsMandalartClick = {
-                    Unit
+                    navController.navigate(OnBoardingDestinations.MANDALART_GUIDE)
                 },
                 onNext = {
-                    Unit
+                    navController.navigate(OnBoardingDestinations.NAME)
+                }
+            )
+        }
+        composable(OnBoardingDestinations.MANDALART_GUIDE) {
+            GuideScreen(
+                onNext = {
+                    navController.navigate(OnBoardingDestinations.NAME)
                 }
             )
         }
