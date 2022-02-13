@@ -23,7 +23,8 @@ fun SingleTextField(
     modifier: Modifier = Modifier,
     text: String,
     onTextChanged: (String) -> Unit,
-    trailingText: String,
+    trailingText: String? = null,
+    hint: String? = null, // TODO: hint 먹이기...
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -44,7 +45,9 @@ fun SingleTextField(
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions
         )
-        Text(text = trailingText, style = t12.copy(Color(0xff999999)))
+        if (trailingText != null) {
+            Text(text = trailingText, style = t12.copy(Color(0xff999999)))
+        }
     }
 }
 

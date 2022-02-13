@@ -69,5 +69,12 @@ fun OnBoardingNavGraph(
                 }
             )
         }
+        composable(OnBoardingDestinations.OTHER_JOB) {
+            OtherJobScreen(
+                onNext = {
+                    navController.navigate(OnBoardingDestinations.GET_STARTED)
+                }
+            )
+        }
     }
 }
