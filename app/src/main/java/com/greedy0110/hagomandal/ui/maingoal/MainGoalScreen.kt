@@ -87,10 +87,11 @@ fun MainGoalScreen(
                 style = t16.copy(color = boxTextColor)
             )
             Spacer(modifier = Modifier.weight(1f))
-            // TODO: 아이콘 교체
             Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.ic_down_arrow),
+                modifier = Modifier
+                    .size(24.dp)
+                    .padding(4.dp),
+                painter = painterResource(id = R.drawable.ic_chevron_down),
                 contentDescription = null,
                 tint = Color.White
             )
