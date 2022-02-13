@@ -66,6 +66,17 @@ val t14 = TextStyle(
     letterSpacing = (-0.3).sp
 )
 
+val t20 = TextStyle(
+    fontWeight = FontWeight.W700,
+    color = Color.White,
+    fontStyle = FontStyle.Normal,
+    fontSize = 20.sp,
+    fontFamily = defaultFontFamily,
+    lineHeight = 24.sp,
+    letterSpacing = (-0.3).sp,
+    textAlign = TextAlign.Center
+)
+
 val t24 = TextStyle(
     fontWeight = FontWeight.W700,
     color = Color.White,

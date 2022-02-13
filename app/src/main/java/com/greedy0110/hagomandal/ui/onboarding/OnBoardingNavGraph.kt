@@ -1,8 +1,6 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,6 +46,16 @@ fun OnBoardingNavGraph(
             NameScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.TYPE)
+                }
+            )
+        }
+        composable(OnBoardingDestinations.TYPE) {
+            TypeScreen(
+                onClickCareer = {
+                    navController.navigate(OnBoardingDestinations.CAREER)
+                },
+                onClickFree = {
+                    navController.navigate(OnBoardingDestinations.GET_STARTED)
                 }
             )
         }
