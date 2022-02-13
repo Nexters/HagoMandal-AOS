@@ -39,7 +39,7 @@ import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 import kotlinx.coroutines.launch
 
-//TODO: 디자인 고도화 필요.
+// TODO: 디자인 고도화 필요.
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GuideScreen(

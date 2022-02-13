@@ -44,5 +44,12 @@ fun OnBoardingNavGraph(
                 }
             )
         }
+        composable(OnBoardingDestinations.NAME) {
+            NameScreen(
+                onNext = {
+                    navController.navigate(OnBoardingDestinations.TYPE)
+                }
+            )
+        }
     }
 }
