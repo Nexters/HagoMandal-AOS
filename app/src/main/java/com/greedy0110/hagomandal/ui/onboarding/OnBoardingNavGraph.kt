@@ -59,5 +59,15 @@ fun OnBoardingNavGraph(
                 }
             )
         }
+        composable(OnBoardingDestinations.CAREER) {
+            CareerScreen(
+                onCareerSelected = {
+                    navController.navigate(OnBoardingDestinations.GET_STARTED)
+                },
+                onClickOtherCareer = {
+                    navController.navigate(OnBoardingDestinations.OTHER_JOB)
+                }
+            )
+        }
     }
 }
