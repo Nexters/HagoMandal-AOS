@@ -3,16 +3,19 @@ package com.greedy0110.hagomandal.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.greedy0110.hagomandal.ui.onboarding.OnBoardingApp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -20,10 +23,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            OnBoardingApp()
             // TODO: Activity 는 하나의 Scenario 를 의미해야한다.
-            HagoMandalTheme {
-                GoalScreen()
-            }
+            // HagoMandalTheme {
+            //     GoalScreen()
+            // }
         }
     }
 }
@@ -55,17 +59,13 @@ fun GoalScreen() {
         // Our selected tab is our current page
         selectedTabIndex = pagerState.currentPage,
         backgroundColor = backgroundColor,
-        // TODO: indicator 만들기
         indicator = { tabPositions ->
             GoalIndicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
             )
-//            TabRowDefaults.Indicator(
-//                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-//            )
         }
     ) {
-        // Add tabs for all of our pages
+        // TODO: 도대체 클릭이 왜 안돼냐;
         pages.forEachIndexed { index, item ->
             GoalTab(
                 completed = item.completed,
@@ -81,9 +81,12 @@ fun GoalScreen() {
         }
     }
 
+    val tabHeight = 56.dp
     HorizontalPager(
         count = pages.size,
         state = pagerState,
+        contentPadding = PaddingValues(top = tabHeight),
+        // userScrollEnabled = false // 이렇게 세팅할 수 있어야함...
     ) { page ->
         // TODO: 패딩은?
         when (page) {

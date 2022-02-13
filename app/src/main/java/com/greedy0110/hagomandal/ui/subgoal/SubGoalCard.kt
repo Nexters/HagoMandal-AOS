@@ -1,5 +1,7 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -27,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.greedy0110.hagomandal.util.coloredShadow
 
 private val defaultFontFamily: FontFamily = FontFamily.SansSerif
 private val t20 = TextStyle(
@@ -41,16 +45,44 @@ private val t20 = TextStyle(
 @Composable
 fun SubGoalCard(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color(0xfff3c403)
+    // backgroundColor: Color = Color(0xfff3c403),
+    brushColorIndex: Int = 0,
+    selected: Boolean = false,
 ) {
     // TODO: text size가 선택적으로 변경되어야한다.
     val (title, setTitle) = rememberSaveable { mutableStateOf("") }
     val maxTitleLength = 12
 
+    // TODO: 애니메이션 처리 고도화.
+    val animationDuration = 1000
+    val fontSizeSp by animateIntAsState(
+        targetValue = if (selected) 20 else 15,
+    )
+    val textAlpha by animateFloatAsState(
+        targetValue = if (selected) 1f else 0.3f,
+    )
+
+    val textStyle = TextStyle(
+        fontWeight = FontWeight.W500,
+        color = Color.White.copy(textAlpha),
+        fontStyle = FontStyle.Normal,
+        fontSize = fontSizeSp.sp,
+        fontFamily = defaultFontFamily
+    )
+
     Column(
         // TODO: shadow 설정은 어떻게?
         modifier = modifier
-            .background(backgroundColor, shape = RoundedCornerShape(16.dp))
+            .coloredShadow(
+                color = Color.Black,
+                alpha = 0.2f,
+                borderRadius = 16.dp,
+                shadowRadius = 20.dp,
+                offsetY = (-16).dp,
+                offsetX = 2.dp
+            )
+            // .background(backgroundColor, shape = RoundedCornerShape(16.dp))
+            .background(cardColorBrushes[brushColorIndex], shape = RoundedCornerShape(16.dp))
             .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.Start
     ) {
@@ -66,11 +98,11 @@ fun SubGoalCard(
                 onDone = { },
             ),
             // // TODO: textStyle 지정은 전체적으로 고려하기
-            textStyle = t20.copy(color = Color.White),
+            textStyle = textStyle,
             cursorBrush = SolidColor(Color.White),
             decorationBox = {
-                if (title.isEmpty()) Text("세부목표", style = t20.copy(color = Color.White))
-                else Text(title, style = t20.copy(color = Color.White))
+                if (title.isEmpty()) Text("세부목표", style = textStyle)
+                else Text(title, style = textStyle)
             }
         )
         Spacer(modifier = Modifier.size(66.dp))
@@ -82,13 +114,33 @@ fun SubGoalCard(
     }
 }
 
-@Preview(widthDp = 320, heightDp = 640)
+@Preview(widthDp = 320, heightDp = 640, showBackground = true)
 @Composable
 fun PreviewSubGoalCard() {
     Column(modifier = Modifier.padding(20.dp)) {
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff5533c0))
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff35ace4))
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff09c6a6))
-        SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xfff3c403))
+        SubGoalCard(
+            modifier = Modifier.fillMaxWidth(),
+            brushColorIndex = 0,
+            selected = true
+        )
+        SubGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 1)
+        SubGoalCard(
+            modifier = Modifier.fillMaxWidth(),
+            brushColorIndex = 2,
+            selected = true
+        )
+        SubGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 4)
+        // SubGoalCard(
+        //     modifier = Modifier.fillMaxWidth(),
+        //     backgroundColor = Color(0xff5533c0),
+        //     selected = true
+        // )
+        // SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xff35ace4))
+        // SubGoalCard(
+        //     modifier = Modifier.fillMaxWidth(),
+        //     backgroundColor = Color(0xff09c6a6),
+        //     selected = true
+        // )
+        // SubGoalCard(modifier = Modifier.fillMaxWidth(), backgroundColor = Color(0xfff3c403))
     }
 }

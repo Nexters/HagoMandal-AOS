@@ -76,6 +76,7 @@ dependencies {
     implementation(Dep.Compose.activity)
     implementation(Dep.Compose.runtime)
     implementation(Dep.Compose.navigation)
+    implementation(Dep.Compose.constraintLayout)
 
     implementation(Dep.Accompanist.inset)
     implementation(Dep.Accompanist.insetUi)
