@@ -76,5 +76,12 @@ fun OnBoardingNavGraph(
                 }
             )
         }
+        composable(OnBoardingDestinations.GET_STARTED) {
+            GetStartedScreen(
+                onNext = {
+                    // TODO: 다른 NavGraph 로?
+                }
+            )
+        }
     }
 }
