@@ -111,9 +111,9 @@ fun GoalTab(
 
     Column(
         modifier = modifier
-            .clickable { onClick() }
             .fillMaxWidth()
             .height(tabHeight)
+            .clickable { onClick() }
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

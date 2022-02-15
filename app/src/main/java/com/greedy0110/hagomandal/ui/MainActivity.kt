@@ -3,6 +3,7 @@ package com.greedy0110.hagomandal.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
@@ -16,7 +17,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
-import com.greedy0110.hagomandal.ui.onboarding.OnBoardingApp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -24,10 +24,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            OnBoardingApp()
-            // HagoMandalTheme {
-            //     GoalScreen()
-            // }
+            // OnBoardingApp()
+            HagoMandalTheme {
+                GoalScreen()
+            }
         }
     }
 }
@@ -55,34 +55,9 @@ fun GoalScreen() {
     // TODO: 이게 뭐람
     val coroutineScope = rememberCoroutineScope()
 
-    TabRow(
-        // Our selected tab is our current page
-        selectedTabIndex = pagerState.currentPage,
-        backgroundColor = backgroundColor,
-        indicator = { tabPositions ->
-            GoalIndicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-            )
-        }
-    ) {
-        // TODO: 도대체 클릭이 왜 안돼냐;
-        pages.forEachIndexed { index, item ->
-            GoalTab(
-                completed = item.completed,
-                selected = pagerState.currentPage == index,
-                title = item.title,
-                badge = "${item.doneCount}/${item.totalCount}",
-                onClick = {
-                    coroutineScope.launch {
-                        pagerState.scrollToPage(index)
-                    }
-                }
-            )
-        }
-    }
-
     val tabHeight = 56.dp
     HorizontalPager(
+        modifier = Modifier.background(Color.Red),
         count = pages.size,
         state = pagerState,
         contentPadding = PaddingValues(top = tabHeight),
@@ -94,6 +69,34 @@ fun GoalScreen() {
             1 -> SubGaolScreen()
             2 -> DetailGoalScreen()
             else -> throw UnsupportedOperationException()
+        }
+    }
+
+    TabRow(
+        // Our selected tab is our current page
+        selectedTabIndex = pagerState.currentPage,
+        backgroundColor = backgroundColor,
+        indicator = { tabPositions ->
+            GoalIndicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+            )
+        }
+    ) {
+        // TODO: 도대체 클릭이 왜 안돼냐;
+        //  ... Pager가 TabRow를 가리고 있었음. github 문서 내용이 좀 잘못된 거 아닌가?
+        //  컨트리뷰션 해야할듯
+        pages.forEachIndexed { index, item ->
+            GoalTab(
+                completed = item.completed,
+                selected = pagerState.currentPage == index,
+                title = item.title,
+                badge = "${item.doneCount}/${item.totalCount}",
+                onClick = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                }
+            )
         }
     }
 }

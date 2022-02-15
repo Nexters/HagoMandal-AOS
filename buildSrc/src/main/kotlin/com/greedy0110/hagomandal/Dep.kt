@@ -76,7 +76,7 @@ object Dep {
     }
 
     object Accompanist {
-        private const val version = "0.24.1-alpha"
+        private const val version = "0.24.2-alpha"
         const val inset = "com.google.accompanist:accompanist-insets:$version"
         const val insetUi = "com.google.accompanist:accompanist-insets-ui:$version"
         const val systemUi = "com.google.accompanist:accompanist-systemuicontroller:$version"
