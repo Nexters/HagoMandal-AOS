@@ -7,7 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,8 +48,10 @@ data class TabItem(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GoalScreen() {
+    val (mainGoal, setMainGoal) = remember { mutableStateOf("") }
+
     val pages = listOf(
-        TabItem("핵심목표", 1, 1, false),
+        TabItem("핵심목표", if (mainGoal.isNotBlank()) 1 else 0, 1, false),
         TabItem("세부목표", 0, 4, false),
         TabItem("실천목표", 3, 4, false),
     )
@@ -73,6 +79,8 @@ fun GoalScreen() {
         // TODO: 패딩은?
         when (page) {
             0 -> MainGoalScreen(
+                mainGoal = mainGoal,
+                setMainGoal = setMainGoal,
                 onDone = {
                     coroutineScope.launch { moveToNextPageIfPossible() }
                 }

@@ -52,6 +52,8 @@ private val durations = listOf(
 @Composable
 fun MainGoalScreen(
     modifier: Modifier = Modifier,
+    mainGoal: String,
+    setMainGoal: (String) -> Unit,
     onDone: () -> Unit = {},
 ) {
     val boxColor = Color(0xff374151)
@@ -62,7 +64,6 @@ fun MainGoalScreen(
         else -> Color.White
     }
     var showDurationSelector by remember { mutableStateOf(true) }
-    val (mainGoal, setMainGoal) = remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -133,7 +134,9 @@ fun MainGoalScreen(
 @Composable
 fun PreviewMainGoalScreen() {
     HagoMandalTheme {
-        MainGoalScreen()
+        MainGoalScreen(
+            mainGoal = "", setMainGoal = {}
+        )
     }
 }
 
