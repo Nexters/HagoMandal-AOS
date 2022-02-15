@@ -1,4 +1,4 @@
-package com.greedy0110.hagomandal.ui
+package com.greedy0110.hagomandal.ui.subgoal
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.Animatable
@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.greedy0110.hagomandal.ui.SubGoalCard
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.util.rememberPrevious
 

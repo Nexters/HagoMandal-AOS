@@ -23,9 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.imePadding
 import com.greedy0110.hagomandal.ui.ColorChooser
-import com.greedy0110.hagomandal.ui.SubGoal
-import com.greedy0110.hagomandal.ui.SubGoalCardList
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
 
@@ -94,10 +93,11 @@ fun SubGaolScreen(
                     setSelectedIndex = setSelectedIndex
                 )
             }
-            // TODO: 키보드 위에 붙어있어야함.
             ColorChooser(
                 modifier = Modifier
                     .fillMaxWidth()
+                    // .navigationBarsWithImePadding() //TODO: 뭔차이?
+                    .imePadding() // TODO: appcompanist 의 imePadding과 foundation의 것은 무엇이 다른가?
                     .background(backgroundColor),
                 selectedIndex = subGoals[selectedIndex].colorIndex,
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
