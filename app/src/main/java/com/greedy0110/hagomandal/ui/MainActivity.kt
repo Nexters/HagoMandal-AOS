@@ -7,11 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +19,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
+import com.greedy0110.hagomandal.ui.subgoal.SubGaolScreen
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -74,7 +73,7 @@ fun GoalScreen() {
         count = pages.size,
         state = pagerState,
         contentPadding = PaddingValues(top = tabHeight),
-        // userScrollEnabled = false // 이렇게 세팅할 수 있어야함...
+        userScrollEnabled = false // 이렇게 세팅할 수 있어야함...
     ) { page ->
         // TODO: 패딩은?
         when (page) {
@@ -85,7 +84,7 @@ fun GoalScreen() {
                     coroutineScope.launch { moveToNextPageIfPossible() }
                 }
             )
-            1 -> SubGaolScreen()
+            1 -> SubGaolScreen("신승민", mainGoal) // 이름은 userRepository에서 긁어오기
             2 -> DetailGoalScreen()
             else -> throw UnsupportedOperationException()
         }

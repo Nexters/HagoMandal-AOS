@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -21,24 +19,25 @@ import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.util.rememberPrevious
 
+data class SubGoal(
+    val title: String,
+    val colorIndex: Int,
+)
+
 @Composable
-fun SubGoalCardList() {
-    val cardColors = listOf(
-        Color(0xff5533c0),
-        Color(0xff35ace4),
-        Color(0xff09c6a6),
-        Color(0xfff3c403),
-    )
-    var selectedIndex by remember { mutableStateOf(0) }
+fun SubGoalCardList(
+    subGoals: SnapshotStateList<SubGoal>,
+    selectedIndex: Int,
+    setSelectedIndex: (Int) -> Unit
+) {
 
     @Composable
-    fun getCard(color: Color, index: Int) {
+    fun getCard(index: Int, subGoal: SubGoal) {
         SubGoalCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { selectedIndex = index },
-            // backgroundColor = color,
-            brushColorIndex = index, // TODO: index 에 따라 선택된 brushColorIndex 제공하기.
+                .clickable { setSelectedIndex(index) },
+            brushColorIndex = subGoal.colorIndex,
             selected = selectedIndex == index
         )
     }
@@ -49,8 +48,8 @@ fun SubGoalCardList() {
             selectedIndex = selectedIndex,
             partitionGap = 10.dp
         ) {
-            cardColors
-                .forEachIndexed { index, color -> getCard(color, index) }
+            subGoals
+                .forEachIndexed { index, subGoal -> getCard(index, subGoal) }
         }
     }
 }
@@ -58,8 +57,15 @@ fun SubGoalCardList() {
 @Preview
 @Composable
 fun PreviewSubGoalCardList() {
+    val subGoals: SnapshotStateList<SubGoal> = remember {
+        val subGoals = IntRange(0, 3)
+            .map { SubGoal(title = "", colorIndex = it) }
+            .toTypedArray()
+        mutableStateListOf(*subGoals)
+    }
+
     HagoMandalTheme {
-        SubGoalCardList()
+        SubGoalCardList(subGoals, 0, {})
     }
 }
 
