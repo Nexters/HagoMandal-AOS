@@ -29,7 +29,7 @@ data class SubGoal(
 fun SubGoalCardList(
     subGoals: SnapshotStateList<SubGoal>,
     selectedIndex: Int,
-    setSelectedIndex: (Int) -> Unit
+    setSelectedIndex: (Int) -> Unit,
 ) {
 
     @Composable
@@ -39,7 +39,13 @@ fun SubGoalCardList(
                 .fillMaxWidth()
                 .clickable { setSelectedIndex(index) },
             brushColorIndex = subGoal.colorIndex,
-            selected = selectedIndex == index
+            selected = selectedIndex == index,
+            title = subGoal.title,
+            setTitle = { title ->
+                if (subGoals[index].title != title) {
+                    subGoals[index] = subGoals[index].copy(title = title)
+                }
+            }
         )
     }
 

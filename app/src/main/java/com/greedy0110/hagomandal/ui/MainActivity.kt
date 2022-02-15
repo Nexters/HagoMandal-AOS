@@ -7,9 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +22,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
 import com.greedy0110.hagomandal.ui.subgoal.SubGaolScreen
+import com.greedy0110.hagomandal.ui.subgoal.SubGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -48,10 +51,16 @@ data class TabItem(
 @Composable
 fun GoalScreen() {
     val (mainGoal, setMainGoal) = remember { mutableStateOf("") }
+    val subGoals: SnapshotStateList<SubGoal> = remember {
+        val subGoals = IntRange(0, 3)
+            .map { SubGoal(title = "", colorIndex = it) }
+            .toTypedArray()
+        mutableStateListOf(*subGoals)
+    }
 
     val pages = listOf(
         TabItem("핵심목표", if (mainGoal.isNotBlank()) 1 else 0, 1, false),
-        TabItem("세부목표", 0, 4, false),
+        TabItem("세부목표", subGoals.count { it.title.isNotBlank() }, subGoals.size, false),
         TabItem("실천목표", 3, 4, false),
     )
     val backgroundColor = Color(0xff202532)
@@ -84,7 +93,11 @@ fun GoalScreen() {
                     coroutineScope.launch { moveToNextPageIfPossible() }
                 }
             )
-            1 -> SubGaolScreen("신승민", mainGoal) // 이름은 userRepository에서 긁어오기
+            1 -> SubGaolScreen(
+                userName = "신승민",
+                mainGoal = mainGoal,
+                subGoals = subGoals
+            ) // TODO: 이름은 userRepository에서 긁어오기
             2 -> DetailGoalScreen()
             else -> throw UnsupportedOperationException()
         }

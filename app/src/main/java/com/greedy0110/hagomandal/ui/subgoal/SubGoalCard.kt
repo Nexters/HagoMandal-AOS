@@ -15,8 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,9 +46,10 @@ fun SubGoalCard(
     // backgroundColor: Color = Color(0xfff3c403),
     brushColorIndex: Int = 0,
     selected: Boolean = false,
+    title: String = "",
+    setTitle: (String) -> Unit = {},
 ) {
     // TODO: text size가 선택적으로 변경되어야한다.
-    val (title, setTitle) = rememberSaveable { mutableStateOf("") }
     val maxTitleLength = 12
 
     // TODO: 애니메이션 처리 고도화.

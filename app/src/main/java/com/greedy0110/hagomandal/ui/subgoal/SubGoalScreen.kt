@@ -49,16 +49,11 @@ private val t14 = TextStyle(
 
 @Composable
 fun SubGaolScreen(
+    modifier: Modifier = Modifier,
     userName: String,
     mainGoal: String,
-    modifier: Modifier = Modifier
+    subGoals: SnapshotStateList<SubGoal> = mutableStateListOf()
 ) {
-    val subGoals: SnapshotStateList<SubGoal> = remember {
-        val subGoals = IntRange(0, 3)
-            .map { SubGoal(title = "", colorIndex = it) }
-            .toTypedArray()
-        mutableStateListOf(*subGoals)
-    }
     val (selectedIndex, setSelectedIndex) = remember { mutableStateOf(0) }
 
     Scaffold(
@@ -113,7 +108,13 @@ fun SubGaolScreen(
 @Preview
 @Composable
 fun PreviewSubGaolScreen() {
+    val subGoals: SnapshotStateList<SubGoal> = remember {
+        val subGoals = IntRange(0, 3)
+            .map { SubGoal(title = "", colorIndex = it) }
+            .toTypedArray()
+        mutableStateListOf(*subGoals)
+    }
     HagoMandalTheme {
-        SubGaolScreen("신승민", "주식부자가 된 나.")
+        SubGaolScreen(userName = "신승민", mainGoal = "주식부자가 된 나.", subGoals = subGoals)
     }
 }
