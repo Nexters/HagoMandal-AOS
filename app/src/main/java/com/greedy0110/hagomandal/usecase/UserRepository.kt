@@ -15,13 +15,15 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     }
 
     suspend fun setName(name: String) {
-        // sharedPre
-        this.name = name
+        sharedPreferences.edit {
+            putString("name", name)
+        }
     }
 
     suspend fun setJob(job: Job) {
-        // sharedPre
-        this.job = job
+        sharedPreferences.edit {
+            putString("name", job.toString())
+        }
     }
 
     suspend fun shownOnBoarding() {
@@ -34,3 +36,4 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
         return sharedPreferences.getBoolean("shownOnBoarding", false)
     }
 }
+
