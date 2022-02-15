@@ -55,6 +55,13 @@ fun GoalScreen() {
     // TODO: 이게 뭐람
     val coroutineScope = rememberCoroutineScope()
 
+    val moveToNextPageIfPossible = suspend {
+        val currentPage = pagerState.currentPage
+        if (currentPage != pages.lastIndex) {
+            pagerState.animateScrollToPage(currentPage + 1)
+        }
+    }
+
     val tabHeight = 56.dp
     HorizontalPager(
         modifier = Modifier.background(Color.Red),
@@ -65,7 +72,11 @@ fun GoalScreen() {
     ) { page ->
         // TODO: 패딩은?
         when (page) {
-            0 -> MainGoalScreen()
+            0 -> MainGoalScreen(
+                onDone = {
+                    coroutineScope.launch { moveToNextPageIfPossible() }
+                }
+            )
             1 -> SubGaolScreen()
             2 -> DetailGoalScreen()
             else -> throw UnsupportedOperationException()

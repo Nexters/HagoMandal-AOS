@@ -24,8 +24,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +48,7 @@ private val durations = listOf(
     "기간 없이"
 )
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MainGoalScreen(
     modifier: Modifier = Modifier,
@@ -109,6 +112,7 @@ fun MainGoalScreen(
                 }
             )
         } else {
+            val keyboardController = LocalSoftwareKeyboardController.current
             Spacer(modifier = Modifier.height(20.dp))
             SingleTextField(
                 modifier = Modifier.padding(horizontal = 20.dp),
@@ -116,7 +120,10 @@ fun MainGoalScreen(
                 onTextChanged = setMainGoal,
                 trailingText = "최대 15자",
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { onDone() })
+                keyboardActions = KeyboardActions(onDone = {
+                    onDone()
+                    keyboardController?.hide()
+                })
             )
         }
     }
