@@ -1,10 +1,12 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.greedy0110.hagomandal.ui.GoalScreen
 
 object OnBoardingDestinations {
     const val INTRO = "intro"
@@ -14,6 +16,7 @@ object OnBoardingDestinations {
     const val CAREER = "career"
     const val OTHER_JOB = "other_job"
     const val GET_STARTED = "get_started"
+    const val GOAL = "goal"
 }
 
 @Composable
@@ -77,11 +80,16 @@ fun OnBoardingNavGraph(
             )
         }
         composable(OnBoardingDestinations.GET_STARTED) {
+            val getStartedViewModel: GetStartedViewModel = hiltViewModel()
             GetStartedScreen(
                 onNext = {
-                    // TODO: 다른 NavGraph 로?
-                }
+                    navController.navigate(OnBoardingDestinations.GOAL)
+                },
+                getStartedViewModel
             )
+        }
+        composable(OnBoardingDestinations.GOAL) {
+            GoalScreen()
         }
     }
 }
