@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -30,25 +32,13 @@ import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 
-private val messages = listOf(
-    "설마.. 내 목소리가 들리는거야?",
-    "우린 진정한 목표를 세워야하는\n" +
-        "순간에만 대화할 수 있는데..!",
-    "난 너야!\n" +
-        "진정한 목표를 찾고 있는\n" +
-        "네 마음의 소리지!",
-    "어떤 목표를 세워야할지,\n" +
-        "목표를 어떻게 이루어야할지\n" +
-        "고민하고 있지는 않아?",
-    "우리 함께 만다라트를 활용해\n" +
-        "목표를 세워보자!"
-)
-
 @Composable
 fun IntroScreen(
     onWhatIsMandalartClick: () -> Unit = {},
     onNext: () -> Unit = {},
 ) {
+    val messages = stringArrayResource(id = R.array.intro_messages)
+
     var currentPage by remember { mutableStateOf(0) }
     val message = messages[currentPage]
     val isLastPage = currentPage == messages.lastIndex
@@ -82,14 +72,17 @@ fun IntroScreen(
                     bottom.linkTo(parent.bottom, margin = 70.dp)
                 }
             ) {
-                ActionButton(text = "만다라트가 뭔데?", onClick = onWhatIsMandalartClick)
+                ActionButton(
+                    text = stringResource(R.string.what_is_mandalart),
+                    onClick = onWhatIsMandalartClick
+                )
                 Spacer(modifier = Modifier.size(16.dp))
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize()
                         .clickable { onNext() },
-                    text = "좋아, 바로 해보자!",
+                    text = stringResource(R.string.ok_let_us_do_it),
                     style = t16
                 )
             }
@@ -119,7 +112,7 @@ fun PreviewIntroScreen() {
 fun TouchNudge(modifier: Modifier = Modifier) {
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "터치해서 다음으로", style = t14)
+        Text(text = stringResource(R.string.touch_to_next), style = t14)
         Spacer(modifier = Modifier.size(7.dp))
         Icon(
             painter = painterResource(id = R.drawable.ic_down_arrow),

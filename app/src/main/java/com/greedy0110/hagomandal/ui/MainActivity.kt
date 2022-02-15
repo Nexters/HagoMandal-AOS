@@ -16,6 +16,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
+import com.greedy0110.hagomandal.ui.onboarding.OnBoardingApp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -23,10 +24,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // OnBoardingApp()
-            HagoMandalTheme {
-                GoalScreen()
-            }
+            OnBoardingApp()
+            // HagoMandalTheme {
+            //     GoalScreen()
+            // }
         }
     }
 }
