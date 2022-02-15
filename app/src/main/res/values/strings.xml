@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">HagoMandal</string>
+    <string name="what_is_mandalart">만다라트가 뭔데?</string>
+    <string name="ok_let_us_do_it">좋아, 바로 해보자!</string>
+    <string name="touch_to_next">터치해서 다음으로</string>
+    <string name="ok_let_us_go">좋아, 가보자!</string>
+    <array name="intro_messages">
+        <item>설마.. 내 목소리가 들리는거야?</item>
+        <item>우린 진정한 목표를 세워야하는\n순간에만 대화할 수 있는데..!</item>
+        <item>난 너야!\n진정한 목표를 찾고 있는\n네 마음의 소리지!</item>
+        <item>어떤 목표를 세워야할지,\n목표를 어떻게 이루어야할지\n고민하고 있지는 않아?</item>
+        <item>우리 함께 만다라트를 활용해\n목표를 세워보자!</item>
+    </array>
+    <array name="guide_messages">
+        <item>만다라트는 일종의 발상기법으로\n목표를 구체화하는 데 \n아주 효과적이지!</item>
+        <item>핵심 목표 달성을 위한\n세부 목표 키워드를 정하고,</item>
+        <item>행동으로 옮기기 위한\n실천 목표를 세워보는거야!</item>
+    </array>
+    <string name="go_with_mandalart">자 그럼 만다라트를 활용해서\n목표를 세우러 가볼까?</string>
 </resources>

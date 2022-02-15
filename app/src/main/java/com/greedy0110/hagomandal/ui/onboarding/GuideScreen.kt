@@ -26,12 +26,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.ActionButton
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
@@ -45,15 +48,7 @@ import kotlinx.coroutines.launch
 fun GuideScreen(
     onNext: () -> Unit = {}
 ) {
-    val messages = listOf(
-        "만다라트는 일종의 발상기법으로\n" +
-            "목표를 구체화하는 데 \n" +
-            "아주 효과적이지!",
-        "핵심 목표 달성을 위한\n" +
-            "세부 목표 키워드를 정하고,",
-        "행동으로 옮기기 위한\n" +
-            "실천 목표를 세워보는거야!"
-    )
+    val messages = stringArrayResource(id = R.array.guide_messages)
 
     val pagerState = PagerState(0)
     var shownAllGuide by remember { mutableStateOf(false) }
@@ -133,14 +128,13 @@ fun GuideScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(56.dp),
-                        text = "자 그럼 만다라트를 활용해서\n" +
-                            "목표를 세우러 가볼까?",
+                        text = stringResource(id = R.string.go_with_mandalart),
                         style = t24,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     ActionButton(
                         modifier = Modifier.padding(bottom = 74.dp),
-                        text = "좋아, 가보자!",
+                        text = stringResource(R.string.ok_let_us_go),
                         onClick = onNext
                     )
                 }

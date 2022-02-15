@@ -1,8 +1,6 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
@@ -17,6 +15,7 @@ fun OnBoardingApp() {
             val systemUiController = rememberSystemUiController()
             val darkIcons = MaterialTheme.colors.isLight
             SideEffect {
+                // TODO: 왜 투명 안되냐.
                 systemUiController.setSystemBarsColor(
                     Color.Transparent,
                     darkIcons = darkIcons,
@@ -24,11 +23,7 @@ fun OnBoardingApp() {
                 )
             }
 
-            val scaffoldState = rememberScaffoldState()
-
-            Scaffold(scaffoldState = scaffoldState) {
-                OnBoardingNavGraph()
-            }
+            OnBoardingNavGraph()
         }
     }
 }
