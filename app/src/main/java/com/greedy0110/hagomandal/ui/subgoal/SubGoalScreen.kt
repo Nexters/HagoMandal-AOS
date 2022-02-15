@@ -52,7 +52,8 @@ fun SubGaolScreen(
     modifier: Modifier = Modifier,
     userName: String,
     mainGoal: String,
-    subGoals: SnapshotStateList<SubGoal> = mutableStateListOf()
+    subGoals: SnapshotStateList<SubGoal> = mutableStateListOf(),
+    onDone: () -> Unit = {},
 ) {
     val (selectedIndex, setSelectedIndex) = remember { mutableStateOf(0) }
 
@@ -85,7 +86,9 @@ fun SubGaolScreen(
                 SubGoalCardList(
                     subGoals = subGoals,
                     selectedIndex = selectedIndex,
-                    setSelectedIndex = setSelectedIndex
+                    setSelectedIndex = setSelectedIndex,
+                    onNext = { index -> setSelectedIndex(index + 1) },
+                    onDone = { onDone() }
                 )
             }
             ColorChooser(

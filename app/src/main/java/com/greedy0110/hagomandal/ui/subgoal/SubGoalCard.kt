@@ -14,9 +14,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
@@ -48,12 +52,12 @@ fun SubGoalCard(
     selected: Boolean = false,
     title: String = "",
     setTitle: (String) -> Unit = {},
+    isDoneable: Boolean = false,
+    onNext: () -> Unit = {},
+    onDone: () -> Unit = {},
 ) {
-    // TODO: text size가 선택적으로 변경되어야한다.
     val maxTitleLength = 12
 
-    // TODO: 애니메이션 처리 고도화.
-    val animationDuration = 1000
     val fontSizeSp by animateIntAsState(
         targetValue = if (selected) 20 else 15,
     )
@@ -68,6 +72,10 @@ fun SubGoalCard(
         fontSize = fontSizeSp.sp,
         fontFamily = defaultFontFamily
     )
+
+    // https://stackoverflow.com/questions/64181930/request-focus-on-textfield-in-jetpack-compose
+    // TODO: 포커스를 먹이는 방법이긴한데 학습 필요.
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         // TODO: shadow 설정은 어떻게?
@@ -88,13 +96,13 @@ fun SubGoalCard(
         // TODO: hint 설정은 어떻게?
         // TODO: 기본 TextField 설정이 이렇게 어려울 수 가 있나?...
         BasicTextField(
+            modifier = Modifier.focusRequester(focusRequester),
             value = title,
             onValueChange = { if (it.length <= maxTitleLength) setTitle(it) },
-            // // TODO: 마지막 요소는 imeAction이 다를 것.
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
             keyboardActions = KeyboardActions(
-                onNext = { },
-                onDone = { },
+                onNext = { onNext() },
+                onDone = { onDone() },
             ),
             // // TODO: textStyle 지정은 전체적으로 고려하기
             textStyle = textStyle,
@@ -110,6 +118,12 @@ fun SubGoalCard(
 //            fontSize = 12.dp,
             color = Color.White.copy(alpha = 0.8f)
         )
+    }
+
+    if (selected) {
+        SideEffect {
+            focusRequester.requestFocus()
+        }
     }
 }
 

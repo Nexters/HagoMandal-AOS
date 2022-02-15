@@ -72,7 +72,9 @@ fun GoalScreen() {
     val moveToNextPageIfPossible = suspend {
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
-            pagerState.animateScrollToPage(currentPage + 1)
+            // FIXME: 애니메이션으로 동작하면 request focus 등과 함께 사용하기 어렵다.
+            // pagerState.animateScrollToPage(currentPage + 1)
+            pagerState.scrollToPage(currentPage + 1)
         }
     }
 
@@ -96,7 +98,10 @@ fun GoalScreen() {
             1 -> SubGaolScreen(
                 userName = "신승민",
                 mainGoal = mainGoal,
-                subGoals = subGoals
+                subGoals = subGoals,
+                onDone = {
+                    coroutineScope.launch { moveToNextPageIfPossible() }
+                }
             ) // TODO: 이름은 userRepository에서 긁어오기
             2 -> DetailGoalScreen()
             else -> throw UnsupportedOperationException()

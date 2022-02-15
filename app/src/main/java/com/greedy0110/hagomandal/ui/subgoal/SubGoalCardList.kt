@@ -30,6 +30,8 @@ fun SubGoalCardList(
     subGoals: SnapshotStateList<SubGoal>,
     selectedIndex: Int,
     setSelectedIndex: (Int) -> Unit,
+    onNext: (Int) -> Unit = {},
+    onDone: () -> Unit = {},
 ) {
 
     @Composable
@@ -45,7 +47,10 @@ fun SubGoalCardList(
                 if (subGoals[index].title != title) {
                     subGoals[index] = subGoals[index].copy(title = title)
                 }
-            }
+            },
+            isDoneable = index == subGoals.lastIndex,
+            onNext = { onNext(index) },
+            onDone = { onDone() }
         )
     }
 
