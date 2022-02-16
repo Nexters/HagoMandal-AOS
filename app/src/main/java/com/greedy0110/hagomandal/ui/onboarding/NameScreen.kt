@@ -11,8 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.ui.SingleTextField
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t24
@@ -27,8 +27,9 @@ import com.greedy0110.hagomandal.ui.theme.t24
 @Composable
 fun NameScreen(
     onNext: () -> Unit,
+    onBoardingViewModel: OnBoardingViewModel = viewModel(),
 ) {
-    val (text, setText) = remember { mutableStateOf("") }
+    val text = onBoardingViewModel.userName.collectAsState()
 
     Column(
         modifier = Modifier
@@ -49,13 +50,15 @@ fun NameScreen(
         Spacer(modifier = Modifier.height(48.dp))
         SingleTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = text,
-            onTextChanged = setText,
+            text = text.value,
+            onTextChanged = { onBoardingViewModel.setUserName(it) },
             trailingText = "최대 8자",
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
-                // TODO: 이름을 디바이스에 저장하는 코드가 동작해야한다.
-                onNext()
+                if (text.value.isNotBlank()) {
+                    onBoardingViewModel.setUserName(text.value)
+                    onNext()
+                }
             })
         )
     }

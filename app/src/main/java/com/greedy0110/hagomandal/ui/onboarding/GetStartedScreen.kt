@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,31 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.ui.ActionButton
 import com.greedy0110.hagomandal.ui.Helper
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t24
-import com.greedy0110.hagomandal.usecase.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-@HiltViewModel
-class GetStartedViewModel @Inject constructor(
-    private val userRepository: UserRepository
-) : ViewModel() {
-
-    suspend fun shownGuide() {
-        userRepository.shownOnBoarding()
-    }
-}
 
 @Composable
 fun GetStartedScreen(
     onNext: () -> Unit,
-    getStartedViewModel: GetStartedViewModel = viewModel()
+    onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
     val helperMessages = listOf(
         "여기야 여기! 나를 눌러봐!",
@@ -54,7 +38,6 @@ fun GetStartedScreen(
 
     var messageIndex by remember { mutableStateOf(0) }
     val helperMessage = helperMessages[messageIndex]
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -71,8 +54,9 @@ fun GetStartedScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            text = "아 맞다! 그러고 보니 \n" +
-                "내 이름이... 뭐더라..?",
+            text = "좋아, 이제 시작해보자!\n" +
+                "목표를 세우면서 막막할 때마다\n" +
+                "화면 왼쪽 아래 나를 불러줘!",
             style = t24.copy(textAlign = TextAlign.Start)
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -83,10 +67,8 @@ fun GetStartedScreen(
         )
         Spacer(modifier = Modifier.height(20.dp))
         ActionButton(text = "다음으로", onClick = {
-            coroutineScope.launch {
-                getStartedViewModel.shownGuide()
-                onNext()
-            }
+            onBoardingViewModel.shownGuide()
+            onNext()
         })
         Spacer(modifier = Modifier.height(80.dp))
     }

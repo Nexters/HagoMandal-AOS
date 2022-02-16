@@ -1,7 +1,7 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,7 +22,8 @@ object OnBoardingDestinations {
 @Composable
 fun OnBoardingNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = OnBoardingDestinations.INTRO
+    startDestination: String = OnBoardingDestinations.INTRO,
+    onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
     NavHost(
         navController = navController,
@@ -49,7 +50,8 @@ fun OnBoardingNavGraph(
             NameScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.TYPE)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.TYPE) {
@@ -59,7 +61,8 @@ fun OnBoardingNavGraph(
                 },
                 onClickFree = {
                     navController.navigate(OnBoardingDestinations.GET_STARTED)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.CAREER) {
@@ -69,23 +72,24 @@ fun OnBoardingNavGraph(
                 },
                 onClickOtherCareer = {
                     navController.navigate(OnBoardingDestinations.OTHER_JOB)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.OTHER_JOB) {
             OtherJobScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.GET_STARTED)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.GET_STARTED) {
-            val getStartedViewModel: GetStartedViewModel = hiltViewModel()
             GetStartedScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.GOAL)
                 },
-                getStartedViewModel
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.GOAL) {
