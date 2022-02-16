@@ -25,18 +25,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.R
+import com.greedy0110.hagomandal.ui.GoalTextField
 import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.t20
 import com.greedy0110.hagomandal.ui.theme.t24
+import com.greedy0110.hagomandal.util.`if`
 
 @Composable
-fun DetailCard(
+fun DetailGoalCard(
     modifier: Modifier = Modifier,
     brushColorIndex: Int,
     expanded: Boolean = false,
     title: String = "",
     onEditSubGoalClick: () -> Unit = {},
+    onCardClick: () -> Unit = {},
     details: SnapshotStateList<String> = mutableStateListOf(),
+    details2: List<String> = emptyList(),
+    setDetails2: (List<String>) -> Unit = {}
 ) {
     val titleGap = animateDpAsState(targetValue = if (expanded) 15.dp else 7.dp)
     val dotGap = animateDpAsState(targetValue = if (expanded) 15.dp else 4.dp)
@@ -47,6 +52,9 @@ fun DetailCard(
     Column(
         modifier = modifier
             .background(cardColorBrush, RoundedCornerShape(16.dp))
+            .`if`(expanded.not()) {
+                clickable { onCardClick() }
+            }
             .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = bottomPadding.value),
         horizontalAlignment = Alignment.Start
     ) {
@@ -64,11 +72,20 @@ fun DetailCard(
         }
         Spacer(modifier = Modifier.height(titleGap.value))
 
-        val count = details.size
-        repeat(count) {
-            //TODO: details를 바꾸는, TextField를 사용해야할 걸.
-            Text(text = "• ${details[it]}", style = t20)
-            if (it != count - 1) Spacer(modifier = Modifier.height(dotGap.value))
+        val count = details2.size
+        repeat(count) { index ->
+            GoalTextField(
+                value = details2[index],
+                onValueChange = { newValue ->
+                    details2
+                        .toMutableList()
+                        .also { it[index] = newValue }
+                        .also { setDetails2(it.toList()) }
+                },
+                prefix = { Text(text = "• ", style = t20) },
+                textStyle = t20,
+            )
+            if (index != count - 1) Spacer(modifier = Modifier.height(dotGap.value))
         }
     }
 }
@@ -77,19 +94,19 @@ fun DetailCard(
 @Composable
 fun PreviewDetailCard() {
     Column(modifier = Modifier.padding(20.dp)) {
-        DetailCard(
+        DetailGoalCard(
             modifier = Modifier.fillMaxWidth(),
             brushColorIndex = 0,
             expanded = true,
             title = "문제 해결 능력 기르기",
             details = remember { mutableStateListOf("아아아", "이이이", "호호호") }
         )
-        DetailCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 1)
-        DetailCard(
+        DetailGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 1)
+        DetailGoalCard(
             modifier = Modifier.fillMaxWidth(),
             brushColorIndex = 2,
             expanded = true
         )
-        DetailCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 4)
+        DetailGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 4)
     }
 }

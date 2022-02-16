@@ -20,6 +20,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.greedy0110.hagomandal.ui.detail.DetailGoal
+import com.greedy0110.hagomandal.ui.detail.DetailGoalScreen
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
 import com.greedy0110.hagomandal.ui.onboarding.OnBoardingApp
 import com.greedy0110.hagomandal.ui.subgoal.SubGaolScreen
@@ -57,6 +59,19 @@ fun GoalScreen() {
             .map { SubGoal(title = "", colorIndex = it) }
             .toTypedArray()
         mutableStateListOf(*subGoals)
+    }
+
+    val detailGoals: SnapshotStateList<DetailGoal> = remember {
+        val detailGoals = subGoals
+            .map { subGoal ->
+                DetailGoal(
+                    title = subGoal.title,
+                    colorIndex = subGoal.colorIndex,
+                    details = List(4) { "" }
+                )
+            }
+            .toTypedArray()
+        mutableStateListOf(*detailGoals)
     }
 
     val pages = listOf(
@@ -104,7 +119,11 @@ fun GoalScreen() {
                     coroutineScope.launch { moveToNextPageIfPossible() }
                 }
             ) // TODO: 이름은 userRepository에서 긁어오기
-            2 -> DetailGoalScreen()
+            2 -> DetailGoalScreen(
+                userName = "신승민",
+                mainGoal = mainGoal,
+                detailGoals = detailGoals,
+            )
             else -> throw UnsupportedOperationException()
         }
     }

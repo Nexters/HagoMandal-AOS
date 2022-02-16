@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -35,13 +34,6 @@ import androidx.compose.ui.unit.sp
 import com.greedy0110.hagomandal.util.coloredShadow
 
 private val defaultFontFamily: FontFamily = FontFamily.SansSerif
-private val t20 = TextStyle(
-    fontWeight = FontWeight.W700,
-    color = Color.White,
-    fontStyle = FontStyle.Normal,
-    fontSize = 20.sp,
-    fontFamily = defaultFontFamily
-)
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
@@ -106,7 +98,7 @@ fun SubGoalCard(
             ),
             // // TODO: textStyle 지정은 전체적으로 고려하기
             textStyle = textStyle,
-            cursorBrush = SolidColor(Color.White),
+            // cursorBrush = SolidColor(Color.White), TODO: ?? 커서는 어떻게...
             decorationBox = {
                 if (title.isEmpty()) Text("세부목표", style = textStyle)
                 else Text(title, style = textStyle)
