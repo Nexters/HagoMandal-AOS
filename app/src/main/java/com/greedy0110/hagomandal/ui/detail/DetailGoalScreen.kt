@@ -1,4 +1,4 @@
-package com.greedy0110.hagomandal.ui
+package com.greedy0110.hagomandal.ui.detail
 
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.clickable
