@@ -5,11 +5,9 @@ import androidx.room.PrimaryKey
 import com.greedy0110.hagomandal.usecase.Job
 
 @Entity
-data class UserEntity (
+data class UserEntity(
     @PrimaryKey val id: String,
     val name: String,
     val job: Job?,
     val interest: String?
 )
-
-

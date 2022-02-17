@@ -7,7 +7,7 @@ enum class GoalColor {
 }
 
 @Entity
-data class SubGoal (
+data class SubGoal(
     val color: GoalColor,
     val content: String
 )
