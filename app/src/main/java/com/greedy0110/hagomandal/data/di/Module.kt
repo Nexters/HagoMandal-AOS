@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.greedy0110.hagomandal.BuildConfig
 import com.greedy0110.hagomandal.data.db.AppDatabase
+import com.greedy0110.hagomandal.data.db.GoalDao
 import com.greedy0110.hagomandal.data.remote.api.HagoMandalService
 import dagger.Module
 import dagger.Provides
@@ -91,5 +92,11 @@ object DatabaseModule {
         }
 
         return builder.build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDao(appDatabase: AppDatabase): GoalDao {
+        return appDatabase.getDao()
     }
 }

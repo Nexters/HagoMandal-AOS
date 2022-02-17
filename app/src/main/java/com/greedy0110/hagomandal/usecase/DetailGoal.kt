@@ -1,5 +1,5 @@
 package com.greedy0110.hagomandal.usecase
 
-data class DetailGoal(
+data class DetailGoal (
     val content: String
 )

@@ -1,35 +1,20 @@
 package com.greedy0110.hagomandal.usecase
 
+import com.greedy0110.hagomandal.data.db.GoalDao
+import com.greedy0110.hagomandal.data.db.MandalartEntity
+import javax.inject.Inject
 import javax.inject.Singleton
 
-enum class GoalColor {
-    RED, ORAGE, YELLOW, LIGHT_GREEN, GREEN, BLUE, NAVY, VIOLET, PURPLE, PINK
-}
-
-enum class SubGoalLocation {
-    TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
-}
-
 @Singleton
-class GoalRepository {
-    fun setGoalDuration(days: Int){
-        // TODO("Not Implemented")
-    }
-
-    fun setMainGoal(){
-        // TODO("Not Implemented")
-    }
-
-    fun setSubGoal(subGoalLocation: SubGoalLocation, goal: String){
-        // TODO("Not Implemented")
-    }
-
-    fun setSubGoalColor(subGoalLocation: SubGoalLocation, goalColor: GoalColor) {
-        // TODO("Not Implemented")
-    }
-
-    fun setDetailGoal(index: Int, goal: String) {
-        // TODO("Not Implemented")
+class GoalRepository @Inject constructor(private val dao: GoalDao) {
+    fun setGoal(
+        id: String,
+        period: Int,
+        mainGoal: String,
+        subGoals: List<SubGoal>,
+        detailGoal: List<DetailGoal>
+    ) {
+        val mandalartEntity = MandalartEntity(id, period, mainGoal, subGoals, detailGoal)
+        dao.insertMandalart(mandalartEntity)
     }
 }
-
