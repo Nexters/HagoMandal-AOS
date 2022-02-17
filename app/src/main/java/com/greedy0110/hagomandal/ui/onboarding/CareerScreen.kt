@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.ActionButton
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
@@ -71,6 +72,7 @@ private val careers = listOf(
 fun CareerScreen(
     onCareerSelected: () -> Unit,
     onClickOtherCareer: () -> Unit,
+    onBoardingViewModel: OnBoardingViewModel = viewModel(),
 ) {
     var selectedCareer by remember { mutableStateOf<Career?>(null) }
 
@@ -108,7 +110,7 @@ fun CareerScreen(
             CareerBottomSheet(
                 career = career,
                 onCareerSelected = { subSector ->
-                    // TODO: 선택을 데이터베이스에 저장하기
+                    onBoardingViewModel.setJob(career.sector, subSector)
                     onCareerSelected()
                 },
                 onDismiss = {
@@ -158,12 +160,11 @@ private fun CareerBottomSheet(
                         text = career.sector,
                         style = t20.copy(textAlign = TextAlign.Start)
                     )
-                    // TODO: X 아이콘으로 대체
                     Icon(
                         modifier = Modifier
                             .size(24.dp)
                             .clickable { onDismiss() },
-                        painter = painterResource(id = R.drawable.ic_check),
+                        painter = painterResource(id = R.drawable.ic_close),
                         contentDescription = null,
                         tint = Color.White
                     )

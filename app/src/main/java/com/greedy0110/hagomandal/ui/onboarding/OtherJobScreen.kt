@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.ui.SingleTextField
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t24
@@ -27,6 +28,7 @@ import com.greedy0110.hagomandal.ui.theme.t24
 @Composable
 fun OtherJobScreen(
     onNext: () -> Unit,
+    onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
     val (text, setText) = remember { mutableStateOf("") }
 
@@ -54,7 +56,7 @@ fun OtherJobScreen(
             hint = "예시) 유튜버",
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
-                // TODO: 본인 커리어를 디비에 저장
+                onBoardingViewModel.setJob(text, "")
                 onNext()
             })
         )

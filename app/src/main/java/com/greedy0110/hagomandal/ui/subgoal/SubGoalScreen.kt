@@ -16,36 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.imePadding
 import com.greedy0110.hagomandal.ui.ColorChooser
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
-
-private val defaultFontFamily: FontFamily = FontFamily.SansSerif
-private val t24 = TextStyle(
-    fontWeight = FontWeight.W700,
-    color = Color.White,
-    fontStyle = FontStyle.Normal,
-    fontSize = 24.sp,
-    fontFamily = defaultFontFamily,
-    lineHeight = 1.5.sp,
-    letterSpacing = (-0.3).sp
-)
-
-private val t14 = TextStyle(
-    fontWeight = FontWeight.W400,
-    color = Color.White,
-    fontSize = 14.sp,
-    fontFamily = defaultFontFamily,
-    letterSpacing = (-0.3).sp
-)
+import com.greedy0110.hagomandal.ui.theme.t14
+import com.greedy0110.hagomandal.ui.theme.t24
 
 @Composable
 fun SubGaolScreen(

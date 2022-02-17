@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.ui.ActionButton
 import com.greedy0110.hagomandal.ui.Helper
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
@@ -28,6 +29,7 @@ import com.greedy0110.hagomandal.ui.theme.t24
 @Composable
 fun GetStartedScreen(
     onNext: () -> Unit,
+    onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
     val helperMessages = listOf(
         "여기야 여기! 나를 눌러봐!",
@@ -52,8 +54,9 @@ fun GetStartedScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            text = "아 맞다! 그러고 보니 \n" +
-                "내 이름이... 뭐더라..?",
+            text = "좋아, 이제 시작해보자!\n" +
+                "목표를 세우면서 막막할 때마다\n" +
+                "화면 왼쪽 아래 나를 불러줘!",
             style = t24.copy(textAlign = TextAlign.Start)
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -63,7 +66,10 @@ fun GetStartedScreen(
             onClick = { if (messageIndex != helperMessages.lastIndex) messageIndex++ }
         )
         Spacer(modifier = Modifier.height(20.dp))
-        ActionButton(text = "다음으로", onClick = onNext)
+        ActionButton(text = "다음으로", onClick = {
+            onBoardingViewModel.shownGuide()
+            onNext()
+        })
         Spacer(modifier = Modifier.height(80.dp))
     }
 }

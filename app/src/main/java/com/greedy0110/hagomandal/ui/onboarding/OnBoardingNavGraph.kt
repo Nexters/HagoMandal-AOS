@@ -1,10 +1,12 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.greedy0110.hagomandal.ui.GoalScreen
 
 object OnBoardingDestinations {
     const val INTRO = "intro"
@@ -14,12 +16,14 @@ object OnBoardingDestinations {
     const val CAREER = "career"
     const val OTHER_JOB = "other_job"
     const val GET_STARTED = "get_started"
+    const val GOAL = "goal"
 }
 
 @Composable
 fun OnBoardingNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = OnBoardingDestinations.INTRO
+    startDestination: String = OnBoardingDestinations.INTRO,
+    onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
     NavHost(
         navController = navController,
@@ -46,7 +50,8 @@ fun OnBoardingNavGraph(
             NameScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.TYPE)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.TYPE) {
@@ -56,7 +61,8 @@ fun OnBoardingNavGraph(
                 },
                 onClickFree = {
                     navController.navigate(OnBoardingDestinations.GET_STARTED)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.CAREER) {
@@ -66,22 +72,28 @@ fun OnBoardingNavGraph(
                 },
                 onClickOtherCareer = {
                     navController.navigate(OnBoardingDestinations.OTHER_JOB)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.OTHER_JOB) {
             OtherJobScreen(
                 onNext = {
                     navController.navigate(OnBoardingDestinations.GET_STARTED)
-                }
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
         }
         composable(OnBoardingDestinations.GET_STARTED) {
             GetStartedScreen(
                 onNext = {
-                    // TODO: 다른 NavGraph 로?
-                }
+                    navController.navigate(OnBoardingDestinations.GOAL)
+                },
+                onBoardingViewModel = onBoardingViewModel
             )
+        }
+        composable(OnBoardingDestinations.GOAL) {
+            GoalScreen()
         }
     }
 }
