@@ -54,6 +54,7 @@ fun OtherJobScreen(
             text = text,
             onTextChanged = setText,
             hint = "예시) 유튜버",
+            maxLength = 20,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 onBoardingViewModel.setJob(text, "")

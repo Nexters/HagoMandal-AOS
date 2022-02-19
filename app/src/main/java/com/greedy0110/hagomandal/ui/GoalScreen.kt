@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,11 +16,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.greedy0110.hagomandal.ui.detail.DetailGoal
 import com.greedy0110.hagomandal.ui.detail.DetailGoalScreen
 import com.greedy0110.hagomandal.ui.maingoal.MainGoalScreen
 import com.greedy0110.hagomandal.ui.subgoal.SubGaolScreen
-import com.greedy0110.hagomandal.ui.subgoal.SubGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import kotlinx.coroutines.launch
 
@@ -42,26 +37,10 @@ fun GoalScreen(
     onSubmit: () -> Unit = {},
     goalViewModel: GoalViewModel = viewModel()
 ) {
-    val (mainGoal, setMainGoal) = remember { mutableStateOf("") }
-    val subGoals: SnapshotStateList<SubGoal> = remember {
-        val subGoals = IntRange(0, 3)
-            .map { SubGoal(title = "", colorIndex = it) }
-            .toTypedArray()
-        mutableStateListOf(*subGoals)
-    }
-
-    val detailGoals: SnapshotStateList<DetailGoal> = remember(subGoals) {
-        val detailGoals = subGoals
-            .map { subGoal ->
-                DetailGoal(
-                    title = subGoal.title,
-                    colorIndex = subGoal.colorIndex,
-                    details = List(4) { "" }
-                )
-            }
-            .toTypedArray()
-        mutableStateListOf(*detailGoals)
-    }
+    val userName by goalViewModel.userName.collectAsState()
+    val mainGoal by goalViewModel.mainGoal.collectAsState()
+    val subGoals by goalViewModel.subGoals.collectAsState()
+    val detailGoals by goalViewModel.detailGoal.collectAsState()
 
     val pages = listOf(
         TabItem("핵심목표", if (mainGoal.isNotBlank()) 1 else 0, 1, false),
@@ -93,22 +72,22 @@ fun GoalScreen(
         when (page) {
             0 -> MainGoalScreen(
                 mainGoal = mainGoal,
-                setMainGoal = setMainGoal,
-                onDone = {
-                    coroutineScope.launch { moveToNextPageIfPossible() }
-                }
+                setMainGoal = goalViewModel::setMainGoal,
+                onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
             )
+
             1 -> SubGaolScreen(
-                userName = goalViewModel.userName.collectAsState().value,
+                userName = userName,
                 mainGoal = mainGoal,
                 subGoals = subGoals,
-                onDone = {
-                    coroutineScope.launch { moveToNextPageIfPossible() }
-                }
+                setSubGoal = goalViewModel::setSubGoal,
+                setSubGoalColor = goalViewModel::setSubGoal,
+                onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
             )
             2 -> DetailGoalScreen(
-                userName = goalViewModel.userName.collectAsState().value,
+                userName = userName,
                 mainGoal = mainGoal,
+                onDetailFixed = goalViewModel::setDetailGoal,
                 detailGoals = detailGoals,
                 onSubmit = onSubmit
             )

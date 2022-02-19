@@ -16,20 +16,17 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.greedy0110.hagomandal.ui.SubGoal
 import com.greedy0110.hagomandal.ui.SubGoalCard
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.util.rememberPrevious
 
-data class SubGoal(
-    val title: String,
-    val colorIndex: Int,
-)
-
 @Composable
 fun SubGoalCardList(
-    subGoals: SnapshotStateList<SubGoal>,
-    selectedIndex: Int,
-    setSelectedIndex: (Int) -> Unit,
+    subGoals: List<SubGoal>,
+    setSubGoal: (Int, String) -> Unit = { _, _ -> },
+    selectedIndex: Int = 0,
+    setSelectedIndex: (Int) -> Unit = {},
     onNext: (Int) -> Unit = {},
     onDone: () -> Unit = {},
 ) {
@@ -43,9 +40,7 @@ fun SubGoalCardList(
             selected = selectedIndex == index,
             title = subGoal.title,
             setTitle = { title ->
-                if (subGoals[index].title != title) {
-                    subGoals[index] = subGoals[index].copy(title = title)
-                }
+                setSubGoal(index, title)
             },
             isDoneable = index == subGoals.lastIndex,
             onNext = {
@@ -80,7 +75,7 @@ fun PreviewSubGoalCardList() {
     }
 
     HagoMandalTheme {
-        SubGoalCardList(subGoals, 0, {})
+        SubGoalCardList(subGoals)
     }
 }
 

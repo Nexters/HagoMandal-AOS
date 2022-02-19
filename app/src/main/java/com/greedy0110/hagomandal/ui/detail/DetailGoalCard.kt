@@ -41,7 +41,7 @@ fun DetailGoalCard(
     onEditSubGoalClick: () -> Unit = {},
     onCardClick: () -> Unit = {},
     details: List<String> = emptyList(),
-    setDetails2: (List<String>) -> Unit = {},
+    onDetailFixed: (Int, String) -> Unit = { _, _ -> },
     isLastCard: Boolean = false,
     onNext: () -> Unit = {},
     onDone: () -> Unit = {},
@@ -80,12 +80,7 @@ fun DetailGoalCard(
 
             GoalTextField(
                 value = details[index],
-                onValueChange = { newValue ->
-                    details
-                        .toMutableList()
-                        .also { it[index] = newValue }
-                        .also { setDetails2(it.toList()) }
-                },
+                onValueChange = { newValue -> onDetailFixed(index, newValue) },
                 prefix = { Text(text = "• ", style = t20) },
                 textStyle = t20,
                 keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),

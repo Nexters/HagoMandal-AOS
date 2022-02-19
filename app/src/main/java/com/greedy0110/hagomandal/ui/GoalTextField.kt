@@ -10,12 +10,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.greedy0110.hagomandal.ui.theme.t20
 
-// TODO: 다른 화면도 이거 사용해야할 듯.
+const val GOAL_TEXT_FIELD_MAX_LEN = Int.MAX_VALUE
+
 @Composable
 fun GoalTextField(
     modifier: Modifier = Modifier,
@@ -26,23 +29,30 @@ fun GoalTextField(
     textStyle: TextStyle = TextStyle.Default,
     hint: String = "",
     prefix: @Composable () -> Unit = {},
+    singleLine: Boolean = true,
+    maxLength: Int = GOAL_TEXT_FIELD_MAX_LEN,
 ) {
     BasicTextField(
         modifier = modifier,
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { newValue ->
+            if (newValue.length > maxLength) return@BasicTextField
+            onValueChange(newValue)
+        },
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        singleLine = singleLine,
         textStyle = textStyle.copy(textAlign = TextAlign.Start),
-        // cursorBrush = SolidColor(Color.White),
+        cursorBrush = SolidColor(Color.White),
         decorationBox = { innerTextField ->
             Row(horizontalArrangement = Arrangement.Start) {
                 prefix()
-                if (value.isEmpty()) Text(
-                    text = hint,
-                    style = textStyle.copy(textAlign = TextAlign.Start)
-                )
-                else innerTextField()
+                if (value.isEmpty()) {
+                    Text(
+                        text = hint,
+                        style = textStyle.copy(textAlign = TextAlign.Start)
+                    )
+                } else innerTextField()
             }
         }
     )

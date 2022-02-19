@@ -13,28 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.ActionButton
+import com.greedy0110.hagomandal.ui.DetailGoal
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-
-data class DetailGoal(
-    val title: String,
-    val details: List<String>,
-    val colorIndex: Int,
-)
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun DetailGoalCardList(
     modifier: Modifier = Modifier,
-    detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
+    detailGoals: List<DetailGoal> = emptyList(),
+    onDetailFixed: (subGoalIndex: Int, index: Int, raw: String) -> Unit = { _, _, _ -> Unit },
     selectedIndex: Int = 0,
     setSelectedIndex: (Int) -> Unit = {},
     onNext: (Int) -> Unit = {},
@@ -95,9 +90,7 @@ fun DetailGoalCardList(
                     setSelectedIndex(index)
                 },
                 details = goal.details,
-                setDetails2 = {
-                    detailGoals[index] = detailGoals[index].copy(details = it)
-                },
+                onDetailFixed = { detailIndex, raw -> onDetailFixed(index, detailIndex, raw) },
                 isLastCard = index == detailGoals.lastIndex,
                 onNext = {
                     onNext(index)

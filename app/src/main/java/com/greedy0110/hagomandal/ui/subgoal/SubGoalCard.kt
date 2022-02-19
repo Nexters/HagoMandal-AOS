@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
@@ -77,9 +76,7 @@ fun SubGoalCard(
             .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        // TODO: hint 설정은 어떻게?
-        // TODO: 기본 TextField 설정이 이렇게 어려울 수 가 있나?...
-        BasicTextField(
+        GoalTextField(
             value = title,
             onValueChange = { if (it.length <= maxTitleLength) setTitle(it) },
             keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
@@ -87,13 +84,9 @@ fun SubGoalCard(
                 onNext = { onNext() },
                 onDone = { onDone() },
             ),
-            // // TODO: textStyle 지정은 전체적으로 고려하기
+            maxLength = 12,
             textStyle = textStyle,
-            // cursorBrush = SolidColor(Color.White), TODO: ?? 커서는 어떻게...
-            decorationBox = {
-                if (title.isEmpty()) Text("세부목표", style = textStyle)
-                else Text(title, style = textStyle)
-            }
+            hint = "세부목표",
         )
         Spacer(modifier = Modifier.size(66.dp))
         Text(

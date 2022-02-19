@@ -120,6 +120,7 @@ fun MainGoalScreen(
                 text = mainGoal,
                 onTextChanged = setMainGoal,
                 trailingText = "최대 15자",
+                maxLength = 15,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     onDone()
