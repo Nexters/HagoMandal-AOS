@@ -31,6 +31,7 @@ import com.greedy0110.hagomandal.ui.GoalTextField
 import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.t20
 import com.greedy0110.hagomandal.ui.theme.t24
+import com.greedy0110.hagomandal.util.coloredShadow
 
 @Composable
 fun DetailGoalCard(
@@ -54,6 +55,14 @@ fun DetailGoalCard(
 
     Column(
         modifier = modifier
+            .coloredShadow(
+                color = Color.Black,
+                alpha = 0.2f,
+                borderRadius = 16.dp,
+                shadowRadius = 20.dp,
+                offsetY = (-16).dp,
+                offsetX = 2.dp
+            )
             .background(cardColorBrush, RoundedCornerShape(16.dp))
             .clickable { onCardClick() }
             .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = bottomPadding.value),

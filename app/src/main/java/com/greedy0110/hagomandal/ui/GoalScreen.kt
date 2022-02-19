@@ -43,9 +43,24 @@ fun GoalScreen(
     val detailGoals by goalViewModel.detailGoal.collectAsState()
 
     val pages = listOf(
-        TabItem("핵심목표", if (mainGoal.isNotBlank()) 1 else 0, 1, false),
-        TabItem("세부목표", subGoals.count { it.title.isNotBlank() }, subGoals.size, false),
-        TabItem("실천목표", 3, 4, false),
+        TabItem(
+            title = "핵심목표",
+            doneCount = if (mainGoal.isNotBlank()) 1 else 0,
+            totalCount = 1,
+            selected = false
+        ),
+        TabItem(
+            title = "세부목표",
+            doneCount = subGoals.count { it.title.isNotBlank() },
+            totalCount = 4,
+            selected = false
+        ),
+        TabItem(
+            title = "실천목표",
+            doneCount = detailGoals.sumOf { list -> list.details.count { it.isNotBlank() } },
+            totalCount = 16,
+            selected = false
+        ),
     )
     val tabBackgroundColor = Color(0xff202532)
 

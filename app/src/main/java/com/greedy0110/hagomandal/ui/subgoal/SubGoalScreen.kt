@@ -90,8 +90,7 @@ fun SubGaolScreen(
 fun PreviewSubGaolScreen() {
     val subGoals = IntRange(0, 3)
         .map { SubGoal(title = "", colorIndex = it) }
-        .toTypedArray()
     HagoMandalTheme {
-        SubGaolScreen(userName = "신승민", mainGoal = "주식부자가 된 나.")
+        SubGaolScreen(userName = "신승민", mainGoal = "주식부자가 된 나.", subGoals = subGoals)
     }
 }
