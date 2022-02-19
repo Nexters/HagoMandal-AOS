@@ -52,7 +52,9 @@ data class TabItem(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun GoalScreen() {
+fun GoalScreen(
+    onSubmit: () -> Unit = {},
+) {
     val (mainGoal, setMainGoal) = remember { mutableStateOf("") }
     val subGoals: SnapshotStateList<SubGoal> = remember {
         val subGoals = IntRange(0, 3)
@@ -123,6 +125,7 @@ fun GoalScreen() {
                 userName = "신승민",
                 mainGoal = mainGoal,
                 detailGoals = detailGoals,
+                onSubmit = onSubmit
             )
             else -> throw UnsupportedOperationException()
         }

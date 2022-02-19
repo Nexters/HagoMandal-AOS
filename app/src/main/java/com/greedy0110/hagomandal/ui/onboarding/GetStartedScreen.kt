@@ -42,6 +42,7 @@ fun GetStartedScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 20.dp)
             .background(
                 brush = Brush.linearGradient(
                     listOf(Color(0xff202632), Color(0xff131b2b))
@@ -52,8 +53,7 @@ fun GetStartedScreen(
         Spacer(modifier = Modifier.height(60.dp))
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .fillMaxWidth(),
             text = "좋아, 이제 시작해보자!\n" +
                 "목표를 세우면서 막막할 때마다\n" +
                 "화면 왼쪽 아래 나를 불러줘!",
@@ -61,7 +61,7 @@ fun GetStartedScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         Helper(
-            modifier = Modifier.padding(horizontal = 20.dp),
+            modifier = Modifier,
             message = helperMessage,
             onClick = { if (messageIndex != helperMessages.lastIndex) messageIndex++ }
         )

@@ -12,12 +12,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -25,7 +29,9 @@ import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t24
+import timber.log.Timber
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DetailGoalScreen(
     modifier: Modifier = Modifier,
@@ -34,8 +40,16 @@ fun DetailGoalScreen(
     detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
     expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
     selectedIndex: MutableState<Int> = remember { mutableStateOf(0) },
-    onDone: () -> Unit = {},
+    onSubmit: () -> Unit = { Timber.d("beanbean on submit") },
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var isSubmitVisible by remember { mutableStateOf(false) }
+
+    val onDone = {
+        keyboardController?.hide()
+        isSubmitVisible = true
+    }
+
     Scaffold(
         modifier = modifier,
         backgroundColor = backgroundColor
@@ -53,9 +67,12 @@ fun DetailGoalScreen(
                 selectedIndex = selectedIndex.value,
                 setSelectedIndex = { selectedIndex.value = it },
                 expanded = expanded.value,
+                setExpanded = { expanded.value = it },
                 onNext = { index -> selectedIndex.value = index + 1 },
-                onDone = { onDone() }
-            ) { expanded.value = it }
+                onDone = { onDone() },
+                isSubmitButtonShow = isSubmitVisible,
+                onSubmit = onSubmit
+            )
 
             AnimatedVisibility(
                 visible = expanded.value.not() || selectedIndex.value == 0,

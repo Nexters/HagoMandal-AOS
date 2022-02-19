@@ -19,7 +19,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,12 +42,12 @@ fun DetailGoalCard(
     onCardClick: () -> Unit = {},
     details: List<String> = emptyList(),
     setDetails2: (List<String>) -> Unit = {},
-    isDoneable: Boolean = false,
+    isLastCard: Boolean = false,
     onNext: () -> Unit = {},
     onDone: () -> Unit = {},
 ) {
     val titleGap = animateDpAsState(targetValue = if (expanded) 15.dp else 7.dp)
-    val dotGap = animateDpAsState(targetValue = if (expanded) 15.dp else 4.dp)
+    val dotGap = animateDpAsState(targetValue = if (expanded) 20.dp else 4.dp)
     val bottomPadding = animateDpAsState(targetValue = if (expanded) 30.dp else 13.dp)
 
     val cardColorBrush = cardColorBrushes[brushColorIndex]
@@ -72,7 +74,10 @@ fun DetailGoalCard(
         Spacer(modifier = Modifier.height(titleGap.value))
 
         val count = details.size
+        val focusManager = LocalFocusManager.current
         repeat(count) { index ->
+            val isDoneable = index == details.lastIndex && isLastCard
+
             GoalTextField(
                 value = details[index],
                 onValueChange = { newValue ->
@@ -86,13 +91,11 @@ fun DetailGoalCard(
                 keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
                 keyboardActions = KeyboardActions(
                     onNext = {
-
                         // 마지막 이면, 다음 카드로 넘어가야함.
                         if (index == details.lastIndex) onNext()
-                        // TODO: 다음 detail TextField로 포커스가 넘어가야함.
+                        // 다음 detail TextField로 포커스가 넘어가야함.
                         else {
-                            // TODO: 어카누?
-                            onNext()
+                            focusManager.moveFocus(FocusDirection.Down)
                         }
                     },
                     onDone = { onDone() },

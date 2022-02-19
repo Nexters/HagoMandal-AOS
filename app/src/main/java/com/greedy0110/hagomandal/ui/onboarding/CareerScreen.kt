@@ -83,6 +83,7 @@ fun CareerScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 20.dp)
                 .background(
                     brush = Brush.linearGradient(
                         listOf(Color(0xff202632), Color(0xff131b2b))
@@ -91,8 +92,7 @@ fun CareerScreen(
         ) {
             Spacer(modifier = Modifier.height(60.dp))
             Text(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp),
+
                 text = "직업을 선택하면\n" +
                     "더 적합한 목표를 추천할 수 있어!",
                 style = t24.copy(textAlign = TextAlign.Start)

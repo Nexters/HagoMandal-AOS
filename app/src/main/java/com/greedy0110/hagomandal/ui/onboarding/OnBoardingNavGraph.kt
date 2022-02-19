@@ -93,7 +93,11 @@ fun OnBoardingNavGraph(
             )
         }
         composable(OnBoardingDestinations.GOAL) {
-            GoalScreen()
+            GoalScreen(
+                onSubmit = {
+                    // TODO: 완료 화면으로 이동, 백 스텍 따위 없으셈.
+                }
+            )
         }
     }
 }
