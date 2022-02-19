@@ -69,19 +69,22 @@ fun DetailGoalCardList(
             DetailGoalCard(
                 modifier = Modifier.fillMaxWidth(),
                 brushColorIndex = goal.colorIndex,
-                title = goal.title,
-                details2 = goal.details,
-                setDetails2 = {
-                    detailGoals[index] = detailGoals[index].copy(details = it)
-                },
                 expanded = expanded,
+                title = goal.title,
                 onCardClick = {
                     if (expanded.not()) {
                         setExpanded(true)
                     }
                     // TODO: expanded 상태로 완전히 변화하며 스크롤 되어야한다... ?
                     setSelectedIndex(index)
-                }
+                },
+                details = goal.details,
+                setDetails2 = {
+                    detailGoals[index] = detailGoals[index].copy(details = it)
+                },
+                isDoneable = index == detailGoals.lastIndex,
+                onNext = { onNext(index) },
+                onDone = { onDone() }
             )
         }
     }

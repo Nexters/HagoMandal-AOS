@@ -34,6 +34,7 @@ fun DetailGoalScreen(
     detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
     expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
     selectedIndex: MutableState<Int> = remember { mutableStateOf(0) },
+    onDone: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -51,7 +52,9 @@ fun DetailGoalScreen(
                 detailGoals = detailGoals,
                 selectedIndex = selectedIndex.value,
                 setSelectedIndex = { selectedIndex.value = it },
-                expanded = expanded.value
+                expanded = expanded.value,
+                onNext = { index -> selectedIndex.value = index + 1 },
+                onDone = { onDone() }
             ) { expanded.value = it }
 
             AnimatedVisibility(

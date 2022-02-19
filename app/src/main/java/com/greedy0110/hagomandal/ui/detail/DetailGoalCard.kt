@@ -12,16 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.R
@@ -38,9 +38,11 @@ fun DetailGoalCard(
     title: String = "",
     onEditSubGoalClick: () -> Unit = {},
     onCardClick: () -> Unit = {},
-    details: SnapshotStateList<String> = mutableStateListOf(),
-    details2: List<String> = emptyList(),
-    setDetails2: (List<String>) -> Unit = {}
+    details: List<String> = emptyList(),
+    setDetails2: (List<String>) -> Unit = {},
+    isDoneable: Boolean = false,
+    onNext: () -> Unit = {},
+    onDone: () -> Unit = {},
 ) {
     val titleGap = animateDpAsState(targetValue = if (expanded) 15.dp else 7.dp)
     val dotGap = animateDpAsState(targetValue = if (expanded) 15.dp else 4.dp)
@@ -69,18 +71,32 @@ fun DetailGoalCard(
         }
         Spacer(modifier = Modifier.height(titleGap.value))
 
-        val count = details2.size
+        val count = details.size
         repeat(count) { index ->
             GoalTextField(
-                value = details2[index],
+                value = details[index],
                 onValueChange = { newValue ->
-                    details2
+                    details
                         .toMutableList()
                         .also { it[index] = newValue }
                         .also { setDetails2(it.toList()) }
                 },
                 prefix = { Text(text = "• ", style = t20) },
                 textStyle = t20,
+                keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+
+                        // 마지막 이면, 다음 카드로 넘어가야함.
+                        if (index == details.lastIndex) onNext()
+                        // TODO: 다음 detail TextField로 포커스가 넘어가야함.
+                        else {
+                            // TODO: 어카누?
+                            onNext()
+                        }
+                    },
+                    onDone = { onDone() },
+                ),
             )
             if (index != count - 1) Spacer(modifier = Modifier.height(dotGap.value))
         }
@@ -95,8 +111,7 @@ fun PreviewDetailCard() {
             modifier = Modifier.fillMaxWidth(),
             brushColorIndex = 0,
             expanded = true,
-            title = "문제 해결 능력 기르기",
-            details = remember { mutableStateListOf("아아아", "이이이", "호호호") }
+            title = "문제 해결 능력 기르기"
         )
         DetailGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 1)
         DetailGoalCard(
