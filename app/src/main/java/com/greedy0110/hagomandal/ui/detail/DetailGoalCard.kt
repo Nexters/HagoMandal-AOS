@@ -12,16 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.R
@@ -29,7 +31,6 @@ import com.greedy0110.hagomandal.ui.GoalTextField
 import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.t20
 import com.greedy0110.hagomandal.ui.theme.t24
-import com.greedy0110.hagomandal.util.`if`
 
 @Composable
 fun DetailGoalCard(
@@ -39,12 +40,14 @@ fun DetailGoalCard(
     title: String = "",
     onEditSubGoalClick: () -> Unit = {},
     onCardClick: () -> Unit = {},
-    details: SnapshotStateList<String> = mutableStateListOf(),
-    details2: List<String> = emptyList(),
-    setDetails2: (List<String>) -> Unit = {}
+    details: List<String> = emptyList(),
+    setDetails2: (List<String>) -> Unit = {},
+    isLastCard: Boolean = false,
+    onNext: () -> Unit = {},
+    onDone: () -> Unit = {},
 ) {
     val titleGap = animateDpAsState(targetValue = if (expanded) 15.dp else 7.dp)
-    val dotGap = animateDpAsState(targetValue = if (expanded) 15.dp else 4.dp)
+    val dotGap = animateDpAsState(targetValue = if (expanded) 20.dp else 4.dp)
     val bottomPadding = animateDpAsState(targetValue = if (expanded) 30.dp else 13.dp)
 
     val cardColorBrush = cardColorBrushes[brushColorIndex]
@@ -52,9 +55,7 @@ fun DetailGoalCard(
     Column(
         modifier = modifier
             .background(cardColorBrush, RoundedCornerShape(16.dp))
-            .`if`(expanded.not()) {
-                clickable { onCardClick() }
-            }
+            .clickable { onCardClick() }
             .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = bottomPadding.value),
         horizontalAlignment = Alignment.Start
     ) {
@@ -72,18 +73,33 @@ fun DetailGoalCard(
         }
         Spacer(modifier = Modifier.height(titleGap.value))
 
-        val count = details2.size
+        val count = details.size
+        val focusManager = LocalFocusManager.current
         repeat(count) { index ->
+            val isDoneable = index == details.lastIndex && isLastCard
+
             GoalTextField(
-                value = details2[index],
+                value = details[index],
                 onValueChange = { newValue ->
-                    details2
+                    details
                         .toMutableList()
                         .also { it[index] = newValue }
                         .also { setDetails2(it.toList()) }
                 },
                 prefix = { Text(text = "• ", style = t20) },
                 textStyle = t20,
+                keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        // 마지막 이면, 다음 카드로 넘어가야함.
+                        if (index == details.lastIndex) onNext()
+                        // 다음 detail TextField로 포커스가 넘어가야함.
+                        else {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    },
+                    onDone = { onDone() },
+                ),
             )
             if (index != count - 1) Spacer(modifier = Modifier.height(dotGap.value))
         }
@@ -98,8 +114,7 @@ fun PreviewDetailCard() {
             modifier = Modifier.fillMaxWidth(),
             brushColorIndex = 0,
             expanded = true,
-            title = "문제 해결 능력 기르기",
-            details = remember { mutableStateListOf("아아아", "이이이", "호호호") }
+            title = "문제 해결 능력 기르기"
         )
         DetailGoalCard(modifier = Modifier.fillMaxWidth(), brushColorIndex = 1)
         DetailGoalCard(

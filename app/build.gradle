@@ -112,6 +112,7 @@ dependencies {
     implementation(Dep.Firebase.analytics)
 
     implementation(Dep.timber)
+    implementation(Dep.snapper)
 }
 
 // 린트 적용하는 GitHook을 강제한다.

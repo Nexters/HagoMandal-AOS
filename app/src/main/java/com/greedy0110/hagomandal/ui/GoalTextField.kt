@@ -3,6 +3,7 @@ package com.greedy0110.hagomandal.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.greedy0110.hagomandal.ui.theme.t20
 
@@ -31,12 +33,12 @@ fun GoalTextField(
         onValueChange = onValueChange,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        textStyle = textStyle,
+        textStyle = textStyle.copy(textAlign = TextAlign.Start),
         // cursorBrush = SolidColor(Color.White),
         decorationBox = { innerTextField ->
             Row(horizontalArrangement = Arrangement.Start) {
                 prefix()
-                if (value.isEmpty()) Text(text = hint, style = textStyle)
+                if (value.isEmpty()) Text(text = hint, style = textStyle.copy(textAlign = TextAlign.Start))
                 else innerTextField()
             }
         }
@@ -49,6 +51,9 @@ fun PreviewGoalTextField() {
     Column {
         GoalTextField(value = "안녕", hint = "플레이스 홀더")
         GoalTextField(value = "", hint = "플레이스 홀더")
-        GoalTextField(value = "신승민", prefix = { Text(text = "• ", style = t20) })
+        GoalTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = "신승민", prefix = { Text(text = "• ", style = t20) }
+        )
     }
 }
