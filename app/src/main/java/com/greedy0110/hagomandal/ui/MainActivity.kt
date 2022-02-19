@@ -91,8 +91,8 @@ fun GoalScreen(
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
             // FIXME: 애니메이션으로 동작하면 request focus 등과 함께 사용하기 어렵다.
-            // pagerState.animateScrollToPage(currentPage + 1)
-            pagerState.scrollToPage(currentPage + 1)
+            pagerState.animateScrollToPage(currentPage + 1)
+            // pagerState.scrollToPage(currentPage + 1)
         }
     }
 

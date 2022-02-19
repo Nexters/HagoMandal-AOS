@@ -33,7 +33,6 @@ fun SubGoalCardList(
     onNext: (Int) -> Unit = {},
     onDone: () -> Unit = {},
 ) {
-
     @Composable
     fun getCard(index: Int, subGoal: SubGoal) {
         SubGoalCard(
@@ -49,10 +48,14 @@ fun SubGoalCardList(
                 }
             },
             isDoneable = index == subGoals.lastIndex,
-            onNext = { onNext(index) },
+            onNext = {
+                onNext(index)
+            },
             onDone = { onDone() }
         )
     }
+
+    // TODO: 바뀐 selected index에 따라서, focus 먹어야 하는 게 정해진다.
 
     Column {
         SubGoalLayout(
