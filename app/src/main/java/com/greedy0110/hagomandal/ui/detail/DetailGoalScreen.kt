@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
@@ -35,16 +36,28 @@ fun DetailGoalScreen(
         modifier = modifier,
         backgroundColor = backgroundColor
     ) {
-        Column(
-            Modifier
-                .padding(it)
-                .padding(top = 32.dp)
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
         ) {
+            val (mainGoalSlot, cardList) = createRefs()
+
+            DetailGoalCardList(
+                modifier = Modifier
+                    .constrainAs(cardList) { centerTo(parent) },
+                detailGoals = detailGoals,
+                selectedIndex = selectedIndex,
+                setSelectedIndex = setSelectedIndex,
+                expanded = expanded.value
+            ) { expanded.value = it }
 
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 20.dp, end = 20.dp)
+                    .constrainAs(mainGoalSlot) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                    .padding(top = 32.dp)
             ) {
                 Text(
                     text = "${userName}님의 핵심목표",
@@ -56,13 +69,6 @@ fun DetailGoalScreen(
                     text = mainGoal,
                     style = t24,
                     color = Color.White
-                )
-                Spacer(modifier = Modifier.size(22.dp))
-                DetailGoalCardList(
-                    detailGoals = detailGoals,
-                    expanded = expanded,
-                    selectedIndex = selectedIndex,
-                    setSelectedIndex = setSelectedIndex
                 )
             }
         }

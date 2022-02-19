@@ -10,11 +10,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -35,17 +32,16 @@ data class DetailGoal(
 fun DetailGoalCardList(
     modifier: Modifier = Modifier,
     detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
-    titles: List<String> = emptyList(),
-    detailss: SnapshotStateList<SnapshotStateList<String>> = mutableStateListOf(),
     selectedIndex: Int = 0,
     setSelectedIndex: (Int) -> Unit = {},
     onNext: (Int) -> Unit = {},
     onDone: () -> Unit = {},
-    expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
+    expanded: Boolean = false,
+    setExpanded: (Boolean) -> Unit = {},
 ) {
 
     // TODO: snap 되어야 한다. (select 에 따라서 우리가, offset 설정하면 된다. 스크롤 노노?)
-    val spaceSize: Int by animateIntAsState(if (expanded.value) 24 else -92)
+    val spaceSize: Int by animateIntAsState(if (expanded) 24 else -92)
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     val coroutineScope = rememberCoroutineScope()
     val snapper = rememberSnapperFlingBehavior(lazyListState)
@@ -58,8 +54,10 @@ fun DetailGoalCardList(
         modifier = modifier,
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(spaceSize.dp),
+        // verticalArrangement = Arrangement.spacedBy((-92).dp),
+        // verticalArrangement = Arrangement.spacedBy(24.dp),
         flingBehavior = snapper,
-        contentPadding = PaddingValues(bottom = 600.dp) // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
+        contentPadding = PaddingValues(top = 122.dp, bottom = 600.dp) // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
         // userScrollEnabled = false
     ) {
         itemsIndexed(detailGoals) { index, goal ->
@@ -71,10 +69,10 @@ fun DetailGoalCardList(
                 setDetails2 = {
                     detailGoals[index] = detailGoals[index].copy(details = it)
                 },
-                expanded = expanded.value,
+                expanded = expanded,
                 onCardClick = {
                     // expanded 상태가 되어야한다.
-                    expanded.value = true
+                    setExpanded(true)
 
                     // TODO: expanded 가 완료된 이후 index 까지 스크롤이 되어야한다.
                     coroutineScope.launch {
@@ -86,28 +84,15 @@ fun DetailGoalCardList(
     }
 }
 
-private val titles: List<String> = listOf(
-    "많이 읽고 많이 쓰기",
-    "체력 향상",
-    "서비스 보는 눈 키우기",
-    "문제 해결 능력 기르기"
-)
-private val detailss = mutableStateListOf(
-    mutableStateListOf<String>("", "", "", ""),
-    mutableStateListOf<String>("", "", "", ""),
-    mutableStateListOf<String>("", "", "", ""),
-    mutableStateListOf<String>("", "", "", ""),
-)
-
 @SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
 fun PreviewDetailGoalListExpanded() {
-    DetailGoalCardList(titles = titles, detailss = detailss, expanded = mutableStateOf(true))
+    DetailGoalCardList(expanded = true)
 }
 
 @Preview
 @Composable
 fun PreviewDetailGoalList() {
-    DetailGoalCardList(titles = titles, detailss = detailss)
+    DetailGoalCardList()
 }
