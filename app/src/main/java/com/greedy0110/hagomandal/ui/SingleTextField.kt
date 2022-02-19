@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
@@ -24,7 +23,8 @@ fun SingleTextField(
     text: String,
     onTextChanged: (String) -> Unit,
     trailingText: String? = null,
-    hint: String? = null, // TODO: hint 먹이기...
+    hint: String = "",
+    maxLength: Int = 8,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -36,12 +36,14 @@ fun SingleTextField(
             .padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BasicTextField(
+        GoalTextField(
             modifier = Modifier.weight(1f),
             value = text,
             onValueChange = onTextChanged,
             singleLine = true,
             textStyle = t16,
+            maxLength = maxLength,
+            hint = hint,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions
         )

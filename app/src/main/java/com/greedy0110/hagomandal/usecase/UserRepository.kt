@@ -14,6 +14,10 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
         context.getSharedPreferences("HagoMandal", Context.MODE_PRIVATE)
     }
 
+    suspend fun getUserName(): String {
+        return this.name
+    }
+
     suspend fun setName(name: String) {
         // sharedPre
         this.name = name

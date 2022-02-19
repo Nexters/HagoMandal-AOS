@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +24,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
@@ -35,9 +35,10 @@ import timber.log.Timber
 @Composable
 fun DetailGoalScreen(
     modifier: Modifier = Modifier,
-    userName: String,
-    mainGoal: String,
-    detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
+    onDetailFixed: (subGoalIndex: Int, index: Int, raw: String) -> Unit = { _, _, _ -> },
+    userName: String = "",
+    mainGoal: String = "",
+    detailGoals: List<DetailGoal> = emptyList(),
     expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
     selectedIndex: MutableState<Int> = remember { mutableStateOf(0) },
     onSubmit: () -> Unit = { Timber.d("beanbean on submit") },
@@ -64,6 +65,7 @@ fun DetailGoalScreen(
                 modifier = Modifier
                     .constrainAs(cardList) { centerTo(parent) },
                 detailGoals = detailGoals,
+                onDetailFixed = onDetailFixed,
                 selectedIndex = selectedIndex.value,
                 setSelectedIndex = { selectedIndex.value = it },
                 expanded = expanded.value,

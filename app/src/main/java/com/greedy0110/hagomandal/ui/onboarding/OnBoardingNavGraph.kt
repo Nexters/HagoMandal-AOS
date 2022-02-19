@@ -1,12 +1,14 @@
 package com.greedy0110.hagomandal.ui.onboarding
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.greedy0110.hagomandal.ui.GoalScreen
+import com.greedy0110.hagomandal.ui.GoalViewModel
 
 object OnBoardingDestinations {
     const val INTRO = "intro"
@@ -93,10 +95,12 @@ fun OnBoardingNavGraph(
             )
         }
         composable(OnBoardingDestinations.GOAL) {
+            val goalViewModel: GoalViewModel = hiltViewModel()
             GoalScreen(
                 onSubmit = {
                     // TODO: 완료 화면으로 이동, 백 스텍 따위 없으셈.
-                }
+                },
+                goalViewModel = goalViewModel
             )
         }
     }

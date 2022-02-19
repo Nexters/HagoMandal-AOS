@@ -31,6 +31,7 @@ import com.greedy0110.hagomandal.ui.GoalTextField
 import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.t20
 import com.greedy0110.hagomandal.ui.theme.t24
+import com.greedy0110.hagomandal.util.coloredShadow
 
 @Composable
 fun DetailGoalCard(
@@ -41,7 +42,7 @@ fun DetailGoalCard(
     onEditSubGoalClick: () -> Unit = {},
     onCardClick: () -> Unit = {},
     details: List<String> = emptyList(),
-    setDetails2: (List<String>) -> Unit = {},
+    onDetailFixed: (Int, String) -> Unit = { _, _ -> },
     isLastCard: Boolean = false,
     onNext: () -> Unit = {},
     onDone: () -> Unit = {},
@@ -54,6 +55,14 @@ fun DetailGoalCard(
 
     Column(
         modifier = modifier
+            .coloredShadow(
+                color = Color.Black,
+                alpha = 0.2f,
+                borderRadius = 16.dp,
+                shadowRadius = 20.dp,
+                offsetY = (-16).dp,
+                offsetX = 2.dp
+            )
             .background(cardColorBrush, RoundedCornerShape(16.dp))
             .clickable { onCardClick() }
             .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = bottomPadding.value),
@@ -80,12 +89,7 @@ fun DetailGoalCard(
 
             GoalTextField(
                 value = details[index],
-                onValueChange = { newValue ->
-                    details
-                        .toMutableList()
-                        .also { it[index] = newValue }
-                        .also { setDetails2(it.toList()) }
-                },
+                onValueChange = { newValue -> onDetailFixed(index, newValue) },
                 prefix = { Text(text = "• ", style = t20) },
                 textStyle = t20,
                 keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),

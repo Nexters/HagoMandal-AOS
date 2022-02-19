@@ -53,6 +53,7 @@ fun NameScreen(
             text = text.value,
             onTextChanged = { onBoardingViewModel.setUserName(it) },
             trailingText = "최대 8자",
+            maxLength = 8,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 if (text.value.isNotBlank()) {
