@@ -3,7 +3,6 @@ package com.greedy0110.hagomandal.ui.detail
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +16,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,20 +56,36 @@ fun DetailGoalCardList(
     //   3. 해당 index를 특정 위치까지 이동시킴.
 
     val draggedState = lazyListState.interactionSource.collectIsDraggedAsState()
+    var needToSnapIndex by remember { mutableStateOf(-1) }
+    // var trigger by remember { mutableStateOf(0) }
 
     // draggedState가 끝났으면서 스크롤도 멈췄다면.
     if (draggedState.value.not() && lazyListState.isScrollInProgress.not()) {
-        Timber.d("beanbean dragged state - ${lazyListState.isScrollInProgress} ${lazyListState.firstVisibleItemIndex} ${lazyListState.firstVisibleItemScrollOffset}")
-
-        //TODO: Unit을 키로 써도 괜찮나...?
-        // key 기준으로 LaunchedEffect가 시작될 거야.
-        LaunchedEffect(key1 = draggedState) {
-            lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex)
-        }
-        //TODO: launch 시키는 코드는 왜 비권장인가?
-        // coroutineScope.launch {
+        Timber.d("beanbean dragged state - ${lazyListState.firstVisibleItemScrollOffset}")
+        Timber.d("beanbean dragged state - needToSnap ${needToSnapIndex}")
+        //TODO: 트리거 해야해~
+        needToSnapIndex = lazyListState.firstVisibleItemIndex
+        //
+        // //TODO: Unit을 키로 써도 괜찮나...?
+        // // key 기준으로 LaunchedEffect가 시작될 거야.
+        // LaunchedEffect(key1 = draggedState) {
         //     lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex)
         // }
+    }
+
+    //TODO: 트리거 해야하면.
+    // 같은 needToSnapIndex에 대해서도, trigger 되어야한다.
+    // 하지만, lazyListState의 변경이 needToSnapIndex의 갱신을 초래한다. 따라서 같은 need에 대해서 애니메이션 론칭하면 무한 루프
+    LaunchedEffect(key1 = needToSnapIndex) {
+        try {
+            Timber.d("beanbean - needToSnap $needToSnapIndex")
+            if (needToSnapIndex == -1) return@LaunchedEffect
+            Timber.d("beanbean - start scroll $needToSnapIndex")
+            lazyListState.animateScrollToItem(needToSnapIndex)
+        } finally {
+            Timber.d("beanbean - end scroll $needToSnapIndex")
+            // needToSnapIndex = -1
+        }
     }
 
 
