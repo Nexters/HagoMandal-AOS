@@ -12,14 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import kotlinx.coroutines.launch
 
 data class DetailGoal(
     val title: String,
@@ -43,21 +42,27 @@ fun DetailGoalCardList(
     // TODO: snap 되어야 한다. (select 에 따라서 우리가, offset 설정하면 된다. 스크롤 노노?)
     val spaceSize: Int by animateIntAsState(if (expanded) 24 else -92)
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
-    val coroutineScope = rememberCoroutineScope()
-    val snapper = rememberSnapperFlingBehavior(lazyListState)
+    // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
+    val contentPadding = PaddingValues(top = 122.dp, bottom = 600.dp)
+    val snapper = rememberSnapperFlingBehavior(
+        lazyListState = lazyListState,
+        snapOffsetForItem = SnapOffsets.Start,
+        endContentPadding = contentPadding.calculateBottomPadding()
+    )
 
     LaunchedEffect(key1 = selectedIndex) {
         lazyListState.animateScrollToItem(selectedIndex)
     }
 
+    if (selectedIndex != lazyListState.firstVisibleItemIndex)
+        setSelectedIndex(lazyListState.firstVisibleItemIndex)
+
     LazyColumn(
         modifier = modifier,
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(spaceSize.dp),
-        // verticalArrangement = Arrangement.spacedBy((-92).dp),
-        // verticalArrangement = Arrangement.spacedBy(24.dp),
         flingBehavior = snapper,
-        contentPadding = PaddingValues(top = 122.dp, bottom = 600.dp) // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
+        contentPadding = contentPadding
         // userScrollEnabled = false
     ) {
         itemsIndexed(detailGoals) { index, goal ->
@@ -71,13 +76,11 @@ fun DetailGoalCardList(
                 },
                 expanded = expanded,
                 onCardClick = {
-                    // expanded 상태가 되어야한다.
-                    setExpanded(true)
-
-                    // TODO: expanded 가 완료된 이후 index 까지 스크롤이 되어야한다.
-                    coroutineScope.launch {
-                        lazyListState.animateScrollToItem(index)
+                    if (expanded.not()) {
+                        setExpanded(true)
                     }
+                    // TODO: expanded 상태로 완전히 변화하며 스크롤 되어야한다... ?
+                    setSelectedIndex(index)
                 }
             )
         }

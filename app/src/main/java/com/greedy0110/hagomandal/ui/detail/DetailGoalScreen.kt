@@ -1,5 +1,9 @@
 package com.greedy0110.hagomandal.ui.detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -29,8 +33,7 @@ fun DetailGoalScreen(
     mainGoal: String,
     detailGoals: SnapshotStateList<DetailGoal> = mutableStateListOf(),
     expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
-    selectedIndex: Int = 0,
-    setSelectedIndex: (Int) -> Unit = {},
+    selectedIndex: MutableState<Int> = remember { mutableStateOf(0) },
 ) {
     Scaffold(
         modifier = modifier,
@@ -46,30 +49,36 @@ fun DetailGoalScreen(
                 modifier = Modifier
                     .constrainAs(cardList) { centerTo(parent) },
                 detailGoals = detailGoals,
-                selectedIndex = selectedIndex,
-                setSelectedIndex = setSelectedIndex,
+                selectedIndex = selectedIndex.value,
+                setSelectedIndex = { selectedIndex.value = it },
                 expanded = expanded.value
             ) { expanded.value = it }
 
-            Column(
-                modifier = Modifier
-                    .constrainAs(mainGoalSlot) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    }
-                    .padding(top = 32.dp)
+            AnimatedVisibility(
+                visible = expanded.value.not() || selectedIndex.value == 0,
+                enter = fadeIn(animationSpec = tween(300)),
+                exit = fadeOut(animationSpec = tween(300))
             ) {
-                Text(
-                    text = "${userName}님의 핵심목표",
-                    style = t14,
-                    color = Color.White.copy(alpha = 0.5f)
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                Text(
-                    text = mainGoal,
-                    style = t24,
-                    color = Color.White
-                )
+                Column(
+                    modifier = Modifier
+                        .constrainAs(mainGoalSlot) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
+                        .padding(top = 32.dp)
+                ) {
+                    Text(
+                        text = "${userName}님의 핵심목표",
+                        style = t14,
+                        color = Color.White.copy(alpha = 0.5f)
+                    )
+                    Spacer(modifier = Modifier.size(4.dp))
+                    Text(
+                        text = mainGoal,
+                        style = t24,
+                        color = Color.White
+                    )
+                }
             }
         }
     }
@@ -92,8 +101,8 @@ fun PreviewDetailGoalScreen() {
             userName = "신승민",
             mainGoal = "부자가 될거야.",
             detailGoals = details,
-            selectedIndex = 2,
-            expanded = remember { mutableStateOf(true) }
+            expanded = remember { mutableStateOf(true) },
+            selectedIndex = remember { mutableStateOf(2) },
         )
     }
 }

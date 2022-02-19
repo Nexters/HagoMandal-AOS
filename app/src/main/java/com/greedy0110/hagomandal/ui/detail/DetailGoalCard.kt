@@ -29,7 +29,6 @@ import com.greedy0110.hagomandal.ui.GoalTextField
 import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.t20
 import com.greedy0110.hagomandal.ui.theme.t24
-import com.greedy0110.hagomandal.util.`if`
 
 @Composable
 fun DetailGoalCard(
@@ -52,9 +51,7 @@ fun DetailGoalCard(
     Column(
         modifier = modifier
             .background(cardColorBrush, RoundedCornerShape(16.dp))
-            .`if`(expanded.not()) {
-                clickable { onCardClick() }
-            }
+            .clickable { onCardClick() }
             .padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = bottomPadding.value),
         horizontalAlignment = Alignment.Start
     ) {
