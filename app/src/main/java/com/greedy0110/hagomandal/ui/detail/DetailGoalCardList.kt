@@ -3,11 +3,13 @@ package com.greedy0110.hagomandal.ui.detail
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -44,17 +46,20 @@ fun DetailGoalCardList(
 
     // TODO: snap 되어야 한다. (select 에 따라서 우리가, offset 설정하면 된다. 스크롤 노노?)
     val spaceSize: Int by animateIntAsState(if (expanded.value) 24 else -92)
-
-    val lazyListState = rememberLazyListState()
+    val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     val coroutineScope = rememberCoroutineScope()
-
     val snapper = rememberSnapperFlingBehavior(lazyListState)
+
+    LaunchedEffect(key1 = selectedIndex) {
+        lazyListState.animateScrollToItem(selectedIndex)
+    }
 
     LazyColumn(
         modifier = modifier,
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(spaceSize.dp),
         flingBehavior = snapper,
+        contentPadding = PaddingValues(bottom = 600.dp) // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
         // userScrollEnabled = false
     ) {
         itemsIndexed(detailGoals) { index, goal ->
