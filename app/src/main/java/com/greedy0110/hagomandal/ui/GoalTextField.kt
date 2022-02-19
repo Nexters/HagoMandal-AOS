@@ -38,7 +38,10 @@ fun GoalTextField(
         decorationBox = { innerTextField ->
             Row(horizontalArrangement = Arrangement.Start) {
                 prefix()
-                if (value.isEmpty()) Text(text = hint, style = textStyle.copy(textAlign = TextAlign.Start))
+                if (value.isEmpty()) Text(
+                    text = hint,
+                    style = textStyle.copy(textAlign = TextAlign.Start)
+                )
                 else innerTextField()
             }
         }
