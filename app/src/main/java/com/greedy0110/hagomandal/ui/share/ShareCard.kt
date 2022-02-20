@@ -66,8 +66,6 @@ fun ShareCardList(
     modifier: Modifier = Modifier,
     details: List<DetailGoal>
 ) {
-    require(details.size == 4)
-
     @Composable
     fun getShareCard(index: Int) {
         ShareCard(

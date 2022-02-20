@@ -37,7 +37,7 @@ class ShareAction(
     val action: () -> Unit = {},
 )
 
-val actions = listOf(
+private val actions = listOf(
     ShareAction(iconRes = R.drawable.ic_user, title = "이름 수정"),
     ShareAction(iconRes = R.drawable.ic_edit_2, title = "목표 수정"),
     ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제"),

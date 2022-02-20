@@ -1,17 +1,31 @@
 package com.greedy0110.hagomandal.ui.share
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.GoalViewModel
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
+import com.greedy0110.hagomandal.ui.theme.t14
+import com.greedy0110.hagomandal.ui.theme.t24
 
 @Composable
 fun ShareScreen(
     goalViewModel: GoalViewModel = viewModel(),
-    onModifyNameClick: (String) -> Unit = {},
+    onModifyNameClick: () -> Unit = {},
     onModifyGoalsClick: () -> Unit = {},
     onDeleteGoalsClick: () -> Unit = {},
     emphasize: Boolean = false,
@@ -38,15 +52,44 @@ fun ShareScreen(
 
 @Composable
 private fun ShareScreen(
+    modifier: Modifier = Modifier,
     userName: String = "",
     duration: String = "",
     mainGoal: String = "",
     detailGoals: List<DetailGoal> = emptyList(),
-    onModifyNameClick: (String) -> Unit = {},
+    onModifyNameClick: () -> Unit = {},
     onModifyGoalsClick: () -> Unit = {},
     onDeleteGoalsClick: () -> Unit = {},
     overlaySlot: @Composable () -> Unit = {},
 ) {
+    val actions = listOf(
+        ShareAction(iconRes = R.drawable.ic_user, title = "이름 수정", action = onModifyNameClick),
+        ShareAction(iconRes = R.drawable.ic_edit_2, title = "목표 수정", action = onModifyGoalsClick),
+        ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제", action = onDeleteGoalsClick),
+        ShareAction(iconRes = R.drawable.ic_image, title = "이미지로 저장"),//TODO: 콜백으로 뭐?
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        ShareTopBar(
+            title = duration,
+            actions = actions
+        )
+        Column(
+            modifier = Modifier
+                .padding(top = 141.dp)
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(text = "${userName}님의 핵심목표", style = t14, color = Color.White.copy(alpha = 0.5f))
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = mainGoal, style = t24)
+            Spacer(modifier = Modifier.height(24.dp))
+            ShareCardList(details = detailGoals)
+        }
+    }
 }
 
 @Preview
