@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,13 +55,10 @@ fun ShareScreen(
     val duration = "D-53" // TODO: 어떻게 ... 처리할까.
 
     ShareScreen(
-        // userName = goalViewModel.userName.collectAsState().value,
-        // mainGoal = goalViewModel.mainGoal.collectAsState().value,
-        // detailGoals = goalViewModel.detailGoal.collectAsState().value,
-        userName = userName,
-        mainGoal = mainGoal,
-        detailGoals = details,
-        duration = duration,
+        userName = goalViewModel.userName.collectAsState().value,
+        duration = duration, // TODO: 어떻게 ... 처리할까.
+        mainGoal = goalViewModel.mainGoal.collectAsState().value,
+        detailGoals = goalViewModel.detailGoal.collectAsState().value,
         onModifyNameClick = onModifyNameClick,
         onModifyGoalsClick = onModifyGoalsClick,
         onDeleteGoalsClick = onDeleteGoalsClick

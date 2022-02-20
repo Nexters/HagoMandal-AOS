@@ -31,8 +31,6 @@ fun OnBoardingNavGraph(
     startDestination: String = OnBoardingDestinations.INTRO,
     onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
-    val startDestination = OnBoardingDestinations.SHARE
-
     NavHost(
         navController = navController,
         startDestination = startDestination
