@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.cardColorBrushes
+import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t12
 import com.greedy0110.hagomandal.ui.theme.t20
 
@@ -60,6 +61,37 @@ fun ShareCard(
     }
 }
 
+@Composable
+fun ShareCardList(
+    modifier: Modifier = Modifier,
+    details: List<DetailGoal>
+) {
+    require(details.size == 4)
+
+    @Composable
+    fun getShareCard(index: Int) {
+        ShareCard(
+            title = details[index].title,
+            contents = details[index].details,
+            colorIndex = details[index].colorIndex
+        )
+    }
+
+    Row(modifier = modifier) {
+        Column(Modifier.weight(1f)) {
+            getShareCard(index = 0)
+            Spacer(modifier = Modifier.height(12.dp))
+            getShareCard(index = 2)
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            getShareCard(index = 1)
+            Spacer(modifier = Modifier.height(12.dp))
+            getShareCard(index = 3)
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewShareCard() {
@@ -74,26 +106,7 @@ fun PreviewShareCard() {
         DetailGoal("저축하기", listOf("용돈 통장 만들어서 쓰기", "", "", ""), 3)
     )
 
-    @Composable
-    fun getShareCard(index: Int) {
-        ShareCard(
-            title = details[index].title,
-            contents = details[index].details,
-            colorIndex = details[index].colorIndex
-        )
-    }
-
-    Row {
-        Column(Modifier.weight(1f)) {
-            getShareCard(index = 0)
-            Spacer(modifier = Modifier.height(12.dp))
-            getShareCard(index = 2)
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(Modifier.weight(1f)) {
-            getShareCard(index = 1)
-            Spacer(modifier = Modifier.height(12.dp))
-            getShareCard(index = 3)
-        }
+    HagoMandalTheme {
+        ShareCardList(details = details)
     }
 }

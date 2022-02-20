@@ -14,7 +14,10 @@ fun ShareScreen(
     onModifyNameClick: (String) -> Unit = {},
     onModifyGoalsClick: () -> Unit = {},
     onDeleteGoalsClick: () -> Unit = {},
+    emphasize: Boolean = false,
 ) {
+    // TODO: emphasize에 따라서 overlaySlot에 채워넣을 내용이 달라진다. (공유하기는 이 overlaySlot에서 처리될 것)
+
     ShareScreen(
         userName = goalViewModel.userName.collectAsState().value,
         duration = "", // TODO: 어떻게 ... 처리할까.
@@ -26,6 +29,13 @@ fun ShareScreen(
     )
 }
 
+// TODO: 외부에서 처리해야할 기능 정리
+// - 이름 수정
+// - 목표 수정
+
+// TODO: ShareScreen이 자체적으로 처리할 기능 정리
+// - 이미지로 저장. (어떻게 하지?)
+
 @Composable
 private fun ShareScreen(
     userName: String = "",
@@ -35,13 +45,8 @@ private fun ShareScreen(
     onModifyNameClick: (String) -> Unit = {},
     onModifyGoalsClick: () -> Unit = {},
     onDeleteGoalsClick: () -> Unit = {},
+    overlaySlot: @Composable () -> Unit = {},
 ) {
-    // TODO: 외부에서 처리해야할 기능 정리
-    // - 이름 수정
-    // - 목표 수정
-
-    // TODO: ShareScreen이 자체적으로 처리할 기능 정리
-    // - 이미지로 저장. (어떻게 하지?)
 }
 
 @Preview
