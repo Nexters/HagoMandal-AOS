@@ -4,24 +4,28 @@ import javax.inject.Singleton
 
 @Singleton
 class HelperRepository {
-    fun setMainGoalRecommendationBase() {
+    suspend fun setMainGoalRecommendationBase() {
         // TODO("Not Implemented")
     }
 
-    fun setSubGoalRecommendationBase(index: Int, subGoal: String) {
+    suspend fun setSubGoalRecommendationBase(index: Int, subGoal: String) {
         // TODO("Not Implemented")
     }
 
-    fun setDetailGoalRecommendationBase(index: Int, detailGaol: String) {
+    suspend fun setDetailGoalRecommendationBase(
+        subGoalIndex: Int,
+        detailGoalIndex: Int,
+        detailGaol: String
+    ) {
         // TODO("Not Implemented")
     }
 
-    fun getSubGoalRecommendations(): List<String> {
+    suspend fun getSubGoalRecommendations(): List<String> {
         // TODO("Not Implemented")
         return listOf("sub goal recommendations")
     }
 
-    fun getDetailGoalRecommendations(): List<String> {
+    suspend fun getDetailGoalRecommendations(): List<String> {
         // TODO("Not Implemented")
         return listOf("detail goal recommendations")
     }

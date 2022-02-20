@@ -1,7 +1,9 @@
 package com.greedy0110.hagomandal.data.db
 
 import androidx.room.TypeConverter
+import com.greedy0110.hagomandal.ui.SubGaolScreen
 import com.greedy0110.hagomandal.usecase.DetailGoal
+import com.greedy0110.hagomandal.usecase.GoalColor
 import com.greedy0110.hagomandal.usecase.Job
 import com.greedy0110.hagomandal.usecase.SubGoal
 import com.squareup.moshi.JsonAdapter
@@ -28,13 +30,28 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromSubGoalsToString(subGoals: List<SubGoal>?): String? {
-        if (subGoals == null) return null
+    fun fromSubGoalToString(subGoal: SubGoal?): String? {
+        val moshi = Moshi.Builder()
+            .build()
+        val adapter = moshi.adapter(SubGoal::class.java)
+        return adapter.toJson(subGoal)
+    }
 
+    @TypeConverter
+    fun fromStringToSubGoal(value: String?): SubGoal? {
+        if (value == null) return null
+        val moshi = Moshi.Builder()
+            .build()
+        val adapter = moshi.adapter(SubGoal::class.java)
+        return adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun fromSubGoalsToString(subGoals: List<SubGoal>?): String? {
         val moshi = Moshi.Builder()
             .build()
         val detailGoalType = Types.newParameterizedType(
-            MutableList::class.java,
+            List::class.java,
             SubGoal::class.java
         )
         val adapter: JsonAdapter<List<SubGoal>> = moshi.adapter(detailGoalType)
@@ -49,7 +66,7 @@ class Converters {
         val moshi = Moshi.Builder()
             .build()
         val detailGoalType = Types.newParameterizedType(
-            MutableList::class.java,
+            List::class.java,
             SubGoal::class.java
         )
         val adapter: JsonAdapter<List<SubGoal>> = moshi.adapter(detailGoalType)
@@ -58,11 +75,11 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromDetailGoalToString(detailGoals: List<DetailGoal>?): String? {
+    fun fromDetailGoalsToString(detailGoals: List<DetailGoal>?): String? {
         val moshi = Moshi.Builder()
             .build()
         val detailGoalType = Types.newParameterizedType(
-            MutableList::class.java,
+            List::class.java,
             DetailGoal::class.java
         )
         val adapter: JsonAdapter<List<DetailGoal>> = moshi.adapter(detailGoalType)
@@ -71,16 +88,52 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromStringToDetailGoal(value: String?): List<DetailGoal>? {
+    fun fromStringToDetailGoals(value: String?): List<DetailGoal>? {
         if (value == null) return null
 
         val moshi = Moshi.Builder()
             .build()
         val detailGoalType = Types.newParameterizedType(
-            MutableList::class.java,
+            List::class.java,
             DetailGoal::class.java
         )
         val adapter: JsonAdapter<List<DetailGoal>> = moshi.adapter(detailGoalType)
         return adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun fromDetailGoalToString(detailGoal: DetailGoal?): String? {
+        val moshi = Moshi.Builder()
+            .build()
+        val adapter = moshi.adapter(DetailGoal::class.java)
+        return adapter.toJson(detailGoal)
+    }
+
+    @TypeConverter
+    fun fromStringToDetailGoal(value: String?): DetailGoal? {
+        if (value == null) return null
+
+        val moshi = Moshi.Builder()
+            .build()
+        val adapter = moshi.adapter(DetailGoal::class.java)
+        return adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun fromColoToString(color: GoalColor?): String? {
+        val moshi = Moshi.Builder()
+            .build()
+        return moshi.adapter(GoalColor::class.java)
+            .toJson(color)
+    }
+
+    @TypeConverter
+    fun fromStringToColor(value: String?): GoalColor? {
+        if (value == null) return null
+
+        val moshi = Moshi.Builder()
+            .build()
+        return moshi.adapter(GoalColor::class.java)
+            .fromJson(value)
     }
 }

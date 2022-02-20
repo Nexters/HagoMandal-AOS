@@ -97,6 +97,6 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDao(appDatabase: AppDatabase): GoalDao {
-        return appDatabase.getDao()
+        return appDatabase.getGoalDao()
     }
 }

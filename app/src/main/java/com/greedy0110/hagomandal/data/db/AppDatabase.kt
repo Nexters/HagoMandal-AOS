@@ -7,5 +7,6 @@ import androidx.room.TypeConverters
 @Database(entities = [MandalartEntity::class, UserEntity::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun getDao(): GoalDao
+    abstract fun getGoalDao(): GoalDao
+    abstract fun getUserDao(): UserDao
 }
