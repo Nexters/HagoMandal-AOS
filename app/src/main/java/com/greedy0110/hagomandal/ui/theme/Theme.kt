@@ -5,6 +5,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -27,6 +31,22 @@ private val LightColorPalette = lightColors(
     */
 )
 
+@Immutable
+data class HagoColors(
+    val background: Color = Color(0xff141414),
+    val onBackground: Color = Color.White,
+    val primary: Color = Color(0xff00c25e),
+    val onPrimary: Color = Color.White,
+    val secondary: Color = Color(0xff333333),
+    val onSecondary: Color = Color.White,
+    val surface: Color = Color.White,
+    val onSurface: Color = Color(0xff202632),
+)
+
+val LocalHagoColors = staticCompositionLocalOf {
+    HagoColors()
+}
+
 @Composable
 fun HagoMandalTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
@@ -35,10 +55,18 @@ fun HagoMandalTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compos
         LightColorPalette
     }
 
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(LocalHagoColors provides HagoColors()) {
+        MaterialTheme(
+            colors = colors,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
+}
+
+object HagoMandalTheme {
+    val colors: HagoColors
+        @Composable
+        get() = LocalHagoColors.current
 }
