@@ -21,7 +21,7 @@ object OnBoardingDestinations {
     const val GET_STARTED = "get_started"
     const val GOAL = "goal"
 
-    //TODO: on boarding 에 국한된 내용이 아니라... 앱 전체의 네비게이션이 되어버림.
+    // TODO: on boarding 에 국한된 내용이 아니라... 앱 전체의 네비게이션이 되어버림.
     const val SHARE = "share"
 }
 
@@ -31,6 +31,8 @@ fun OnBoardingNavGraph(
     startDestination: String = OnBoardingDestinations.INTRO,
     onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
+    val startDestination = OnBoardingDestinations.SHARE
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -102,7 +104,7 @@ fun OnBoardingNavGraph(
             val goalViewModel: GoalViewModel = hiltViewModel()
             GoalScreen(
                 onSubmit = {
-                    //TODO: 강조 on 상태로 켜야한다.
+                    // TODO: 강조 on 상태로 켜야한다.
                     navController.navigate(OnBoardingDestinations.SHARE)
                 },
                 goalViewModel = goalViewModel

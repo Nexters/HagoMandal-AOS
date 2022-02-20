@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,12 +30,27 @@ fun ShareScreen(
     emphasize: Boolean = false,
 ) {
     // TODO: emphasize에 따라서 overlaySlot에 채워넣을 내용이 달라진다. (공유하기는 이 overlaySlot에서 처리될 것)
+    val details = listOf(
+        DetailGoal(
+            "주식 공부하기",
+            listOf("주식 책 6권 읽기", "주식 투자 포트폴리오 만들기", "가진 종목 스토리 점검하기", "연간 수익율 분석하고 공유하는 스터디 하기"),
+            0
+        ),
+        DetailGoal("세금 공부하기", listOf("세금 책 2권 읽기", "", "", ""), 1),
+        DetailGoal("부동산 공부하기", listOf("나만의 집 기준 만들기", "자취방 체크 리스트 만들기", "", ""), 2),
+        DetailGoal("저축하기", listOf("용돈 통장 만들어서 쓰기", "", "", ""), 3)
+    )
+    val userName = "신승민"
+    val mainGoal = "부자고고"
 
     ShareScreen(
-        userName = goalViewModel.userName.collectAsState().value,
+        // userName = goalViewModel.userName.collectAsState().value,
+        // mainGoal = goalViewModel.mainGoal.collectAsState().value,
+        // detailGoals = goalViewModel.detailGoal.collectAsState().value,
+        userName = userName,
+        mainGoal = mainGoal,
+        detailGoals = details,
         duration = "", // TODO: 어떻게 ... 처리할까.
-        mainGoal = goalViewModel.mainGoal.collectAsState().value,
-        detailGoals = goalViewModel.detailGoal.collectAsState().value,
         onModifyNameClick = onModifyNameClick,
         onModifyGoalsClick = onModifyGoalsClick,
         onDeleteGoalsClick = onDeleteGoalsClick
@@ -66,7 +80,7 @@ private fun ShareScreen(
         ShareAction(iconRes = R.drawable.ic_user, title = "이름 수정", action = onModifyNameClick),
         ShareAction(iconRes = R.drawable.ic_edit_2, title = "목표 수정", action = onModifyGoalsClick),
         ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제", action = onDeleteGoalsClick),
-        ShareAction(iconRes = R.drawable.ic_image, title = "이미지로 저장"),//TODO: 콜백으로 뭐?
+        ShareAction(iconRes = R.drawable.ic_image, title = "이미지로 저장"), // TODO: 콜백으로 뭐?
     )
 
     Box(
