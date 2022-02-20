@@ -33,4 +33,9 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     suspend fun isShownOnBoarding(): Boolean {
         return sharedPreferences.getBoolean("shownOnBoarding", false)
     }
+
+    suspend fun getRemoteUserId(): String {
+        // TODO: 구현
+        return ""
+    }
 }

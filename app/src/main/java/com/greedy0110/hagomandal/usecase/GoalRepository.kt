@@ -8,7 +8,7 @@ import javax.inject.Singleton
 @Singleton
 class GoalRepository @Inject constructor(private val dao: GoalDao) {
     suspend fun initMandalart(userId: String): String {
-        val id = getRandomString(MANDALART_ID_LENGTH)
+        val id = RandomStringGenerator.generate(MANDALART_ID_LENGTH)
         dao.insertMandalartId(id, userId)
         return id
     }
@@ -72,13 +72,6 @@ class GoalRepository @Inject constructor(private val dao: GoalDao) {
             detailGoals[detailGoalId] = DetailGoal(goal)
             dao.updateDetailGoals(mandalartId, detailGoals)
         } ?: throw IllegalStateException("initMandalart를 먼저 호출해야 합니다")
-    }
-
-    private fun getRandomString(length: Int): String {
-        val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-
-        return List(length) { charset.random() }
-            .joinToString("")
     }
 
     companion object {
