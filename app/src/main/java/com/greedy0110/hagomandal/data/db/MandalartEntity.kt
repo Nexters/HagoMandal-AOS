@@ -9,7 +9,7 @@ import com.greedy0110.hagomandal.usecase.SubGoal
 @Entity(tableName = "mandalart_entity")
 data class MandalartEntity(
     @PrimaryKey val id: String,
-    val idAtRemote: String,
+    val remoteId: String,
     val userId: String,
     val period: Int,
     val mainGoal: String,

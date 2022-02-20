@@ -47,12 +47,12 @@ interface GoalDao {
     @Query("SELECT period FROM mandalart_entity WHERE id = :mandalartId")
     fun getPeriod(mandalartId: String): Int
 
-    @Query("UPDATE mandalart_entity SET idAtRemote = :idAtRemote WHERE id = :mandalartId")
+    @Query("UPDATE mandalart_entity SET remoteId = :idAtRemote WHERE id = :mandalartId")
     fun updateRemoteMandalartId(mandalartId: String, idAtRemote: String)
 
     @Query("UPDATE mandalart_entity SET isComplete = :isComplete WHERE id = :mandalartId")
     fun updateIsComplete(mandalartId: String, isComplete: Boolean)
 
-    @Query("SELECT idAtRemote FROM mandalart_entity WHERE id = :mandalartId")
+    @Query("SELECT remoteId FROM mandalart_entity WHERE id = :mandalartId")
     fun getIdAtRemote(mandalartId: String): String?
 }

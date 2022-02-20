@@ -23,7 +23,9 @@ import javax.inject.Singleton
 const val CONNECT_TIMEOUT = 60.toLong()
 const val WRITE_TIMEOUT = 60.toLong()
 const val READ_TIMEOUT = 60.toLong()
+// TODO("BASE_URL, API_KEY 값 넣기")
 const val BASE_URL = ""
+private const val API_KEY = ""
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -45,6 +47,50 @@ object NetworkModule {
         val cacheSize = 10 * 1024 * 1024L
         return Cache(applicationContext.cacheDir, cacheSize)
     }
+
+    @Provides
+    @Singleton
+    fun provideApiKeyHeader(): Interceptor {
+        return Interceptor { chain: Interceptor.Chain ->
+            val request = chain.request()
+            var newUrl = request.url.toString()
+            val newRequest = chain.request().newBuilder()
+                .url(newUrl)
+                .addHeader("API-KEY", API_KEY)
+                .build()
+
+            return@Interceptor chain.proceed(newRequest)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteUserIdHeader(): Interceptor {
+        return Interceptor { chain: Interceptor.Chain ->
+            val request = chain.request()
+            var newUrl = request.url.toString()
+            val builder = chain.request().newBuilder()
+                .url(newUrl)
+
+            if (newUrl.contains("/api/reply")
+                || newUrl.contains("/api/member/check-replied-today")
+                || newUrl.contains("/api/member/scrap")
+                || newUrl.contains("/api/questions")
+                || newUrl.contains("/api/today-expression")
+                || newUrl.contains("/api/today-question")
+                || newUrl.contains("/api/member/me")
+                || newUrl.contains("/api/member/me/fcm-token")
+            ) {
+                return@Interceptor chain.proceed(chain.request().newBuilder().apply {
+                    addHeader("X-AUTH-TOKEN", authManager.accessToken)
+                    url(newUrl)
+                }.build())
+            }
+
+            return@Interceptor chain.proceed(builder.build())
+        }
+    }
+
 
     @Provides
     @Singleton

@@ -1,7 +1,6 @@
 package com.greedy0110.hagomandal.data.db
 
 import androidx.room.TypeConverter
-import com.greedy0110.hagomandal.ui.SubGaolScreen
 import com.greedy0110.hagomandal.usecase.DetailGoal
 import com.greedy0110.hagomandal.usecase.GoalColor
 import com.greedy0110.hagomandal.usecase.Job
