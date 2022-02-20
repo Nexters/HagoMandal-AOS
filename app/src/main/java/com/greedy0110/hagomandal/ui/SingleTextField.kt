@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,7 @@ fun SingleTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
-    val backgroundColor = Color(0xff2d3949)
+    val backgroundColor = HagoMandalTheme.colors.surface
 
     Row(
         modifier
@@ -41,14 +40,14 @@ fun SingleTextField(
             value = text,
             onValueChange = onTextChanged,
             singleLine = true,
-            textStyle = t16,
+            textStyle = t16.copy(color = HagoMandalTheme.colors.onSurface),
             maxLength = maxLength,
             hint = hint,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions
         )
         if (trailingText != null) {
-            Text(text = trailingText, style = t12.copy(Color(0xff999999)))
+            HagoMandalText(text = trailingText, style = t12.copy(Color(0xff999999)))
         }
     }
 }

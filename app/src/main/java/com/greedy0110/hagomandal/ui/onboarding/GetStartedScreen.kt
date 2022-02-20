@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,13 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.ui.ActionButton
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.Helper
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t24
@@ -42,22 +40,17 @@ fun GetStartedScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
-            .background(
-                brush = Brush.linearGradient(
-                    listOf(Color(0xff202632), Color(0xff131b2b))
-                )
-            ),
+            .background(HagoMandalTheme.colors.background)
+            .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.End
     ) {
         Spacer(modifier = Modifier.height(60.dp))
-        Text(
+        HagoMandalText(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = "좋아, 이제 시작해보자!\n" +
-                "목표를 세우면서 막막할 때마다\n" +
-                "화면 왼쪽 아래 나를 불러줘!",
-            style = t24.copy(textAlign = TextAlign.Start)
+            text = "좋아, 이제 시작해보자!\n\n목표를 세우면서 막막할 때마다\n화면 왼쪽 아래 나를 불러줘!",
+            style = t24,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.weight(1f))
         Helper(
@@ -65,12 +58,19 @@ fun GetStartedScreen(
             message = helperMessage,
             onClick = { if (messageIndex != helperMessages.lastIndex) messageIndex++ }
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        ActionButton(text = "다음으로", onClick = {
-            onBoardingViewModel.shownGuide()
-            onNext()
-        })
-        Spacer(modifier = Modifier.height(80.dp))
+        if (messageIndex == helperMessages.lastIndex) {
+            Spacer(modifier = Modifier.height(40.dp))
+            ActionButton(
+                text = "다음으로",
+                onClick = {
+                    onBoardingViewModel.shownGuide()
+                    onNext()
+                }
+            )
+            Spacer(modifier = Modifier.height(80.dp))
+        } else {
+            Spacer(modifier = Modifier.height(80.dp))
+        }
     }
 }
 

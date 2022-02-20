@@ -4,7 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,8 +36,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.ActionButton
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 import kotlinx.coroutines.launch
@@ -55,21 +55,15 @@ fun GuideScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .background(HagoMandalTheme.colors.surface)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
     ) {
-        // TODO: https://csshero.org/mesher/ 여기 참고해서 휘황찬란하게 그려보자.
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .background(Color.Yellow.copy(alpha = 0.5f))
-        ) { }
-
         val coroutineScope = rememberCoroutineScope()
-
         Column(
             modifier = Modifier
                 .height(332.dp)
-                .background(backgroundColor),
+                .background(HagoMandalTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (shownAllGuide.not()) {
@@ -111,7 +105,7 @@ fun GuideScreen(
                         size = messages.size,
                         selectedInt = pagerState.currentPage
                     )
-                    Text(
+                    HagoMandalText(
                         modifier = Modifier
                             .constrainAs(skipButton) {
                                 end.linkTo(parent.end, margin = 20.dp)
@@ -119,12 +113,13 @@ fun GuideScreen(
                             }
                             .clickable { shownAllGuide = true },
                         text = "SKIP",
-                        style = t16.copy(color = Color(0xff3388ff))
+                        style = t16,
+                        color = HagoMandalTheme.colors.primary
                     )
                 }
             } else {
                 Column {
-                    Text(
+                    HagoMandalText(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(56.dp),
@@ -172,7 +167,7 @@ fun PreviewDotIndicatorRows() {
 @Composable
 fun DotIndicator(selected: Boolean) {
     val dotColor = when {
-        selected -> Color(0xff3388ff)
+        selected -> HagoMandalTheme.colors.primary
         else -> Color.White.copy(alpha = 0.4f)
     }
 

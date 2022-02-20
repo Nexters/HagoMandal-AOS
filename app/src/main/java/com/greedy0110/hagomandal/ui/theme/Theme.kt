@@ -37,10 +37,10 @@ data class HagoColors(
     val onBackground: Color = Color.White,
     val primary: Color = Color(0xff00c25e),
     val onPrimary: Color = Color.White,
-    val secondary: Color = Color(0xff333333),
-    val onSecondary: Color = Color.White,
-    val surface: Color = Color.White,
-    val onSurface: Color = Color(0xff202632),
+    val surface: Color = Color(0xff333333),
+    val onSurface: Color = Color.White,
+    val secondary: Color = Color.White,
+    val onSecondary: Color = Color(0xff202632),
 )
 
 val LocalHagoColors = staticCompositionLocalOf {

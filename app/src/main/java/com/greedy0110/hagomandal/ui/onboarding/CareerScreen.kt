@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.ActionButton
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t20
@@ -83,19 +83,14 @@ fun CareerScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(HagoMandalTheme.colors.background)
                 .padding(horizontal = 20.dp)
-                .background(
-                    brush = Brush.linearGradient(
-                        listOf(Color(0xff202632), Color(0xff131b2b))
-                    )
-                )
         ) {
             Spacer(modifier = Modifier.height(60.dp))
             Text(
-
-                text = "직업을 선택하면\n" +
-                    "더 적합한 목표를 추천할 수 있어!",
-                style = t24.copy(textAlign = TextAlign.Start)
+                text = "직업을 선택하면\n더 적합한 목표를 추천할 수 있어!",
+                style = t24,
+                textAlign = TextAlign.Start
             )
             Spacer(modifier = Modifier.weight(1f))
             ActionButton(text = "개발자", onClick = { selectedCareer = careers[0] })
@@ -136,7 +131,7 @@ private fun CareerBottomSheet(
     onDismiss: () -> Unit = {}
 ) {
     val backgroundColor = Color.Black.copy(alpha = 0.4f)
-    val sheetColor = Color(0xff2d3849)
+    val sheetColor = HagoMandalTheme.colors.surface
 
     Column(
         modifier = Modifier
@@ -155,10 +150,12 @@ private fun CareerBottomSheet(
                     modifier = Modifier.padding(bottom = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
+                    HagoMandalText(
                         modifier = Modifier.weight(1f),
                         text = career.sector,
-                        style = t20.copy(textAlign = TextAlign.Start)
+                        style = t20,
+                        textAlign = TextAlign.Start,
+                        color = HagoMandalTheme.colors.onSurface
                     )
                     Icon(
                         modifier = Modifier
@@ -166,18 +163,20 @@ private fun CareerBottomSheet(
                             .clickable { onDismiss() },
                         painter = painterResource(id = R.drawable.ic_close),
                         contentDescription = null,
-                        tint = Color.White
+                        tint = HagoMandalTheme.colors.onSurface
                     )
                 }
             }
             items(career.subSectors) { subSector ->
-                Text(
+                HagoMandalText(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onCareerSelected(subSector) }
                         .padding(top = 15.dp, bottom = 14.dp),
                     text = subSector,
-                    style = t16.copy(textAlign = TextAlign.Start)
+                    style = t16,
+                    textAlign = TextAlign.Start,
+                    color = HagoMandalTheme.colors.onSurface.copy(alpha = 0.8f)
                 )
             }
         }

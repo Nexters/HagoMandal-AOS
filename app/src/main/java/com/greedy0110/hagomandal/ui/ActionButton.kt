@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
@@ -29,8 +28,8 @@ fun ActionButton(
     onClick: () -> Unit = {}
 ) {
     val backgroundColor = when {
-        emphasize -> Color(0xff3388ff)
-        else -> Color(0xff2d3949)
+        emphasize -> HagoMandalTheme.colors.primary
+        else -> HagoMandalTheme.colors.surface
     }
 
     Box(

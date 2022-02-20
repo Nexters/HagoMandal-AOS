@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t24
 import timber.log.Timber
@@ -53,7 +52,7 @@ fun DetailGoalScreen(
 
     Scaffold(
         modifier = modifier,
-        backgroundColor = backgroundColor
+        backgroundColor = HagoMandalTheme.colors.background
     ) {
         ConstraintLayout(
             modifier = Modifier

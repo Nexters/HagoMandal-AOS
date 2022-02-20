@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.SingleTextField
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 
@@ -68,7 +67,7 @@ fun MainGoalScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(backgroundColor)
+            .background(HagoMandalTheme.colors.background)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Text(

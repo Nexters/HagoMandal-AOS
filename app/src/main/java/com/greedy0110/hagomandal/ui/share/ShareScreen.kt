@@ -24,9 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.GoalViewModel
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.Helper
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
@@ -97,7 +97,7 @@ private fun ShareScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(backgroundColor)
+            .background(HagoMandalTheme.colors.background)
     ) {
         ShareTopBar(
             modifier = Modifier.padding(top = 24.dp),
@@ -110,9 +110,13 @@ private fun ShareScreen(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "${userName}님의 핵심목표", style = t14, color = Color.White.copy(alpha = 0.5f))
+            HagoMandalText(
+                text = "${userName}님의 핵심목표",
+                style = t14,
+                color = HagoMandalTheme.colors.onBackground.copy(alpha = 0.5f)
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = mainGoal, style = t24)
+            HagoMandalText(text = mainGoal, style = t24)
             Spacer(modifier = Modifier.height(24.dp))
             ShareCardList(details = detailGoals)
         }

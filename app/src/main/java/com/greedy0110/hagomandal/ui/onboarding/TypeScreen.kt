@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t12
 import com.greedy0110.hagomandal.ui.theme.t20
@@ -40,18 +40,14 @@ fun TypeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    listOf(Color(0xff202632), Color(0xff131b2b))
-                )
-            )
+            .background(HagoMandalTheme.colors.background)
             .padding(horizontal = 20.dp)
     ) {
         Spacer(modifier = Modifier.height(60.dp))
-        Text(
-            text = "좋아, ${name.value}!\n" +
-                "그럼 어떤 목표를 세워볼까?",
-            style = t24.copy(textAlign = TextAlign.Start)
+        HagoMandalText(
+            text = "좋아, ${name.value}!\n그럼 어떤 목표를 세워볼까?",
+            style = t24,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.height(80.dp))
         Row {
@@ -80,7 +76,7 @@ private fun TypeCard(
 ) {
     val backgroundColor = when {
         forCareer -> Color(0xff3388ff)
-        else -> Color(0xff00c2a2)
+        else -> Color(0xff9c57ea)
     }
 
     val title = when {

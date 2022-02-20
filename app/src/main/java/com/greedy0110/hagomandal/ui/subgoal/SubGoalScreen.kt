@@ -20,7 +20,6 @@ import com.google.accompanist.insets.imePadding
 import com.greedy0110.hagomandal.ui.ColorChooser
 import com.greedy0110.hagomandal.ui.SubGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t24
 
@@ -38,7 +37,7 @@ fun SubGaolScreen(
 
     Scaffold(
         modifier = modifier,
-        backgroundColor = backgroundColor
+        backgroundColor = HagoMandalTheme.colors.background
     ) {
         Column(
             Modifier
@@ -76,7 +75,7 @@ fun SubGaolScreen(
                     .fillMaxWidth()
                     // .navigationBarsWithImePadding() //TODO: 뭔차이?
                     .imePadding() // TODO: appcompanist 의 imePadding과 foundation의 것은 무엇이 다른가?
-                    .background(backgroundColor),
+                    .background(HagoMandalTheme.colors.background),
                 selectedIndex = subGoals[selectedIndex].colorIndex,
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                 onChooseColor = { colorIndex -> setSubGoalColor(selectedIndex, colorIndex) }
