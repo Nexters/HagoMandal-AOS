@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t12
@@ -57,15 +58,24 @@ fun ShareTopBar(
             .background(Color.Transparent),
         horizontalAlignment = Alignment.End
     ) {
-        Row(Modifier.fillMaxWidth()) {
+        ConstraintLayout(
+            Modifier.fillMaxWidth(),
+        ) {
+            val (text, more) = createRefs()
+
             Text(
+                modifier = Modifier
+                    .constrainAs(text) { centerTo(parent) },
                 text = title,
                 style = t18,
-                modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
             )
             Icon(
                 modifier = Modifier
+                    .constrainAs(more) {
+                        centerVerticallyTo(parent)
+                        end.linkTo(parent.end, margin = 20.dp)
+                    }
                     .clickable { expanded.value = expanded.value.not() },
                 painter = painterResource(id = R.drawable.ic_more_vertical),
                 contentDescription = null,
@@ -74,7 +84,7 @@ fun ShareTopBar(
         }
         if (expanded.value) {
             Spacer(modifier = Modifier.height(12.dp))
-            ShareTopBarDropDown(actions = actions)
+            ShareTopBarDropDown(modifier = Modifier.padding(end = 20.dp), actions = actions)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui.share
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.GoalViewModel
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
+import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t24
 
@@ -41,7 +43,8 @@ fun ShareScreen(
         DetailGoal("저축하기", listOf("용돈 통장 만들어서 쓰기", "", "", ""), 3)
     )
     val userName = "신승민"
-    val mainGoal = "부자고고"
+    val mainGoal = "8구단 드래프트 1순위"
+    val duration = "D-53" // TODO: 어떻게 ... 처리할까.
 
     ShareScreen(
         // userName = goalViewModel.userName.collectAsState().value,
@@ -50,7 +53,7 @@ fun ShareScreen(
         userName = userName,
         mainGoal = mainGoal,
         detailGoals = details,
-        duration = "", // TODO: 어떻게 ... 처리할까.
+        duration = duration,
         onModifyNameClick = onModifyNameClick,
         onModifyGoalsClick = onModifyGoalsClick,
         onDeleteGoalsClick = onDeleteGoalsClick
@@ -86,8 +89,10 @@ private fun ShareScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(backgroundColor)
     ) {
         ShareTopBar(
+            modifier = Modifier.padding(top = 24.dp),
             title = duration,
             actions = actions
         )
