@@ -105,7 +105,6 @@ class GoalRepository @Inject constructor(
         mutableDetailGoals[detailGoalId] = DetailGoal(goal)
         dao.updateDetailGoals(mandalartId, mutableDetailGoals)
 
-
         val remoteMandalartId = dao.getRemoteMandalartId(mandalartId)
             ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
         val goalDto = GoalDto(
