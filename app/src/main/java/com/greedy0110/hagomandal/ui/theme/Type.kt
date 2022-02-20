@@ -58,6 +58,15 @@ val t16 = TextStyle(
     letterSpacing = (-0.3).sp
 )
 
+val t18 = TextStyle(
+    fontWeight = FontWeight.W500,
+    color = Color.White,
+    fontStyle = FontStyle.Normal,
+    fontSize = 18.sp,
+    fontFamily = defaultFontFamily,
+    letterSpacing = (-0.3).sp
+)
+
 val t14 = TextStyle(
     fontWeight = FontWeight.W400,
     color = Color.White,
