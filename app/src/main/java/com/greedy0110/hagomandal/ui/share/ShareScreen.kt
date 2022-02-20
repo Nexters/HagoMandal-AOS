@@ -1,26 +1,33 @@
 package com.greedy0110.hagomandal.ui.share
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.GoalViewModel
+import com.greedy0110.hagomandal.ui.Helper
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.backgroundColor
 import com.greedy0110.hagomandal.ui.theme.t14
+import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 
 @Composable
@@ -77,6 +84,9 @@ private fun ShareScreen(
     onModifyNameClick: () -> Unit = {},
     onModifyGoalsClick: () -> Unit = {},
     onDeleteGoalsClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    onHelperClick: () -> Unit = {},
+    helperText: String = "",
     overlaySlot: @Composable () -> Unit = {},
 ) {
     val actions = listOf(
@@ -108,6 +118,11 @@ private fun ShareScreen(
             Spacer(modifier = Modifier.height(24.dp))
             ShareCardList(details = detailGoals)
         }
+        EmphasizeContent(
+            onShareClick = onShareClick,
+            onHelperClick = onHelperClick,
+            helperText = helperText
+        )
     }
 }
 
@@ -131,6 +146,54 @@ private fun PreviewShareScreen() {
             duration = "D-53", // TODO: 다른 포맷으로 고려할 것.
             mainGoal = "부자가 되겠어",
             detailGoals = details,
+            helperText = "간결하고 핵심적인 목표로\n쪼개어 하나씩 적어보자"
+        )
+    }
+}
+
+@Composable
+fun EmphasizeContent(
+    modifier: Modifier = Modifier,
+    onShareClick: () -> Unit = {},
+    onHelperClick: () -> Unit = {},
+    helperText: String = "",
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
+            .background(Color.Transparent),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.End,
+    ) {
+        Helper(message = helperText, onClick = onHelperClick)
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White, RoundedCornerShape(8.dp))
+                .clickable { onShareClick() }
+        ) {
+            Text(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                text = "SNS로 공유하기",
+                style = t16,
+                color = Color(0xff202532),
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(74.dp))
+    }
+}
+
+@Preview(widthDp = 320, heightDp = 640)
+@Composable
+fun PreviewEmphasizeContent() {
+    HagoMandalTheme {
+        EmphasizeContent(
+            helperText = "간결하고 핵심적인 목표로\n쪼개어 하나씩 적어보자"
         )
     }
 }
