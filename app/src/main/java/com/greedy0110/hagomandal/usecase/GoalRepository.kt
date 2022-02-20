@@ -2,14 +2,25 @@ package com.greedy0110.hagomandal.usecase
 
 import com.greedy0110.hagomandal.data.db.GoalDao
 import com.greedy0110.hagomandal.data.db.MandalartIdEntity
+import com.greedy0110.hagomandal.data.remote.GoalCategoryDto.DETAIL_GOAL_CATEGORY
+import com.greedy0110.hagomandal.data.remote.GoalCategoryDto.MAIN_GOAL_CATEGORY
+import com.greedy0110.hagomandal.data.remote.GoalCategoryDto.SUB_GOAL_CATEGORY
+import com.greedy0110.hagomandal.data.remote.GoalDto
+import com.greedy0110.hagomandal.data.remote.api.HagoMandalService
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GoalRepository @Inject constructor(private val dao: GoalDao) {
+class GoalRepository @Inject constructor(
+    private val dao: GoalDao,
+    private val service: HagoMandalService
+) {
     suspend fun initMandalart(userId: String): String {
         val id = RandomStringGenerator.generate(MANDALART_ID_LENGTH)
-        dao.insertMandalartId(id, userId)
+        dao.insertMandalartId(userId = userId, mandalartId = id)
+
+        val mandalartIdDto = service.postMandalart()
+        dao.insertRemoteMandalartId(mandalartId = id, remoteId = mandalartIdDto.remoteMandalartId)
         return id
     }
 
@@ -43,11 +54,20 @@ class GoalRepository @Inject constructor(private val dao: GoalDao) {
     }
 
     suspend fun getRemoteMandalartId(mandalartId: String): String? {
-        return dao.getIdAtRemote(mandalartId)
+        return dao.getRemoteMandalartId(mandalartId)
     }
 
     suspend fun setMainGoal(mandalartId: String, goal: String) {
         dao.updateMainGoal(mandalartId, goal)
+        val remoteMandalartId = dao.getRemoteMandalartId(mandalartId)
+            ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
+
+        val goalDto = GoalDto(
+            goalCategory = MAIN_GOAL_CATEGORY,
+            position = 0,
+            title = goal
+        )
+        service.postGoal(remoteMandalartId, goalDto)
     }
 
     suspend fun setPeriod(mandalartId: String, period: Int) {
@@ -59,19 +79,41 @@ class GoalRepository @Inject constructor(private val dao: GoalDao) {
     }
 
     suspend fun setSubGoal(mandalartId: String, subGoalId: Int, goal: String, color: GoalColor) {
-        dao.getSubGoals(mandalartId)?.let {
-            val subGoals = it.toMutableList()
-            subGoals[subGoalId] = SubGoal(color, goal)
-            dao.updateSubGoals(mandalartId, subGoals)
-        } ?: throw IllegalStateException("initMandalart를 먼저 호출해야 합니다")
+        val subGoals = dao.getSubGoals(mandalartId)
+            ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
+        val mutableSubGoals = subGoals.toMutableList()
+
+        mutableSubGoals[subGoalId] = SubGoal(color, goal)
+        dao.updateSubGoals(mandalartId, mutableSubGoals)
+
+        val remoteGoalId = dao.getRemoteMandalartId(mandalartId)
+            ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
+
+        val goalDto = GoalDto(
+            goalCategory = SUB_GOAL_CATEGORY,
+            position = subGoalId,
+            title = goal
+        )
+        service.postGoal(remoteGoalId, goalDto)
     }
 
     suspend fun setDetailGoal(mandalartId: String, detailGoalId: Int, goal: String) {
-        dao.getDetailGoals(mandalartId)?.let {
-            val detailGoals = it.toMutableList()
-            detailGoals[detailGoalId] = DetailGoal(goal)
-            dao.updateDetailGoals(mandalartId, detailGoals)
-        } ?: throw IllegalStateException("initMandalart를 먼저 호출해야 합니다")
+        val detailGoals = dao.getDetailGoals(mandalartId)
+            ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
+
+        val mutableDetailGoals = detailGoals.toMutableList()
+        mutableDetailGoals[detailGoalId] = DetailGoal(goal)
+        dao.updateDetailGoals(mandalartId, mutableDetailGoals)
+
+
+        val remoteMandalartId = dao.getRemoteMandalartId(mandalartId)
+            ?: throw IllegalStateException("GoalRepository의 initMandalart()를 먼저 호출해야 합니다.")
+        val goalDto = GoalDto(
+            goalCategory = DETAIL_GOAL_CATEGORY,
+            position = detailGoalId,
+            title = goal
+        )
+        service.postGoal(remoteMandalartId, goalDto)
     }
 
     companion object {
