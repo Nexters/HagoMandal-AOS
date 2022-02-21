@@ -4,12 +4,16 @@ import android.content.Context
 import androidx.room.Room
 import com.greedy0110.hagomandal.BuildConfig
 import com.greedy0110.hagomandal.data.db.AppDatabase
+import com.greedy0110.hagomandal.data.db.GoalDao
 import com.greedy0110.hagomandal.data.remote.api.HagoMandalService
+import com.greedy0110.hagomandal.usecase.RandomStringGenerator
+import com.greedy0110.hagomandal.usecase.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -22,7 +26,12 @@ import javax.inject.Singleton
 const val CONNECT_TIMEOUT = 60.toLong()
 const val WRITE_TIMEOUT = 60.toLong()
 const val READ_TIMEOUT = 60.toLong()
+
+const val TRACKING_ID_LENGTH = 16
+
+// TODO("BASE_URL, API_KEY 값 넣기")
 const val BASE_URL = ""
+private const val API_KEY = ""
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,6 +42,34 @@ object NetworkModule {
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
+    }
+
+    val apiKeyHeaderInterceptor: Interceptor = Interceptor { chain: Interceptor.Chain ->
+        val request = chain.request()
+        val url = request.url.toString()
+
+        val newRequest = chain.request().newBuilder()
+            .url(url)
+            .addHeader("API-KEY", API_KEY)
+            .build()
+
+        return@Interceptor chain.proceed(newRequest)
+    }
+
+    val trackingIdParamInterceptor: Interceptor = Interceptor { chain: Interceptor.Chain ->
+        val trackingId = RandomStringGenerator.generate(TRACKING_ID_LENGTH)
+        val request = chain.request()
+        val originalUrl = request.url
+
+        val newUrl = originalUrl.newBuilder()
+            .addQueryParameter("tracking_id", trackingId)
+            .build()
+
+        val newRequest = request.newBuilder()
+            .url(newUrl)
+            .build()
+
+        return@Interceptor chain.proceed(newRequest)
     }
 
     @Provides
@@ -47,13 +84,36 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideAuthorizationHeaderInterceptor(userRepository: UserRepository): Interceptor {
+        val remoteUserId = runBlocking { return@runBlocking userRepository.getRemoteUserId() }
+
+        return Interceptor { chain: Interceptor.Chain ->
+            val request = chain.request()
+            val url = request.url.toString()
+
+            val builder = chain.request().newBuilder()
+                .url(url)
+
+            if (!url.contains("/users")) {
+                builder.addHeader("Authorization", remoteUserId)
+            }
+
+            val newRequest = builder.build()
+            return@Interceptor chain.proceed(newRequest)
+        }
+    }
+
+    @Provides
+    @Singleton
     fun provideHttpClient(
         okHttpCache: Cache,
-        tokenInterceptor: Interceptor
+        authorizationHeaderInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .cache(okHttpCache)
-            .addInterceptor(tokenInterceptor)
+            .addInterceptor(apiKeyHeaderInterceptor)
+            .addInterceptor(trackingIdParamInterceptor)
+            .addInterceptor(authorizationHeaderInterceptor)
             .addInterceptor(httpLoggingInterceptor)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -91,5 +151,11 @@ object DatabaseModule {
         }
 
         return builder.build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDao(appDatabase: AppDatabase): GoalDao {
+        return appDatabase.getGoalDao()
     }
 }

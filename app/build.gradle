@@ -96,6 +96,7 @@ dependencies {
     implementation(Dep.Room.runtime)
     kapt(Dep.Room.compiler)
     testImplementation(Dep.Room.test)
+    implementation(Dep.Room.ktx)
 
     implementation(Dep.OkHttp.core)
     implementation(Dep.OkHttp.loggingInterceptor)

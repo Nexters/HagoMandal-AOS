@@ -8,8 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(@ApplicationContext val context: Context) {
-    private var name: String = ""
-    private var job: Job? = null
     private val sharedPreferences by lazy {
         context.getSharedPreferences("HagoMandal", Context.MODE_PRIVATE)
     }
@@ -19,13 +17,15 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     }
 
     suspend fun setName(name: String) {
-        // sharedPre
-        this.name = name
+        sharedPreferences.edit {
+            putString("name", name)
+        }
     }
 
     suspend fun setJob(job: Job) {
-        // sharedPre
-        this.job = job
+        sharedPreferences.edit {
+            putString("name", job.toString())
+        }
     }
 
     suspend fun shownOnBoarding() {
@@ -36,5 +36,10 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
 
     suspend fun isShownOnBoarding(): Boolean {
         return sharedPreferences.getBoolean("shownOnBoarding", false)
+    }
+
+    suspend fun getRemoteUserId(): String {
+        // TODO: 구현
+        return ""
     }
 }
