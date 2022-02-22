@@ -43,8 +43,8 @@ fun Helper(
         MessageBubble(message = message)
         Spacer(modifier = Modifier.height(3.dp))
         Image(
-            modifier = Modifier.size(32.dp),
-            painter = painterResource(id = R.drawable.gp_helper),
+            modifier = Modifier.size(40.dp, 35.dp),
+            painter = painterResource(id = R.drawable.gp_happy_mandal),
             contentDescription = "작고 귀여운 헬퍼"
         )
     }
