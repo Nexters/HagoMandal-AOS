@@ -26,8 +26,13 @@ import com.greedy0110.hagomandal.ui.theme.t24
 fun NameScreen(
     onNext: () -> Unit,
     onBoardingViewModel: OnBoardingViewModel = viewModel(),
+    isUpdating: Boolean = false,
 ) {
     val text = onBoardingViewModel.userName.collectAsState()
+    val title = when {
+        isUpdating -> "어쩐지..\n뭔가 익숙하지 않더라고..."
+        else -> "아 맞다! 그러고 보니 \n내 이름이... 뭐더라..?"
+    }
 
     Column(
         modifier = Modifier
@@ -37,7 +42,7 @@ fun NameScreen(
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         HagoMandalText(
-            text = "아 맞다! 그러고 보니 \n내 이름이... 뭐더라..?",
+            text = title,
             style = t24,
             textAlign = TextAlign.Start
         )

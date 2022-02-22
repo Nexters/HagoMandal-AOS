@@ -123,6 +123,8 @@ fun ShareTopBarDropDown(
         actions.forEachIndexed { index, action ->
             Row(
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { action.action() }
                     .padding(vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

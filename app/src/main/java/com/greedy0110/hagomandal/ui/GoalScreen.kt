@@ -31,6 +31,7 @@ data class TabItem(
     val completed: Boolean get() = doneCount >= totalCount
 }
 
+// TODO: 수정 하는 모드로 들어왔나...?
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GoalScreen(

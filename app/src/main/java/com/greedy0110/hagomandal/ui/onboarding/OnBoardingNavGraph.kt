@@ -23,6 +23,7 @@ object OnBoardingDestinations {
 
     // TODO: on boarding 에 국한된 내용이 아니라... 앱 전체의 네비게이션이 되어버림.
     const val SHARE = "share"
+    const val MODIFY_NAME = "modify_name"
 }
 
 @Composable
@@ -31,6 +32,8 @@ fun OnBoardingNavGraph(
     startDestination: String = OnBoardingDestinations.INTRO,
     onBoardingViewModel: OnBoardingViewModel = viewModel()
 ) {
+    val startDestination = OnBoardingDestinations.SHARE
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -111,8 +114,22 @@ fun OnBoardingNavGraph(
         composable(OnBoardingDestinations.SHARE) {
             val goalViewModel: GoalViewModel = hiltViewModel()
             ShareScreen(
-                goalViewModel,
-                emphasize = true
+                goalViewModel = goalViewModel,
+                emphasize = true,
+                onModifyNameClick = {
+                    navController.navigate(OnBoardingDestinations.MODIFY_NAME)
+                },
+                onDeleteGoalsClick = {
+                    // TODO: 목표 제거하고 골 화면으로 다시 이동
+                    navController.navigate(OnBoardingDestinations.GOAL)
+                }
+            )
+        }
+        composable(OnBoardingDestinations.MODIFY_NAME) {
+            NameScreen(
+                onBoardingViewModel = onBoardingViewModel,
+                onNext = { navController.popBackStack() },
+                isUpdating = true,
             )
         }
     }

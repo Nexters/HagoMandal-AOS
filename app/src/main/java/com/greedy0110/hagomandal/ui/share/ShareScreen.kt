@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui.share
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,15 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.greedy0110.hagomandal.R
+import com.greedy0110.hagomandal.ui.AlertDialogSupport
 import com.greedy0110.hagomandal.ui.DetailGoal
 import com.greedy0110.hagomandal.ui.GoalViewModel
 import com.greedy0110.hagomandal.ui.HagoMandalText
@@ -55,14 +59,23 @@ fun ShareScreen(
     val duration = "D-53" // TODO: 어떻게 ... 처리할까.
 
     ShareScreen(
-        userName = goalViewModel.userName.collectAsState().value,
+        userName = userName,
         duration = duration, // TODO: 어떻게 ... 처리할까.
-        mainGoal = goalViewModel.mainGoal.collectAsState().value,
-        detailGoals = goalViewModel.detailGoal.collectAsState().value,
+        mainGoal = mainGoal,
+        detailGoals = details,
         onModifyNameClick = onModifyNameClick,
         onModifyGoalsClick = onModifyGoalsClick,
         onDeleteGoalsClick = onDeleteGoalsClick
     )
+    // ShareScreen(
+    //     userName = goalViewModel.userName.collectAsState().value,
+    //     duration = duration, // TODO: 어떻게 ... 처리할까.
+    //     mainGoal = goalViewModel.mainGoal.collectAsState().value,
+    //     detailGoals = goalViewModel.detailGoal.collectAsState().value,
+    //     onModifyNameClick = onModifyNameClick,
+    //     onModifyGoalsClick = onModifyGoalsClick,
+    //     onDeleteGoalsClick = onDeleteGoalsClick
+    // )
 }
 
 // TODO: 외부에서 처리해야할 기능 정리
@@ -87,44 +100,75 @@ private fun ShareScreen(
     helperText: String = "",
     overlaySlot: @Composable () -> Unit = {},
 ) {
+    val openDialog = remember { mutableStateOf(false) }
+
+    fun showDialog() {
+        openDialog.value = true
+    }
+
+    fun dismissDialog() {
+        openDialog.value = false
+    }
+
     val actions = listOf(
         ShareAction(iconRes = R.drawable.ic_user, title = "이름 수정", action = onModifyNameClick),
         ShareAction(iconRes = R.drawable.ic_edit_2, title = "목표 수정", action = onModifyGoalsClick),
-        ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제", action = onDeleteGoalsClick),
+        ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제", action = ::showDialog),
         ShareAction(iconRes = R.drawable.ic_image, title = "이미지로 저장"), // TODO: 콜백으로 뭐?
     )
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(HagoMandalTheme.colors.background)
+    AlertDialogSupport(
+        title = "완성된 목표를 삭제할까?",
+        content = "완성된 목표는 한 번 삭제하면\n되돌릴 수 없어",
+        leftButtonText = "취소",
+        rightButtonText = "삭제할래",
+        onLeftClick = {
+            dismissDialog()
+        },
+        onRightClick = {
+            onDeleteGoalsClick()
+            dismissDialog()
+        },
+        openDialog = openDialog
     ) {
-        ShareTopBar(
-            modifier = Modifier.padding(top = 24.dp),
-            title = duration,
-            actions = actions
-        )
-        Column(
-            modifier = Modifier
-                .padding(top = 141.dp)
-                .padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(HagoMandalTheme.colors.background)
         ) {
-            HagoMandalText(
-                text = "${userName}님의 핵심목표",
-                style = t14,
-                color = HagoMandalTheme.colors.onBackground.copy(alpha = 0.5f)
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(id = R.drawable.background),
+                contentDescription = null
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            HagoMandalText(text = mainGoal, style = t24)
-            Spacer(modifier = Modifier.height(24.dp))
-            ShareCardList(details = detailGoals)
+
+            ShareTopBar(
+                modifier = Modifier.padding(top = 24.dp),
+                title = duration,
+                actions = actions
+            )
+            Column(
+                modifier = Modifier
+                    .padding(top = 141.dp)
+                    .padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                HagoMandalText(
+                    text = "${userName}님의 핵심목표",
+                    style = t14,
+                    color = HagoMandalTheme.colors.onBackground.copy(alpha = 0.5f)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                HagoMandalText(text = mainGoal, style = t24)
+                Spacer(modifier = Modifier.height(24.dp))
+                ShareCardList(details = detailGoals)
+            }
+            EmphasizeContent(
+                onShareClick = onShareClick,
+                onHelperClick = onHelperClick,
+                helperText = helperText
+            )
         }
-        EmphasizeContent(
-            onShareClick = onShareClick,
-            onHelperClick = onHelperClick,
-            helperText = helperText
-        )
     }
 }
 
