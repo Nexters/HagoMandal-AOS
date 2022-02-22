@@ -36,6 +36,11 @@ import com.greedy0110.hagomandal.ui.theme.t14
 import com.greedy0110.hagomandal.ui.theme.t16
 import com.greedy0110.hagomandal.ui.theme.t24
 
+// BEAN:
+// XXXScreen에 ViewModel을 먹이고 싶은 경우
+// 외부에 VM 을 인자로 받는 Screen 만들고, 그를 쪼개서 진짜 Screen에 Feed한다.
+// 이렇게 해야 스크린을 Preview하고 테스트 할 수 있기 때문.
+
 @Composable
 fun ShareScreen(
     goalViewModel: GoalViewModel = viewModel(),
