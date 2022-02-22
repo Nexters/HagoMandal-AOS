@@ -17,33 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.greedy0110.hagomandal.ui.theme.Grey6
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
-
-private val defaultFontFamily: FontFamily = FontFamily.SansSerif
-private val t12 = TextStyle(
-    fontWeight = FontWeight.W400,
-    color = Color.White,
-    fontStyle = FontStyle.Normal,
-    fontSize = 14.sp,
-    fontFamily = defaultFontFamily,
-    lineHeight = 1.2.sp,
-    letterSpacing = (-0.3).sp
-)
-
-private val t10 = TextStyle(
-    fontWeight = FontWeight.W500,
-    color = Color.White,
-    fontSize = 10.sp,
-    fontFamily = defaultFontFamily,
-    letterSpacing = (-0.3).sp
-)
+import com.greedy0110.hagomandal.ui.theme.t10
+import com.greedy0110.hagomandal.ui.theme.t12
 
 @Composable
 fun GoalTabBadge(
@@ -53,9 +32,9 @@ fun GoalTabBadge(
 ) {
     val badgeTextColor = Color(0xff202532)
     val badgeColor = when {
-        completed -> Color(0xff3174d6)
-        selected -> Color(0xffffffff)
-        else -> Color(0xff40495c)
+        completed -> HagoMandalTheme.colors.primary
+        selected -> Color.White
+        else -> Grey6
     }
 
     Text(
@@ -98,16 +77,17 @@ fun GoalTab(
     onClick: () -> Unit = {},
 ) {
     val textColor = when {
-        selected -> Color(0xffffffff)
-        else -> Color(0xff40485c)
+        completed -> HagoMandalTheme.colors.primary
+        selected -> Color.White
+        else -> Grey6
     }
     val indicatorHeight = 2.dp
     val tabHeight = 56.dp
 
     val indicatorColor = when {
-        completed -> Color(0xff3174d6)
-        else -> Color(0xFF619FFF).copy(alpha = 0.2f)
-    }
+        completed -> HagoMandalTheme.colors.primary
+        else -> Grey6
+    }.copy(alpha = 0.8f)
 
     Column(
         modifier = modifier
@@ -158,7 +138,7 @@ fun GoalIndicator(modifier: Modifier = Modifier) {
         modifier
             .fillMaxWidth()
             .height(indicatorHeight)
-            .background(indicatorColor, RoundedCornerShape(4.dp))
+            .background(indicatorColor)
     )
 }
 

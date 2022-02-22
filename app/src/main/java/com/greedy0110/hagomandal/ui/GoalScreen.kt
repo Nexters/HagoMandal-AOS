@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -65,7 +66,6 @@ fun GoalScreen(
             selected = false
         ),
     )
-    val tabBackgroundColor = Color(0xff202532)
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -80,7 +80,9 @@ fun GoalScreen(
     }
 
     val tabHeight = 56.dp
-    Box {
+    Box(
+        modifier = Modifier.background(HagoMandalTheme.colors.background),
+    ) {
         HorizontalPager(
             count = pages.size,
             state = pagerState,
@@ -122,12 +124,12 @@ fun GoalScreen(
 
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = tabBackgroundColor,
+            backgroundColor = Color.Transparent,
             indicator = { tabPositions ->
                 GoalIndicator(
                     Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                 )
-            }
+            },
         ) {
             // 도대체 클릭이 왜 안돼냐;
             //  ... Pager가 TabRow를 가리고 있었음. github 문서 내용이 좀 잘못된 거 아닌가?
