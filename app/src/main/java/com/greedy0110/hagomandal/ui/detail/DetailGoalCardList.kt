@@ -43,7 +43,7 @@ fun DetailGoalCardList(
     val coroutineScope = rememberCoroutineScope()
     val spaceSize: Int by animateIntAsState(if (expanded) 24 else -92)
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
-    //바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
+    // 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
     val contentPadding =
         PaddingValues(top = 122.dp, bottom = if (isSubmitButtonShow) 40.dp else 600.dp)
     val snapper = rememberSnapperFlingBehavior(

@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,8 +39,8 @@ fun DetailGoalScreen(
     userName: String = "",
     mainGoal: String = "",
     detailGoals: List<DetailGoal> = emptyList(),
-    expanded: MutableState<Boolean> = remember { mutableStateOf(false) },
-    selectedIndex: MutableState<Int> = remember { mutableStateOf(0) },
+    expanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    selectedIndex: MutableState<Int> = rememberSaveable { mutableStateOf(0) },
     onSubmit: () -> Unit = { Timber.d("beanbean on submit") },
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
