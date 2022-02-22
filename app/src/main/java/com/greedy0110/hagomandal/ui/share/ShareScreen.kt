@@ -144,11 +144,6 @@ private fun ShareScreen(
                 contentScale = ContentScale.Crop
             )
 
-            ShareTopBar(
-                modifier = Modifier.padding(top = 24.dp),
-                title = duration,
-                actions = actions
-            )
             Column(
                 modifier = Modifier
                     .padding(top = 141.dp)
@@ -165,6 +160,11 @@ private fun ShareScreen(
                 Spacer(modifier = Modifier.height(24.dp))
                 ShareCardList(details = detailGoals)
             }
+            ShareTopBar(
+                modifier = Modifier.padding(top = 24.dp),
+                title = duration,
+                actions = actions
+            )
             EmphasizeContent(
                 onShareClick = onShareClick,
                 onHelperClick = onHelperClick,
