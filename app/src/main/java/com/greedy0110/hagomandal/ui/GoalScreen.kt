@@ -1,12 +1,14 @@
 package com.greedy0110.hagomandal.ui
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,63 +80,71 @@ fun GoalScreen(
     }
 
     val tabHeight = 56.dp
-    HorizontalPager(
-        modifier = Modifier.background(Color.Red),
-        count = pages.size,
-        state = pagerState,
-        contentPadding = PaddingValues(top = tabHeight),
-        userScrollEnabled = false
-    ) { page ->
-        when (page) {
-            0 -> MainGoalScreen(
-                mainGoal = mainGoal,
-                setMainGoal = goalViewModel::setMainGoal,
-                onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
-            )
+    Box {
+        HorizontalPager(
+            count = pages.size,
+            state = pagerState,
+            contentPadding = PaddingValues(top = tabHeight),
+            userScrollEnabled = false
+        ) { page ->
+            when (page) {
+                0 -> MainGoalScreen(
+                    mainGoal = mainGoal,
+                    setMainGoal = goalViewModel::setMainGoal,
+                    onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
+                )
 
-            1 -> SubGaolScreen(
-                userName = userName,
-                mainGoal = mainGoal,
-                subGoals = subGoals,
-                setSubGoal = goalViewModel::setSubGoal,
-                setSubGoalColor = goalViewModel::setSubGoal,
-                onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
-            )
-            2 -> DetailGoalScreen(
-                userName = userName,
-                mainGoal = mainGoal,
-                onDetailFixed = goalViewModel::setDetailGoal,
-                detailGoals = detailGoals,
-                onSubmit = onSubmit
-            )
-            else -> throw UnsupportedOperationException()
+                1 -> SubGaolScreen(
+                    userName = userName,
+                    mainGoal = mainGoal,
+                    subGoals = subGoals,
+                    setSubGoal = goalViewModel::setSubGoal,
+                    setSubGoalColor = goalViewModel::setSubGoal,
+                    onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
+                )
+                2 -> DetailGoalScreen(
+                    userName = userName,
+                    mainGoal = mainGoal,
+                    onDetailFixed = goalViewModel::setDetailGoal,
+                    detailGoals = detailGoals,
+                    onSubmit = onSubmit
+                )
+                else -> throw UnsupportedOperationException()
+            }
         }
-    }
 
-    TabRow(
-        selectedTabIndex = pagerState.currentPage,
-        backgroundColor = tabBackgroundColor,
-        indicator = { tabPositions ->
-            GoalIndicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-            )
-        }
-    ) {
-        // 도대체 클릭이 왜 안돼냐;
-        //  ... Pager가 TabRow를 가리고 있었음. github 문서 내용이 좀 잘못된 거 아닌가?
-        //  컨트리뷰션 해야할듯
-        pages.forEachIndexed { index, item ->
-            GoalTab(
-                completed = item.completed,
-                selected = pagerState.currentPage == index,
-                title = item.title,
-                badge = "${item.doneCount}/${item.totalCount}",
-                onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
+        Helper(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 74.dp, end = 20.dp),
+            message = "이직, 취업을 원하는 회사나\n평소 존경하는 사람을 떠올려봐!"
+        )
+
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = tabBackgroundColor,
+            indicator = { tabPositions ->
+                GoalIndicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                )
+            }
+        ) {
+            // 도대체 클릭이 왜 안돼냐;
+            //  ... Pager가 TabRow를 가리고 있었음. github 문서 내용이 좀 잘못된 거 아닌가?
+            //  컨트리뷰션 해야할듯
+            pages.forEachIndexed { index, item ->
+                GoalTab(
+                    completed = item.completed,
+                    selected = pagerState.currentPage == index,
+                    title = item.title,
+                    badge = "${item.doneCount}/${item.totalCount}",
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
