@@ -95,7 +95,6 @@ fun GoalScreen(
                     setMainGoal = goalViewModel::setMainGoal,
                     onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
                 )
-
                 1 -> SubGaolScreen(
                     userName = userName,
                     mainGoal = mainGoal,

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.R
+import com.greedy0110.hagomandal.ui.HagoMandalText
 import com.greedy0110.hagomandal.ui.SingleTextField
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.ui.theme.t16
@@ -55,7 +56,6 @@ fun MainGoalScreen(
     setMainGoal: (String) -> Unit,
     onDone: () -> Unit = {},
 ) {
-    val boxColor = Color(0xff374151)
     var selectedDurations by remember { mutableStateOf("") }
     val hintText = "기간을 선택해봐!"
     val boxTextColor = when {
@@ -80,7 +80,7 @@ fun MainGoalScreen(
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .background(boxColor, RoundedCornerShape(8.dp))
+                .background(HagoMandalTheme.colors.surface, RoundedCornerShape(8.dp))
                 .clickable { showDurationSelector = true }
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -146,15 +146,14 @@ fun ListSelector(
     texts: List<String>,
     onSelected: (index: Int) -> Unit = {},
 ) {
-    val backgroundColor = Color(0xff2d3849)
     val dividerColor = Color(0xff18202e).copy(alpha = 0.4f)
 
     LazyColumn(
         modifier = modifier
-            .background(backgroundColor, RoundedCornerShape(8.dp))
+            .background(HagoMandalTheme.colors.surface, RoundedCornerShape(8.dp))
     ) {
         itemsIndexed(texts) { index, text ->
-            Text(
+            HagoMandalText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onSelected(index) }
