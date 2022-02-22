@@ -13,7 +13,7 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
     }
 
     suspend fun getUserName(): String {
-        return this.name
+        return sharedPreferences.getString("name", null).orEmpty()
     }
 
     suspend fun setName(name: String) {
