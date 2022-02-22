@@ -2,7 +2,6 @@ package com.greedy0110.hagomandal.ui.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -23,6 +23,7 @@ import com.greedy0110.hagomandal.ui.DetailGoal
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
@@ -39,11 +40,10 @@ fun DetailGoalCardList(
     isSubmitButtonShow: Boolean = false,
     onSubmit: () -> Unit = {},
 ) {
-
-    // TODO: snap 되어야 한다. (select 에 따라서 우리가, offset 설정하면 된다. 스크롤 노노?)
+    val coroutineScope = rememberCoroutineScope()
     val spaceSize: Int by animateIntAsState(if (expanded) 24 else -92)
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
-    // TODO: 바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
+    //바텀 패딩을 임의로 개많이줌. (아래 것도 잘 스크롤 해서 위로 적절히 위치 시킬 수 있도록)
     val contentPadding =
         PaddingValues(top = 122.dp, bottom = if (isSubmitButtonShow) 40.dp else 600.dp)
     val snapper = rememberSnapperFlingBehavior(
@@ -52,18 +52,11 @@ fun DetailGoalCardList(
         endContentPadding = contentPadding.calculateBottomPadding()
     )
 
-    LaunchedEffect(key1 = selectedIndex) {
-        lazyListState.animateScrollToItem(selectedIndex)
-    }
-
     LaunchedEffect(key1 = isSubmitButtonShow) {
         if (isSubmitButtonShow) lazyListState.scrollToItem(detailGoals.size)
     }
 
-    if (lazyListState.interactionSource.collectIsDraggedAsState().value.not() &&
-        lazyListState.isScrollInProgress.not() &&
-        selectedIndex != lazyListState.firstVisibleItemIndex
-    ) {
+    if (lazyListState.isScrollInProgress && selectedIndex != lazyListState.firstVisibleItemIndex) {
         setSelectedIndex(lazyListState.firstVisibleItemIndex)
     }
 
@@ -86,8 +79,11 @@ fun DetailGoalCardList(
                     if (expanded.not()) {
                         setExpanded(true)
                     }
-                    // TODO: expanded 상태로 완전히 변화하며 스크롤 되어야한다... ?
-                    setSelectedIndex(index)
+                    coroutineScope.launch {
+                        // TODO: expanded 가 완전이 완료된 이후 스크롤 되어야한다
+                        lazyListState.animateScrollToItem(index)
+                        setSelectedIndex(index)
+                    }
                 },
                 details = goal.details,
                 onDetailFixed = { detailIndex, raw -> onDetailFixed(index, detailIndex, raw) },
