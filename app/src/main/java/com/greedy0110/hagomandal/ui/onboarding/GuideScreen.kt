@@ -58,7 +58,6 @@ fun GuideScreen(
 
     val pagerState = PagerState(0)
     var shownAllGuide by remember { mutableStateOf(false) }
-
     if (shownAllGuide.not()) {
         Column(
             modifier = Modifier
@@ -113,7 +112,7 @@ fun GuideScreen(
                             bottom.linkTo(parent.bottom, margin = 74.dp)
                         }
                         .clickable { shownAllGuide = true },
-                    text = "SKIP",
+                    text = if (pagerState.currentPage == pagerState.pageCount - 1) "다음" else "SKIP",
                     style = t16,
                     color = HagoMandalTheme.colors.primary
                 )
@@ -220,6 +219,7 @@ private fun GuideEndScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         ActionButton(
+            modifier = Modifier.padding(horizontal = 20.dp),
             text = stringResource(R.string.ok_let_us_go),
             onClick = onClick
         )

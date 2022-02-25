@@ -33,7 +33,7 @@ fun SubGaolScreen(
     mainGoal: String,
     onDone: () -> Unit = {},
 ) {
-    val (selectedIndex, setSelectedIndex) = remember { mutableStateOf(0) }
+    val (selectedIndex, setSelectedIndex) = remember { mutableStateOf(subGoals.lastIndex) }
 
     Scaffold(
         modifier = modifier,
