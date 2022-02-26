@@ -31,6 +31,7 @@ fun GoalTextField(
     prefix: @Composable () -> Unit = {},
     singleLine: Boolean = true,
     maxLength: Int = GOAL_TEXT_FIELD_MAX_LEN,
+    enabled: Boolean = true,
 ) {
     BasicTextField(
         modifier = modifier,
@@ -54,7 +55,8 @@ fun GoalTextField(
                     )
                 } else innerTextField()
             }
-        }
+        },
+        enabled = enabled,
     )
 }
 

@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -26,15 +25,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.greedy0110.hagomandal.ui.theme.defaultFontFamily
 import com.greedy0110.hagomandal.util.coloredShadow
-
-private val defaultFontFamily: FontFamily = FontFamily.SansSerif
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun SubGoalCard(
     modifier: Modifier = Modifier,
-    // backgroundColor: Color = Color(0xfff3c403),
     brushColorIndex: Int = 0,
     selected: Boolean = false,
     title: String = "",
@@ -87,6 +84,7 @@ fun SubGoalCard(
             maxLength = 12,
             textStyle = textStyle,
             hint = "세부목표",
+            enabled = selected,
         )
         Spacer(modifier = Modifier.size(66.dp))
         Text(

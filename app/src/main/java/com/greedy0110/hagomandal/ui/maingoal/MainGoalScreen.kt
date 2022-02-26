@@ -19,6 +19,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -63,6 +66,7 @@ fun MainGoalScreen(
         else -> Color.White
     }
     var showDurationSelector by remember { mutableStateOf(true) }
+    val mainGoalFocusRequester = remember { FocusRequester() }
 
     Column(
         modifier = modifier
@@ -115,7 +119,9 @@ fun MainGoalScreen(
             val keyboardController = LocalSoftwareKeyboardController.current
             Spacer(modifier = Modifier.height(20.dp))
             SingleTextField(
-                modifier = Modifier.padding(horizontal = 20.dp),
+                modifier = Modifier
+                    .focusRequester(mainGoalFocusRequester)
+                    .padding(horizontal = 20.dp),
                 text = mainGoal,
                 onTextChanged = setMainGoal,
                 trailingText = "최대 15자",
@@ -126,6 +132,10 @@ fun MainGoalScreen(
                     keyboardController?.hide()
                 })
             )
+
+            LaunchedEffect(key1 = Unit) {
+                mainGoalFocusRequester.requestFocus()
+            }
         }
     }
 }
