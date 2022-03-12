@@ -32,6 +32,7 @@ fun SubGaolScreen(
     userName: String,
     mainGoal: String,
     onDone: () -> Unit = {},
+    isEndScroll: Boolean = true,
 ) {
     val (selectedIndex, setSelectedIndex) = remember { mutableStateOf(subGoals.lastIndex) }
 
@@ -67,7 +68,8 @@ fun SubGaolScreen(
                     selectedIndex = selectedIndex,
                     setSelectedIndex = setSelectedIndex,
                     onNext = { index -> setSelectedIndex(index + 1) },
-                    onDone = { onDone() }
+                    onDone = { onDone() },
+                    isEndScroll = isEndScroll
                 )
             }
             ColorChooser(

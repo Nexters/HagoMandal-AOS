@@ -73,9 +73,7 @@ fun GoalScreen(
     val moveToNextPageIfPossible = suspend {
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
-            // FIXME: 애니메이션으로 동작하면 request focus 등과 함께 사용하기 어렵다.
             pagerState.animateScrollToPage(currentPage + 1)
-            // pagerState.scrollToPage(currentPage + 1)
         }
     }
 
@@ -101,7 +99,8 @@ fun GoalScreen(
                     subGoals = subGoals,
                     setSubGoal = goalViewModel::setSubGoal,
                     setSubGoalColor = goalViewModel::setSubGoal,
-                    onDone = { coroutineScope.launch { moveToNextPageIfPossible() } }
+                    onDone = { coroutineScope.launch { moveToNextPageIfPossible() } },
+                    isEndScroll = pagerState.isScrollInProgress.not()
                 )
                 2 -> DetailGoalScreen(
                     userName = userName,

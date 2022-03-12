@@ -12,12 +12,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.SubGoal
-import com.greedy0110.hagomandal.ui.SubGoalCard
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.util.rememberPrevious
 
@@ -29,7 +29,10 @@ fun SubGoalCardList(
     setSelectedIndex: (Int) -> Unit = {},
     onNext: (Int) -> Unit = {},
     onDone: () -> Unit = {},
+    isEndScroll: Boolean = true,
 ) {
+    val focusRequesters = Array(subGoals.size) { FocusRequester() }
+
     @Composable
     fun getCard(index: Int, subGoal: SubGoal) {
         SubGoalCard(
@@ -39,18 +42,13 @@ fun SubGoalCardList(
             brushColorIndex = subGoal.colorIndex,
             selected = selectedIndex == index,
             title = subGoal.title,
-            setTitle = { title ->
-                setSubGoal(index, title)
-            },
+            setTitle = { title -> setSubGoal(index, title) },
             isDoneable = index == subGoals.lastIndex,
-            onNext = {
-                onNext(index)
-            },
-            onDone = { onDone() }
+            onNext = { onNext(index) },
+            onDone = { onDone() },
+            focusRequester = focusRequesters[index],
         )
     }
-
-    // TODO: 바뀐 selected index에 따라서, focus 먹어야 하는 게 정해진다.
 
     Column {
         SubGoalLayout(
@@ -61,6 +59,12 @@ fun SubGoalCardList(
             subGoals
                 .forEachIndexed { index, subGoal -> getCard(index, subGoal) }
         }
+    }
+
+    // Scroll 중간에 포커스가 넘어가면, 스크롤이 중단되는 버그가 있다.
+    LaunchedEffect(key1 = selectedIndex, key2 = isEndScroll) {
+        if (!isEndScroll) return@LaunchedEffect
+        focusRequesters[selectedIndex].requestFocus()
     }
 }
 

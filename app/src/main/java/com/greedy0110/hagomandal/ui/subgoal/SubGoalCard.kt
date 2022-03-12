@@ -1,4 +1,4 @@
-package com.greedy0110.hagomandal.ui
+package com.greedy0110.hagomandal.ui.subgoal
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
@@ -14,8 +14,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -25,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.greedy0110.hagomandal.ui.GoalTextField
+import com.greedy0110.hagomandal.ui.cardColorBrushes
 import com.greedy0110.hagomandal.ui.theme.defaultFontFamily
 import com.greedy0110.hagomandal.util.coloredShadow
 
@@ -39,6 +44,7 @@ fun SubGoalCard(
     isDoneable: Boolean = false,
     onNext: () -> Unit = {},
     onDone: () -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() }
 ) {
     val maxTitleLength = 12
 
@@ -68,12 +74,12 @@ fun SubGoalCard(
                 offsetY = (-16).dp,
                 offsetX = 2.dp
             )
-            // .background(backgroundColor, shape = RoundedCornerShape(16.dp))
             .background(cardColorBrushes[brushColorIndex], shape = RoundedCornerShape(16.dp))
             .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
         horizontalAlignment = Alignment.Start
     ) {
         GoalTextField(
+            modifier = Modifier.focusRequester(focusRequester),
             value = title,
             onValueChange = { if (it.length <= maxTitleLength) setTitle(it) },
             keyboardOptions = KeyboardOptions(imeAction = if (isDoneable) ImeAction.Done else ImeAction.Next),
@@ -89,7 +95,6 @@ fun SubGoalCard(
         Spacer(modifier = Modifier.size(66.dp))
         Text(
             text = "${title.length}/$maxTitleLength",
-//            fontSize = 12.dp,
             color = Color.White.copy(alpha = 0.8f)
         )
     }
