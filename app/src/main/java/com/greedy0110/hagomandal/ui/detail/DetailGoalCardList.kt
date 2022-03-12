@@ -60,7 +60,7 @@ fun DetailGoalCardList(
         setSelectedIndex(lazyListState.firstVisibleItemIndex)
     }
 
-    val focusManager = LocalFocusManager.current
+    // val focusManager = LocalFocusManager.current
     LazyColumn(
         modifier = modifier,
         state = lazyListState,
@@ -90,7 +90,7 @@ fun DetailGoalCardList(
                 isLastCard = index == detailGoals.lastIndex,
                 onNext = {
                     onNext(index)
-                    focusManager.moveFocus(FocusDirection.Down)
+                    // focusManager.moveFocus(FocusDirection.Down)
                 },
                 onDone = { onDone() }
             )

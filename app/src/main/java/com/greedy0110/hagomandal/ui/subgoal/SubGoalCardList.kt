@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.greedy0110.hagomandal.ui.SubGoal
 import com.greedy0110.hagomandal.ui.theme.HagoMandalTheme
 import com.greedy0110.hagomandal.util.rememberPrevious
+import timber.log.Timber
 
 @Composable
 fun SubGoalCardList(
@@ -63,6 +64,7 @@ fun SubGoalCardList(
 
     // Scroll 중간에 포커스가 넘어가면, 스크롤이 중단되는 버그가 있다.
     LaunchedEffect(key1 = selectedIndex, key2 = isEndScroll) {
+        Timber.d("launched effect trigger -> $selectedIndex, $isEndScroll")
         if (!isEndScroll) return@LaunchedEffect
         focusRequesters[selectedIndex].requestFocus()
     }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,9 +72,11 @@ fun GoalScreen(
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     val moveToNextPageIfPossible = suspend {
         keyboardController?.hide()
+        focusManager.clearFocus(true)
 
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
@@ -104,7 +107,7 @@ fun GoalScreen(
                     setSubGoal = goalViewModel::setSubGoal,
                     setSubGoalColor = goalViewModel::setSubGoal,
                     onDone = { coroutineScope.launch { moveToNextPageIfPossible() } },
-                    isEndScroll = pagerState.isScrollInProgress.not()
+                    isEndScroll = pagerState.isScrollInProgress.not() && currentPage == 1
                 )
                 2 -> DetailGoalScreen(
                     userName = userName,

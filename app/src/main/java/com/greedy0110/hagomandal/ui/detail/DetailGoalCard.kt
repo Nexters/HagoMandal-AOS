@@ -83,7 +83,7 @@ fun DetailGoalCard(
         Spacer(modifier = Modifier.height(titleGap.value))
 
         val count = details.size
-        val focusManager = LocalFocusManager.current
+        // val focusManager = LocalFocusManager.current
         repeat(count) { index ->
             val isDoneable = index == details.lastIndex && isLastCard
 
@@ -97,9 +97,10 @@ fun DetailGoalCard(
                     onNext = {
                         // 마지막 이면, 다음 카드로 넘어가야함.
                         if (index == details.lastIndex) onNext()
-                        // 다음 detail TextField로 포커스가 넘어가야함.
+                        //TODO: 다음 detail TextField로 포커스가 넘어가야함.
+                        // 근데... 현재focus가 어디있는지 확신할 수가 없네.
                         else {
-                            focusManager.moveFocus(FocusDirection.Down)
+                            // focusManager.moveFocus(FocusDirection.Down)
                         }
                     },
                     onDone = { onDone() },
