@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HagoMandal">
         <activity
+            android:name=".ui.share.ShareCaptureActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.HagoMandal.NoActionBar"

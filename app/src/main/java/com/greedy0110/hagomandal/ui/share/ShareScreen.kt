@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui.share
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -116,11 +118,23 @@ private fun ShareScreen(
         openDialog.value = false
     }
 
+    val context = LocalContext.current
+
     val actions = listOf(
         ShareAction(iconRes = R.drawable.ic_user, title = "이름 수정", action = onModifyNameClick),
         ShareAction(iconRes = R.drawable.ic_edit_2, title = "목표 수정", action = onModifyGoalsClick),
         ShareAction(iconRes = R.drawable.ic_trash, title = "목표 삭제", action = ::showDialog),
-        ShareAction(iconRes = R.drawable.ic_image, title = "이미지로 저장"), // TODO: 콜백으로 뭐?
+        ShareAction(
+            iconRes = R.drawable.ic_image,
+            title = "이미지로 저장",
+            action = {
+                //TODO: 새로운 화면을 띄우고,
+                // 해당 화면에서 ShareCaptureScreenView를 랜더링 한 다음
+                // 그걸 takeScreenShot - saveAsImage 하고
+                // 화면 종료하면 되나?
+                context.startActivity(Intent(context, ShareCaptureActivity::class.java))
+            }
+        ),
     )
 
     AlertDialogSupport(

@@ -19,9 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,7 +95,7 @@ fun DetailGoalCard(
                     onNext = {
                         // 마지막 이면, 다음 카드로 넘어가야함.
                         if (index == details.lastIndex) onNext()
-                        //TODO: 다음 detail TextField로 포커스가 넘어가야함.
+                        // TODO: 다음 detail TextField로 포커스가 넘어가야함.
                         // 근데... 현재focus가 어디있는지 확신할 수가 없네.
                         else {
                             // focusManager.moveFocus(FocusDirection.Down)
