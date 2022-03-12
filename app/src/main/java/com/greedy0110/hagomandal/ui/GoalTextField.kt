@@ -19,7 +19,7 @@ import com.greedy0110.hagomandal.ui.theme.t20
 
 const val GOAL_TEXT_FIELD_MAX_LEN = Int.MAX_VALUE
 
-//TODO: 커서는 어떻게 구현하지?
+// TODO: 커서는 어떻게 구현하지?
 @Composable
 fun GoalTextField(
     modifier: Modifier = Modifier,

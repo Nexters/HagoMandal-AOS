@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,7 +36,7 @@ data class TabItem(
 }
 
 // TODO: 수정 하는 모드로 들어왔나...?
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun GoalScreen(
     onSubmit: () -> Unit = {},
@@ -45,6 +46,7 @@ fun GoalScreen(
     val mainGoal by goalViewModel.mainGoal.collectAsState()
     val subGoals by goalViewModel.subGoals.collectAsState()
     val detailGoals by goalViewModel.detailGoal.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val pages = listOf(
         TabItem(
@@ -71,6 +73,8 @@ fun GoalScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val moveToNextPageIfPossible = suspend {
+        keyboardController?.hide()
+        
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
             pagerState.animateScrollToPage(currentPage + 1)
