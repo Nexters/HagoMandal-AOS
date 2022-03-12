@@ -1,5 +1,6 @@
 package com.greedy0110.hagomandal.ui
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.greedy0110.hagomandal.usecase.UserRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 // TODO: goal 관련 데이터 통합 관리하자. 지금 화면마다 관리하니까 주고 받고 난리도 아님...
@@ -78,11 +80,12 @@ class GoalViewModel @Inject constructor(
     }
 }
 
+@Parcelize
 data class DetailGoal(
     val title: String = "",
     val details: List<String> = listOf("", "", "", ""),
     val colorIndex: Int = 0,
-)
+) : Parcelable
 
 data class SubGoal(
     val title: String = "",

@@ -41,7 +41,7 @@ suspend fun View.takeScreenShot(
     }
 }
 
-//TODO: 이거, media type 으로 다뤄야하겠다. 일단 external에는 저장할 수 있음을 확읺마.
+// TODO: 이거, media type 으로 다뤄야하겠다. 일단 external에는 저장할 수 있음을 확읺마.
 suspend fun Bitmap.saveAsImage(
     context: Context,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO

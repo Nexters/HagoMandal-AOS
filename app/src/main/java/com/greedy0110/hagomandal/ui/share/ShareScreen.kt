@@ -1,6 +1,5 @@
 package com.greedy0110.hagomandal.ui.share
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -128,11 +127,13 @@ private fun ShareScreen(
             iconRes = R.drawable.ic_image,
             title = "이미지로 저장",
             action = {
-                //TODO: 새로운 화면을 띄우고,
-                // 해당 화면에서 ShareCaptureScreenView를 랜더링 한 다음
-                // 그걸 takeScreenShot - saveAsImage 하고
-                // 화면 종료하면 되나?
-                context.startActivity(Intent(context, ShareCaptureActivity::class.java))
+                val intent = ShareCaptureActivity.intent(
+                    context = context,
+                    userName = userName,
+                    mainGoal = mainGoal,
+                    detailGoals = detailGoals
+                )
+                context.startActivity(intent)
             }
         ),
     )
