@@ -57,7 +57,8 @@ suspend fun Bitmap.saveAsImage(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveAsImageInMediaStore(bitmap, context)
             } else {
-                TODO("뭐 해야하지?")
+                // TODO: 이 때 permission 받아와야함.
+                saveAsImageInMediaStoreUnderQ(bitmap, context)
             }
         } catch (e: Throwable) {
             e.printStackTrace()
@@ -96,7 +97,7 @@ private fun saveAsImageInMediaStore(bitmap: Bitmap, context: Context) {
     val filename = getRandomFileName("jpg")
 
     val imageValues = ContentValues().apply {
-        put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/Hagomandal")
+        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         put(MediaStore.Images.Media.DISPLAY_NAME, filename)
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
         put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -118,4 +119,39 @@ private fun saveAsImageInMediaStore(bitmap: Bitmap, context: Context) {
     imageValues.clear()
     imageValues.put(MediaStore.Images.Media.IS_PENDING, 0)
     contentResolver.update(item, imageValues, null, null)
+}
+
+/**
+ * WRITE_EXTERNAL_STORAGE 권한 필요
+ * TODO: 작업 검증 필요.
+ */
+private fun saveAsImageInMediaStoreUnderQ(bitmap: Bitmap, context: Context) {
+    // val contentResolver =
+    //     context.contentResolver ?: throw IllegalStateException("contentResolver can't be null")
+    //
+    // val dir = context.filesDir
+    // val filename = getRandomFileName("jpg")
+    // val file = File(dir, filename)
+    //
+    // FileOutputStream(file).use { outStream ->
+    //     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+    // }
+    //
+    // val imageValues = ContentValues().apply {
+    //     put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+    //     put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+    //     put(MediaStore.Images.Media.DATA, file.absolutePath)
+    // }
+    //
+    // contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageValues)
+    //     ?: throw IOException("error while inserting a image values")
+    val externalDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        ?: throw IOException("error while inserting a image values there is no external files")
+    val filename = getRandomFileName("jpg")
+    val file = File(externalDir, filename)
+
+    FileOutputStream(file).use { outStream ->
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+    }
+    Timber.d("beanbean file saved > ${file.absolutePath}")
 }
