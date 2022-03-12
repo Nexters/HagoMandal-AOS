@@ -74,7 +74,7 @@ fun GoalScreen(
 
     val moveToNextPageIfPossible = suspend {
         keyboardController?.hide()
-        
+
         val currentPage = pagerState.currentPage
         if (currentPage != pages.lastIndex) {
             pagerState.animateScrollToPage(currentPage + 1)
