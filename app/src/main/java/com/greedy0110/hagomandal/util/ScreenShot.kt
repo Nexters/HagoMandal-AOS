@@ -96,7 +96,7 @@ private fun saveAsImageInMediaStore(bitmap: Bitmap, context: Context) {
     val filename = getRandomFileName("jpg")
 
     val imageValues = ContentValues().apply {
-        // TODO: 상대 경로 지정하자.
+        put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/Hagomandal")
         put(MediaStore.Images.Media.DISPLAY_NAME, filename)
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
         put(MediaStore.Images.Media.IS_PENDING, 1)
