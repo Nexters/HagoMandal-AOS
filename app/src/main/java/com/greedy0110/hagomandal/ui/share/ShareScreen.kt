@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,39 +51,39 @@ fun ShareScreen(
     onDeleteGoalsClick: () -> Unit = {},
     emphasize: Boolean = false,
 ) {
-    // TODO: emphasize에 따라서 overlaySlot에 채워넣을 내용이 달라진다. (공유하기는 이 overlaySlot에서 처리될 것)
-    val details = listOf(
-        DetailGoal(
-            "주식 공부하기",
-            listOf("주식 책 6권 읽기", "주식 투자 포트폴리오 만들기", "가진 종목 스토리 점검하기", "연간 수익율 분석하고 공유하는 스터디 하기"),
-            0
-        ),
-        DetailGoal("세금 공부하기", listOf("세금 책 2권 읽기", "", "", ""), 1),
-        DetailGoal("부동산 공부하기", listOf("나만의 집 기준 만들기", "자취방 체크 리스트 만들기", "", ""), 2),
-        DetailGoal("저축하기", listOf("용돈 통장 만들어서 쓰기", "", "", ""), 3)
-    )
-    val userName = "신승민"
-    val mainGoal = "8구단 드래프트 1순위"
+    // // TODO: emphasize에 따라서 overlaySlot에 채워넣을 내용이 달라진다. (공유하기는 이 overlaySlot에서 처리될 것)
+    // val details = listOf(
+    //     DetailGoal(
+    //         "주식 공부하기",
+    //         listOf("주식 책 6권 읽기", "주식 투자 포트폴리오 만들기", "가진 종목 스토리 점검하기", "연간 수익율 분석하고 공유하는 스터디 하기"),
+    //         0
+    //     ),
+    //     DetailGoal("세금 공부하기", listOf("세금 책 2권 읽기", "", "", ""), 1),
+    //     DetailGoal("부동산 공부하기", listOf("나만의 집 기준 만들기", "자취방 체크 리스트 만들기", "", ""), 2),
+    //     DetailGoal("저축하기", listOf("용돈 통장 만들어서 쓰기", "", "", ""), 3)
+    // )
+    // val userName = "신승민"
+    // val mainGoal = "8구단 드래프트 1순위"
     val duration = "D-53" // TODO: 어떻게 ... 처리할까.
-
-    ShareScreen(
-        userName = userName,
-        duration = duration, // TODO: 어떻게 ... 처리할까.
-        mainGoal = mainGoal,
-        detailGoals = details,
-        onModifyNameClick = onModifyNameClick,
-        onModifyGoalsClick = onModifyGoalsClick,
-        onDeleteGoalsClick = onDeleteGoalsClick
-    )
+    //
     // ShareScreen(
-    //     userName = goalViewModel.userName.collectAsState().value,
+    //     userName = userName,
     //     duration = duration, // TODO: 어떻게 ... 처리할까.
-    //     mainGoal = goalViewModel.mainGoal.collectAsState().value,
-    //     detailGoals = goalViewModel.detailGoal.collectAsState().value,
+    //     mainGoal = mainGoal,
+    //     detailGoals = details,
     //     onModifyNameClick = onModifyNameClick,
     //     onModifyGoalsClick = onModifyGoalsClick,
     //     onDeleteGoalsClick = onDeleteGoalsClick
     // )
+    ShareScreen(
+        userName = goalViewModel.userName.collectAsState().value,
+        duration = duration, // TODO: 어떻게 ... 처리할까.
+        mainGoal = goalViewModel.mainGoal.collectAsState().value,
+        detailGoals = goalViewModel.detailGoal.collectAsState().value,
+        onModifyNameClick = onModifyNameClick,
+        onModifyGoalsClick = onModifyGoalsClick,
+        onDeleteGoalsClick = onDeleteGoalsClick
+    )
 }
 
 // TODO: 외부에서 처리해야할 기능 정리

@@ -127,9 +127,6 @@ class GoalViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
-
-    private fun saveGoal() {
-    }
 }
 
 @Parcelize
