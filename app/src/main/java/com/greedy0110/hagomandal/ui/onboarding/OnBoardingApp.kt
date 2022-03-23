@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,7 +48,10 @@ class OnBoardingViewModel @Inject constructor(
 
     init {
 
+        // stateFlow 라서 최초 값이 있는데 이 최초값을 무시하자.
+        // 안그러면, 항상 empty string이 세팅된다.
         userName
+            .drop(1)
             .debounce(1000L)
             .onEach { userRepository.setName(it) }
             .launchIn(viewModelScope)

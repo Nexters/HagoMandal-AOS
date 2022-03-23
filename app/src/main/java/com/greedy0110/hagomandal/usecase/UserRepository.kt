@@ -24,7 +24,7 @@ class UserRepository @Inject constructor(@ApplicationContext val context: Contex
 
     suspend fun setJob(job: Job) {
         sharedPreferences.edit {
-            putString("name", job.toString())
+            putString("job", job.toString())
         }
     }
 
