@@ -94,7 +94,11 @@ fun OnBoardingNavGraph(
         composable(OnBoardingDestinations.GET_STARTED) {
             GetStartedScreen(
                 onNext = {
-                    navController.navigate(OnBoardingDestinations.GOAL)
+                    navController.navigate(OnBoardingDestinations.GOAL) {
+                        popUpTo(OnBoardingDestinations.INTRO) {
+                            inclusive = true
+                        }
+                    }
                 },
                 onBoardingViewModel = onBoardingViewModel
             )
